@@ -1,17 +1,21 @@
+import 'package:feedays/ui/page/add_content_page.dart';
+import 'package:feedays/ui/page/pages.dart';
+import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import '../util.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  // このウィジェットは、アプリケーションのトップページになります。このウィジェットはステートフルです。
+  // つまり、Stateオブジェクト(以下で定義)を持ち、このオブジェクトには見た目に影響を与えるフィールドが含まれています。
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  // このクラスは、Stateのコンフィギュレーションです。親(この場合はAppウィジェット)から提供され、
+  // ステートのビルドメソッドで使用される値(この場合はタイトル)を保持します。
+  // Widgetのサブクラスのフィールドは、常に「final」とマークされます。
 
   final String title;
 
@@ -21,69 +25,146 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   int _counter = 0;
+  int _currentPageIndex = 0;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // hanged in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      //architecture
+      // このsetStateの呼び出しは、FlutterフレームワークにこのStateで何かがハングアップしたことを伝え、
+      // 以下のbuildメソッドを再実行させ、ディスプレイに更新された値を反映させることができるようにします。
+      //setState()を呼ばずに_counterを変更した場合、buildメソッドは再び呼ばれないため、何も起こらないように見える。
+      //アーキテクチャ
       _counter++;
     });
   }
 
+  void _selectedDestination(int value, BuildContext context) {
+    setState(() => _currentPageIndex = value);
+    if (value == 0) {
+      scaffoldKey.currentState!.openDrawer();
+    }
+  }
+
+  List<Widget> _addPages() {
+    return const [SearchPage(), AddContentPage()];
+  }
+
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
+    // このメソッドは、例えば上記の_incrementCounterメソッドで行われるように、setStateが呼び出されるたびに再実行される。
     //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // Flutter フレームワークは、ビルドメソッドの再実行が高速になるように最適化されており、
+    // ウィジェットのインスタンスを個別に変更するのではなく、更新が必要なものを再構築するだけで済むようになっています。
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+        key: scaffoldKey,
+        drawer: AppDrawerMenu(
+          scaffoldKey: scaffoldKey,
+        ),
+        //TODO:ページを入れ替える必要がある
+        body: barpages[_currentPageIndex],
+        // ExampleWidget(
+        //   counter: _counter,
+        //   currentPageIndex: _currentPageIndex,
+        // ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ), // この末尾のカンマは、ビルドメソッドの自動書式化を円滑にするものです。
+        bottomNavigationBar: DefaultTextStyle.merge(
+          style: genResponsiveTextStyle(context, 25.0, 40.0, null, null, null),
+          child: NavigationBar(
+            onDestinationSelected: (value) =>
+                _selectedDestination(value, context),
+            selectedIndex: _currentPageIndex,
+            animationDuration: const Duration(seconds: 1),
+            elevation: 25.0, //標高
+            height: 100,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+            backgroundColor: Colors.black,
+            surfaceTintColor: Colors.orange,
+            destinations: const <Widget>[
+              NavigationDestination(
+                icon: Icon(Icons.menu),
+                label: 'Menu',
+                tooltip: "open a menu",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.bookmark_border),
+                label: 'ReadLater',
+                tooltip: "Read later",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.menu_book),
+                label: 'TodayArticle',
+                tooltip: "Today articles",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.add_circle_outline_sharp),
+                label: "AddContent",
+                tooltip: 'Add Content',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.search),
+                label: "Search",
+                tooltip: "Search Content",
+              )
+            ],
+          ),
+        ));
+  }
+}
+
+class ExampleWidget extends StatelessWidget {
+  const ExampleWidget({
+    Key? key,
+    required int counter,
+    required int currentPageIndex,
+  })  : _counter = counter,
+        _currentPageIndex = currentPageIndex,
+        super(key: key);
+
+  final int _counter;
+  final int _currentPageIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        child: SingleChildScrollView(
+          child: DefaultTextStyle.merge(
+            style:
+                genResponsiveTextStyle(context, 25.0, 40.0, null, null, null),
+            child: Column(
+              // Column はレイアウトウィジェットでもあります。
+              //子供のリストを受け取り、それらを縦に並べます。
+              //デフォルトでは、子プロセスの水平サイズに合うように自分自身のサイズを調整し、親プロセスと同じ高さになるように試みます。
+              //
+              // 各ウィジェットのワイヤーフレームを見るために "デバッグペイント" を起動する
+              //（コンソールで "p" を押す、Android Studio の Flutter Inspector から "Toggle Debug Paint" アクションを選ぶ、
+              //または Visual Studio Code で "Toggle Debug Paint" コマンドを選ぶ）。
+              //
+              // Column には、それ自身のサイズとその子の位置を制御するための様々なプロパティがあります。
+              //ここでは、mainAxisAlignment を使用して、子カラムを垂直方向に配置しています。
+              //Column が垂直方向であるため、ここでの主軸は垂直軸です（横軸は水平方向となります）。
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'これだけボタンが押されているのだから:',
+                ),
+                Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                Text(
+                  '$_currentPageIndex',
+                  style: Theme.of(context).textTheme.headline4,
+                )
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
