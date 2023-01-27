@@ -40,6 +40,7 @@ class _StartPageState extends State<StartPage> {
 
   void _selectedDestination(int value, BuildContext context) {
     setState(() => _currentPageIndex = value);
+    //PLAN:もしくはページ遷移
     if (value == 0) {
       scaffoldKey.currentState!.openDrawer();
     }
@@ -62,17 +63,8 @@ class _StartPageState extends State<StartPage> {
         ),
         //TODO:ページを入れ替える必要がある
         body: barpages[_currentPageIndex],
-        // ExampleWidget(
-        //   counter: _counter,
-        //   currentPageIndex: _currentPageIndex,
-        // ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        ), // この末尾のカンマは、ビルドメソッドの自動書式化を円滑にするものです。
         bottomNavigationBar: DefaultTextStyle.merge(
-          style: genResponsiveTextStyle(context, 25.0, 40.0, null, null, null),
+          style: genResponsiveTextStyle(context, 28.0, 35.0, null, null, null),
           child: NavigationBar(
             onDestinationSelected: (value) =>
                 _selectedDestination(value, context),
@@ -82,7 +74,7 @@ class _StartPageState extends State<StartPage> {
             height: 100,
             labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             backgroundColor: Colors.black,
-            surfaceTintColor: Colors.orange,
+            surfaceTintColor: Colors.black,
             destinations: const <Widget>[
               NavigationDestination(
                 icon: Icon(Icons.menu),
@@ -130,6 +122,11 @@ class ExampleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (() {}),
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: DefaultTextStyle.merge(

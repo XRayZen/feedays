@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'ui/page/start_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,11 +18,18 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         // これがアプリケーションのテーマです。
+        //PLAN:設定で切り替えられるようにする
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        primarySwatch: Colors.amber,
+        // primarySwatch: Colors.amber,
+        brightness: Brightness.dark,
+        colorScheme: const ColorScheme.dark(
+          primary: Colors.amber,
+          secondary: Colors.white54,
+        ),
+        useMaterial3: true,
       ),
-      darkTheme: ThemeData.dark(), // ダーク用テーマ
-      themeMode: ThemeMode.dark,
+      // darkTheme: ThemeData.dark(useMaterial3: true), // ダーク用テーマ
+      themeMode: ThemeMode.system,
       home: const StartPage(title: 'Flutter Demo Home Page'),
       builder: (context, child) => ResponsiveWrapper.builder(child,
           maxWidth: 1200,
