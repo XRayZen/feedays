@@ -20,8 +20,7 @@ class UserConfig {
       required this.subscribeSites,
       required this.config,
       required this.identInfo,
-      required this.accountType
-      });
+      required this.accountType});
 }
 
 class WebSite {
@@ -47,6 +46,18 @@ class WebSite {
     required this.feeds,
     required this.fav,
   });
+  factory WebSite.mock(String key, String name, String category) {
+    return WebSite(
+        key: key,
+        name: name,
+        url: "",
+        newCount: 0,
+        readLateCount: 0,
+        category: category,
+        tags: [],
+        feeds: [],
+        fav: false);
+  }
 }
 
 class RssFeed {

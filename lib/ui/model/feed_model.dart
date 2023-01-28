@@ -11,6 +11,8 @@ class FeedModel {
   final ByteData? icon;
   final int newCount;
   final String category;
+  final CategoryOrSite categoryOrSite;
+  final List<FeedModel> nodes;
   FeedModel({
     required this.key,
     required this.name,
@@ -18,16 +20,22 @@ class FeedModel {
     this.icon,
     required this.newCount,
     required this.category,
+    required this.categoryOrSite,
+    required this.nodes,
   });
+
   //ファクトリーコンストラクタの名前は、直前のクラスの名前と同じでなければなりません。
   factory FeedModel.from(WebSite site) {
     return FeedModel(
-      key: site.key,
-      name: site.name,
-      url: site.url,
-      newCount: site.newCount,
-      category: site.category,
-      icon: site.icon,
-    );
+        key: site.key,
+        name: site.name,
+        url: site.url,
+        newCount: site.newCount,
+        category: site.category,
+        icon: site.icon,
+        categoryOrSite: CategoryOrSite.site,
+        nodes: []);
   }
 }
+
+enum CategoryOrSite { category, site }

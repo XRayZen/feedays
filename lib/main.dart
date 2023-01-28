@@ -8,6 +8,9 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
+final scaffoldStateKey = GlobalKey<ScaffoldState>();
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -16,6 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
         // これがアプリケーションのテーマです。
         //PLAN:設定で切り替えられるようにする

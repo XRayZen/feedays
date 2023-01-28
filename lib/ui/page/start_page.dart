@@ -1,7 +1,8 @@
+import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
-import 'package:feedays/ui/page/pages.dart';
 import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
+import 'package:feedays/ui/widgets/reorderable_tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -26,7 +27,7 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   int _counter = 0;
   int _currentPageIndex = 0;
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _incrementCounter() {
     setState(() {
@@ -42,7 +43,7 @@ class _StartPageState extends State<StartPage> {
     setState(() => _currentPageIndex = value);
     //PLAN:もしくはページ遷移
     if (value == 0) {
-      scaffoldKey.currentState!.openDrawer();
+      scaffoldStateKey.currentState!.openDrawer();
     }
   }
 
@@ -53,16 +54,19 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     // このメソッドは、例えば上記の_incrementCounterメソッドで行われるように、setStateが呼び出されるたびに再実行される。
-    //
+    //flutterでビジネスロジックを書いたクラスをRiverpodと組み合わせたい
     // Flutter フレームワークは、ビルドメソッドの再実行が高速になるように最適化されており、
     // ウィジェットのインスタンスを個別に変更するのではなく、更新が必要なものを再構築するだけで済むようになっています。
     return Scaffold(
-        key: scaffoldKey,
-        drawer: AppDrawerMenu(
-          scaffoldKey: scaffoldKey,
+        key: scaffoldStateKey,
+        drawer: Expanded(
+          child: AppDrawerMenu(
+            scaffoldKey: scaffoldStateKey,
+          ),
         ),
         //TODO:ページを入れ替える必要がある
-        body: barpages[_currentPageIndex],
+        body: DragReorderableListView(),
+        // barpages[_currentPageIndex],
         bottomNavigationBar: DefaultTextStyle.merge(
           style: genResponsiveTextStyle(context, 28.0, 35.0, null, null, null),
           child: NavigationBar(
