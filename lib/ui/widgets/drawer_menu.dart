@@ -18,15 +18,15 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      //I want to solve the error Vertical viewport was given unbounded height in flutter's DragAndDropLists widget.
       backgroundColor: Colors.black,
       //NOTE:feedlyのメニューをパクる
       child: SingleChildScrollView(
-        child: ListView(
-          shrinkWrap: true,
+        child: Column(
+          // primary: false,
+          // shrinkWrap: true,//これだとパフォーマンスに影響が出る
           children: [
             SafeArea(
-              minimum: const EdgeInsets.only(top: 1.0),
+              minimum: const EdgeInsets.only(top: 5.0),
               child: Align(
                 alignment: Alignment.centerRight,
                 //PLAN:コンテンツリストの順位・削除
@@ -34,9 +34,12 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
                   onPressed: () {
                     //PLAN:ReorderableListViewのbuildDefaultDragHandlesで編集モードの切替
                     setState(() {
-                      //プロバイダーにセットする
                       var isEditMode = ref.watch(isFeedsEditModeProvider);
-                      isEditMode = isEditMode == false ? true : false;
+                      isEditMode = isEditMode == FeedsEditMode.edit
+                          ? FeedsEditMode.noEdit
+                          : FeedsEditMode.edit;
+                      ref.read(isFeedsEditModeProvider.notifier).state =
+                          isEditMode;
                     });
                   },
                   child: const Text('EDIT'),
@@ -96,12 +99,17 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
               // ignore: prefer_const_literals_to_create_immutables
               children: [
                 // ignore: prefer_const_constructors
-                SizedBox(
-                    //高さを手動で設定するだけでできたが・・・面倒
-                    //PLAN:緊急避難的に静的にしているがアイテム数に応じてレスポンシブにしたい
-                    height: 1000,
-                    // ignore: prefer_const_constructors
-                    child: DragReorderableListView()),
+                LimitedBox(
+                  //高さを手動で設定するだけでできたが・・・面倒
+                  //PLAN:緊急避難的に静的にしているがアイテム数に応じてレスポンシブにしたい
+                  //リスト数から必要な高さを推定して達したら下にmoreを出して延長するか決める
+                  //https://www.youtube.com/watch?v=LUqDNnv_dh0
+                  //これも参考になるかもしれない
+                  //https://dartpad.dev/workshops.html?webserver=https://fdr-shrinkwrap-slivers.web.app#Step2
+                  maxHeight: 800,
+                  // ignore: prefer_const_constructors
+                  child: DragReorderableListView(),
+                ),
               ],
             ),
 
