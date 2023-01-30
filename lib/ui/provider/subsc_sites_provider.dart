@@ -2,8 +2,8 @@ import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/model/feed_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FeedsListNotifier extends StateNotifier<List<FeedModel>> {
-  FeedsListNotifier() : super([]);
+class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
+  SubscriptionSiteListNotifier() : super([]);
 
   //追加
   void add(List<WebSite> sites) {
@@ -12,30 +12,7 @@ class FeedsListNotifier extends StateNotifier<List<FeedModel>> {
     // 代わりに、既存と新規を含む新しいリストを作成します。
     // Dart のスプレッド演算子を使うと便利ですよ!
     //カテゴリーに基づいてノードを作る必要がある
-    var items = <FeedModel>[];
-    int currentCategoryKey = 7000;
-    for (var site in sites) {
-      if (items.isEmpty ||
-          items.any((element) => element.category != site.category)) {
-        //カテゴリーを追加
-        currentCategoryKey += 1;
-        currentCategoryKey += items.length;
-        items.add(FeedModel(
-            key: currentCategoryKey.toString(),
-            name: site.category,
-            url: "",
-            newCount: 0,
-            category: site.category,
-            categoryOrSite: CategoryOrSite.category,
-            nodes: [FeedModel.from(site)]));
-      } else {
-        //BUG:カテゴリーが同じなのが来てもカテゴリーを作ってしまう
-        //Nodeを追加する
-        var findCategoryIndex =
-            items.indexWhere((element) => site.category == element.category);
-        items[findCategoryIndex].nodes.add(FeedModel.from(site));
-      }
-    }
+    List<FeedModel> items = _webSitesToFeedModels(sites);
     state = items;
     // `notifyListeners` などのメソッドを呼ぶ必要はありません。
     // `state =` により必要なときに UI側 に通知が届き、ウィジェットが更新されます。
@@ -82,7 +59,42 @@ class FeedsListNotifier extends StateNotifier<List<FeedModel>> {
   }
 }
 
-final feedsSiteListProvider =
-    StateNotifierProvider<FeedsListNotifier, List<FeedModel>>((ref) {
-  return FeedsListNotifier();
+final subscriptionSiteListProvider =
+    StateNotifierProvider<SubscriptionSiteListNotifier, List<FeedModel>>((ref) {
+  return SubscriptionSiteListNotifier();
 });
+
+List<FeedModel> _webSitesToFeedModels(List<WebSite> sites) {
+  var items = <FeedModel>[];
+  int currentCategoryKey = 7000;
+  for (var site in sites) {
+    if (items.isEmpty) {
+      items.add(FeedModel(
+          key: currentCategoryKey.toString(),
+          name: site.category,
+          url: "",
+          newCount: 0,
+          category: site.category,
+          categoryOrSite: CategoryOrSite.category,
+          nodes: [FeedModel.from(site)]));
+    }
+    if (items.any((element) => element.category == site.category)) {
+      //Nodeを追加する
+      var findCategoryIndex =
+          items.indexWhere((element) => site.category == element.category);
+      items[findCategoryIndex].nodes.add(FeedModel.from(site));
+    } else {
+      //カテゴリーを追加
+      currentCategoryKey += 1 + items.length;
+      items.add(FeedModel(
+          key: currentCategoryKey.toString(),
+          name: site.category,
+          url: "",
+          newCount: 0,
+          category: site.category,
+          categoryOrSite: CategoryOrSite.category,
+          nodes: [FeedModel.from(site)]));
+    }
+  }
+  return items;
+}

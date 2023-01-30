@@ -1,6 +1,9 @@
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
+import 'package:feedays/ui/page/pages.dart';
+import 'package:feedays/ui/page/read_later.dart';
 import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/today_page.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:feedays/ui/widgets/reorderable_tree_view.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +54,14 @@ class _StartPageState extends State<StartPage> {
     return const [SearchPage(), AddContentPage()];
   }
 
+  List<Widget> barpages = [
+    ExampleWidget(counter: 0, currentPageIndex: 0),
+    ReadlaterPage(),
+    ToDayPage(),
+    AddContentPage(),
+    SearchPage()
+  ];
+
   @override
   Widget build(BuildContext context) {
     // このメソッドは、例えば上記の_incrementCounterメソッドで行われるように、setStateが呼び出されるたびに再実行される。
@@ -65,8 +76,7 @@ class _StartPageState extends State<StartPage> {
           ),
         ),
         //TODO:ページを入れ替える必要がある
-        body: DragReorderableListView(),
-        // barpages[_currentPageIndex],
+        body: barpages[_currentPageIndex],
         bottomNavigationBar: DefaultTextStyle.merge(
           style: genResponsiveTextStyle(context, 28.0, 35.0, null, null, null),
           child: NavigationBar(

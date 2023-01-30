@@ -1,6 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:feedays/ui/model/feed_model.dart';
-import 'package:feedays/ui/provider/notifier_provider.dart';
+import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,10 +18,11 @@ class _ReorderableTreeListViewState
     extends ConsumerState<DragReorderableListView> {
   @override
   Widget build(BuildContext context) {
-    var res = ref.watch(feedsSiteListProvider.notifier);
+    var res = ref.watch(subscriptionSiteListProvider.notifier);
     //PLAN:このフラグがオンなら色々とアイコンの位置をずらす必要がある
     var isEditFlg = _isEditMode(ref.watch(isFeedsEditModeProvider));
     if (res.isEmpty()) {
+      //PLAN:これをSilverToBoxで囲えばSliverでも高さ設定無し出来るか
       return const Center(child: Text('リストが空です'));
     } else {
       //カテゴリータイルにドラッグアンドドロップしたらそれを特定して
@@ -29,7 +30,7 @@ class _ReorderableTreeListViewState
       //編集モードの切替で右にメニューアイコンを表示させてドラッグ可能か判断できるようにする
       //NOTE:`DragAndDropLists`はページなら高さ設定は要らないが、ドロワーメニューでは高さ設定が必要
       return DragAndDropLists(
-        children: _buildList(ref.watch(feedsSiteListProvider)),
+        children: _buildList(ref.watch(subscriptionSiteListProvider)),
         onItemReorder: _onChildItemReorder,
         onListReorder: _onListReorder,
         //trueの場合、長押しした後にアイテムをドラッグします。falseの場合は、すぐにドラッグします。
@@ -40,7 +41,8 @@ class _ReorderableTreeListViewState
         //PLAN:いずれはスライバ(Sliver)を使うべき
         //ウィジェットまたはスライバと互換性のあるリストを返すかどうか。sliver として使用する場合は true を設定する。
         //true の場合、[scrollController] を提供する必要がある。ウィジェットのみで使用する場合は false に設定する。
-        sliverList: false,
+        // sliverList: true,
+        // scrollController: ScrollController(),
         listPadding: const EdgeInsets.all(5),
         itemDivider: Divider(
           thickness: 2,
@@ -131,13 +133,13 @@ class _ReorderableTreeListViewState
   _onChildItemReorder(
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     ref
-        .watch(feedsSiteListProvider.notifier)
+        .watch(subscriptionSiteListProvider.notifier)
         .onItemReorder(oldItemIndex, oldListIndex, newItemIndex, newListIndex);
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
     ref
-        .watch(feedsSiteListProvider.notifier)
+        .watch(subscriptionSiteListProvider.notifier)
         .onListReorder(oldListIndex, newListIndex);
   }
 

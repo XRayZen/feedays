@@ -1,5 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
-import 'package:feedays/ui/provider/notifier_provider.dart';
+import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/reorderable_tree_view.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +15,11 @@ class AppDrawerMenu extends ConsumerStatefulWidget {
 }
 
 class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    var res = ref.watch(subscriptionSiteListProvider.notifier).isEmpty();
     return Drawer(
       backgroundColor: Colors.black,
       //NOTE:feedlyのメニューをパクる
@@ -25,115 +28,111 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           // primary: false,
           // shrinkWrap: true,//これだとパフォーマンスに影響が出る
           children: [
-            SafeArea(
-              minimum: const EdgeInsets.only(top: 5.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                //PLAN:コンテンツリストの順位・削除
-                child: TextButton(
-                  onPressed: () {
-                    //PLAN:ReorderableListViewのbuildDefaultDragHandlesで編集モードの切替
-                    setState(() {
-                      var isEditMode = ref.watch(isFeedsEditModeProvider);
-                      isEditMode = isEditMode == FeedsEditMode.edit
-                          ? FeedsEditMode.noEdit
-                          : FeedsEditMode.edit;
-                      ref.read(isFeedsEditModeProvider.notifier).state =
-                          isEditMode;
-                    });
-                  },
-                  child: const Text('EDIT'),
-                ),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Divider(thickness: 1.0, height: 5),
-                ListTile(
-                  leading: const Icon(Icons.menu_book),
-                  title: const Text('Today'),
-                  onTap: () {
-                    //PLAN:TodayPageに表示を切り替えてメニューを閉じる
-                    setState(() {
-                      //今はテスト用にリストを挿入している
-                      var hoge = ref.watch(feedsSiteListProvider.notifier);
-                      var temp1 = WebSite.mock("1", "site1", "Anime");
-                      var temp2 = WebSite.mock("2", "site2", "Anime");
-                      var temp3 = WebSite.mock("3", "site3", "Manga");
-                      var temp4 = WebSite.mock("4", "site4", "Manga");
-                      hoge.add([temp1, temp2, temp3, temp4]);
-                    });
-                  },
-                ),
-                const Divider(thickness: 1.0, height: 0.05),
-                ListTile(
-                  leading: const Icon(Icons.bookmark_border),
-                  title: const Text('Read Later'),
-                  onTap: () {},
-                ),
-                const Divider(thickness: 1.0, height: 0.05),
-                Tooltip(
-                  waitDuration: const Duration(milliseconds: 700),
-                  message: "今はまだ有料化するほどの機能はない",
-                  child: ListTile(
-                    leading: const Icon(Icons.upcoming),
-                    title: const Text('Upgrade'),
-                    onTap: () {},
-                    enabled: false, //PLAN:今はまだ有料化するほどの機能はない
-                  ),
-                ),
-              ],
-            ),
-            //購読したサイトの情報を表示するリストをツリー表示する
-            //constにすると再描画されなくなる
-            // ignore: prefer_const_constructors
-            ExpansionTile(
-              title: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Feeds'),
-                ),
-              ),
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                // ignore: prefer_const_constructors
-                LimitedBox(
-                  //高さを手動で設定するだけでできたが・・・面倒
-                  //PLAN:緊急避難的に静的にしているがアイテム数に応じてレスポンシブにしたい
-                  //リスト数から必要な高さを推定して達したら下にmoreを出して延長するか決める
-                  //https://www.youtube.com/watch?v=LUqDNnv_dh0
-                  //これも参考になるかもしれない
-                  //https://dartpad.dev/workshops.html?webserver=https://fdr-shrinkwrap-slivers.web.app#Step2
-                  maxHeight: 800,
-                  // ignore: prefer_const_constructors
-                  child: DragReorderableListView(),
-                ),
-              ],
-            ),
-
-            // const ListTile(
-            //   //子要素としてはListTileを入れる
-            //   leading: Icon(Icons.message),
-            //   title: Text('Messages'),
-            // ),
-            // const ListTile(
-            //   leading: Icon(Icons.account_circle),
-            //   title: Text('Profile'),
-            // ),
-            // const ListTile(
-            //   leading: Icon(Icons.settings),
-            //   title: Text('Settings'),
-            // ),
+            //レイアウトのみでパーツは関数で分割
+            _editButton(),
+            _pageListTiles(),
+            _feedsList()
           ],
         ),
       ),
     );
+    // const ListTile(
+    //   //子要素としてはListTileを入れる
+    //   leading: Icon(Icons.message),
+    //   title: Text('Messages'),
+    // ),
+    // const ListTile(
+    //   leading: Icon(Icons.account_circle),
+    //   title: Text('Profile'),
+    // ),
+    // const ListTile(
+    //   leading: Icon(Icons.settings),
+    //   title: Text('Settings'),
+    // ),
   }
+
+  Widget _feedsList() {
+    // ignore: prefer_const_constructors
+    return ExpansionTile(
+      title: const Text("Feeds"),
+      // ignore: prefer_const_literals_to_create_immutables
+      children: [
+        //Sliverにしてもだめだったからheightは動的にするしかないか
+        // ignore: prefer_const_constructors
+        SizedBox(
+          height: 800, //PLAN:レスポンシブにしたい
+          // ignore: prefer_const_constructors
+          child: DragReorderableListView(),
+        )
+      ],
+    );
+  }
+
+  Widget _editButton() {
+    return SafeArea(
+      minimum: const EdgeInsets.only(top: 5.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: () {
+            //編集モードの切替
+            setState(() {
+              var isEditMode = ref.watch(isFeedsEditModeProvider);
+              isEditMode = isEditMode == FeedsEditMode.edit
+                  ? FeedsEditMode.noEdit
+                  : FeedsEditMode.edit;
+              ref.read(isFeedsEditModeProvider.notifier).state = isEditMode;
+            });
+          },
+          child: const Text('EDIT'),
+        ),
+      ),
+    );
+  }
+
+  Widget _pageListTiles() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(thickness: 1.0, height: 5),
+        ListTile(
+          leading: const Icon(Icons.menu_book),
+          title: const Text('Today'),
+          onTap: () {
+            //PLAN:TodayPageに表示を切り替えてメニューを閉じる
+            setState(
+              () {},
+            );
+          },
+        ),
+        const Divider(thickness: 1.0, height: 0.05),
+        ListTile(
+          leading: const Icon(Icons.bookmark_border),
+          title: const Text('Read Later'),
+          onTap: () {
+            //今はテスト用にリストを挿入している
+            var hoge = ref.watch(subscriptionSiteListProvider.notifier);
+            var temp1 = WebSite.mock("1", "site1", "Anime");
+            var temp2 = WebSite.mock("2", "site2", "Anime");
+            var temp3 = WebSite.mock("3", "site3", "Manga");
+            var temp4 = WebSite.mock("4", "site4", "Manga");
+            var temp5 = WebSite.mock("5", "site5", "Anime");
+            hoge.add([temp1, temp2, temp3, temp4,temp5]);
+          },
+        ),
+        const Divider(thickness: 1.0, height: 0.05),
+        Tooltip(
+          waitDuration: const Duration(milliseconds: 700),
+          message: "今はまだ有料化するほどの機能はない",
+          child: ListTile(
+            leading: const Icon(Icons.upcoming),
+            title: const Text('Upgrade'),
+            onTap: () {},
+            enabled: false, //PLAN:今はまだ有料化するほどの機能はない
+          ),
+        ),
+      ],
+    );
+  }
+  //
 }
-
-
-
-
-//TODO:とりあえず、ここでリストに入れるモックデータを書く
