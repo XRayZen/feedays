@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:feedays/domain/entities/activity.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:feedays/domain/entities/activity.dart';
 
 import './app_config.dart';
 
@@ -65,11 +66,15 @@ class RssFeed {
   final String description;
   final String link;
   final ByteData image;
+  final String site;
+  final String category;
   RssFeed({
     required this.title,
     required this.description,
     required this.link,
     required this.image,
+    required this.site,
+    required this.category,
   });
 }
 

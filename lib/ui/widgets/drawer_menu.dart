@@ -54,7 +54,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   Widget _feedsList() {
     // ignore: prefer_const_constructors
     return ExpansionTile(
-      title: const Text("Feeds"),
+      title:  Text("Feeds"),
       // ignore: prefer_const_literals_to_create_immutables
       children: [
         //Sliverにしてもだめだったからheightは動的にするしかないか

@@ -27,3 +27,22 @@ TextStyle genResponsiveTextStyle(
       letterSpacing: letterSpacing,
       fontWeight: fontWeight);
 }
+
+double getResponsiveValue(
+  BuildContext context,
+  double defaultValue,
+  double mobileValue,
+  double tabletValue,
+) {
+  var res = ResponsiveValue(
+    context,
+    defaultValue: defaultValue,
+    valueWhen: [
+      //MOBILE より小さい場合はフォントサイズがvalue  になる
+      Condition.smallerThan(name: MOBILE, value: mobileValue),
+      // TABLET より大きい場合はフォントサイズが value になる
+      Condition.largerThan(name: TABLET, value: tabletValue)
+    ],
+  ).value;
+  return res ?? defaultValue;
+}

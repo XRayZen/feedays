@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../domain/entities/entity.dart';
 
-class FeedModel {
+class SubscFeedSiteModel {
   final String key;
   final String name;
   final String url;
@@ -12,8 +12,8 @@ class FeedModel {
   final int newCount;
   final String category;
   final CategoryOrSite categoryOrSite;
-  final List<FeedModel> nodes;
-  FeedModel({
+  final List<SubscFeedSiteModel> nodes;
+  SubscFeedSiteModel({
     required this.key,
     required this.name,
     required this.url,
@@ -25,8 +25,8 @@ class FeedModel {
   });
 
   //ファクトリーコンストラクタの名前は、直前のクラスの名前と同じでなければなりません。
-  factory FeedModel.from(WebSite site) {
-    return FeedModel(
+  factory SubscFeedSiteModel.from(WebSite site) {
+    return SubscFeedSiteModel(
         key: site.key,
         name: site.name,
         url: site.url,

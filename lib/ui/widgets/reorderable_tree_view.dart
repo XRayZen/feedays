@@ -1,7 +1,7 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:feedays/ui/model/feed_model.dart';
-import 'package:feedays/ui/provider/subsc_sites_provider.dart';
+import 'package:feedays/ui/model/subsc_feed_site_model.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -125,7 +125,6 @@ class _ReorderableTreeListViewState
         child: const Icon(Icons.menu),
       ),
     );
-    print(isEditMode);
     return isEditMode ? handle : null;
   }
 
@@ -143,7 +142,7 @@ class _ReorderableTreeListViewState
         .onListReorder(oldListIndex, newListIndex);
   }
 
-  _buildList(List<FeedModel> nodes) {
+  _buildList(List<SubscFeedSiteModel> nodes) {
     List<DragAndDropListExpansion> widgets = [];
 
     for (var node in nodes) {
@@ -160,19 +159,33 @@ class _ReorderableTreeListViewState
           // trailing: ExpansionTileCustomAnimeWidget(),
           onExpansionChanged: (bool value) {
             //コントローラーをステートプロバイダーにしてここで指示する
+            //disposeでエラーが出る
+            //NOTE:コントローラーの廃棄タイミングをこのウィジェットにする
+            //今だとタイルごとに廃棄しているからエラーが出る
             // ref.watch(expansionTileCustomAnimePro);
+            // setState(() {
+            //   if (value) {
+            //     expansionTileCustomAnimePro[0].forward();
+            //   } else {
+            //     expansionTileCustomAnimePro[0].reverse().then<void>((value) {
+            //       if (!mounted) return;
+            //       setState(() {});
+            //     });
+            //   }
+            // });
           },
           children: _buildTreeChildNode(node.nodes)));
     }
     return widgets;
   }
 
-  List<DragAndDropItem> _buildTreeChildNode(List<FeedModel> models) {
+  List<DragAndDropItem> _buildTreeChildNode(List<SubscFeedSiteModel> models) {
     if (models.isEmpty) {
       return [];
     }
     return models.map((e) {
       return DragAndDropItem(
+        canDrag: _isEditMode(ref.watch(isFeedsEditModeProvider)),
         //ドラッグしてるときの様子
         // feedbackWidget: ,
         //PLAN:後回し
@@ -190,11 +203,10 @@ class _ReorderableTreeListViewState
 //他のクラスでも使いたいが渡す必要があるため渡せない
 //StateNotifierでなら渡せる
 //これ以上のプロバイダーコードはProviderレイヤーで書く
-final expansionTileCustomAnimePro = Provider.autoDispose
-    .family<AnimationController, _ExpansionTileAnimeState>((ref, lo) {
-  return AnimationController(
-      duration: const Duration(milliseconds: 900), vsync: lo);
-});
+// final expansionTileCustomAnimePro = Provider.autoDispose<AnimationController, bool>((ref, lo) {
+//   return ;
+// });
+final List<AnimationController> expansionTileCustomAnimePro = [];
 
 class ExpansionTileCustomAnimeWidget extends ConsumerStatefulWidget {
   const ExpansionTileCustomAnimeWidget({super.key});
@@ -216,13 +228,16 @@ class _ExpansionTileAnimeState
   @override
   void initState() {
     super.initState();
-    final controller = ref.read(expansionTileCustomAnimePro(this));
-    _iconTurns = controller.drive(_halfTween.chain(_easeInTween));
+    final controller = AnimationController(
+        duration: const Duration(milliseconds: 400), vsync: this);
+    expansionTileCustomAnimePro.add(controller);
+    _iconTurns =
+        expansionTileCustomAnimePro[0].drive(_halfTween.chain(_easeInTween));
   }
 
   @override
   void dispose() {
-    // _controller.dispose();
+    expansionTileCustomAnimePro[0].dispose();
     super.dispose();
   }
 

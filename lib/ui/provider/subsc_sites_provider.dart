@@ -1,8 +1,9 @@
 import 'package:feedays/domain/entities/entity.dart';
-import 'package:feedays/ui/model/feed_model.dart';
+import 'package:feedays/ui/model/subsc_feed_site_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
+class SubscriptionSiteListNotifier
+    extends StateNotifier<List<SubscFeedSiteModel>> {
   SubscriptionSiteListNotifier() : super([]);
 
   //追加
@@ -12,7 +13,7 @@ class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
     // 代わりに、既存と新規を含む新しいリストを作成します。
     // Dart のスプレッド演算子を使うと便利ですよ!
     //カテゴリーに基づいてノードを作る必要がある
-    List<FeedModel> items = _webSitesToFeedModels(sites);
+    List<SubscFeedSiteModel> items = _webSitesToFeedModels(sites);
     state = items;
     // `notifyListeners` などのメソッドを呼ぶ必要はありません。
     // `state =` により必要なときに UI側 に通知が届き、ウィジェットが更新されます。
@@ -23,7 +24,7 @@ class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     const point = 0;
     final newList = [...state];
-    final FeedModel movedItem =
+    final SubscFeedSiteModel movedItem =
         newList[oldListIndex + point].nodes.removeAt(oldItemIndex);
     newList[newListIndex].nodes.insert(newItemIndex, movedItem);
     state = newList;
@@ -34,7 +35,7 @@ class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
     if (oldListIndex < newListIndex) {
       newListIndex -= 1;
     }
-    final FeedModel node = newList.removeAt(oldListIndex);
+    final SubscFeedSiteModel node = newList.removeAt(oldListIndex);
     newList.insert(newListIndex, node);
     state = newList;
   }
@@ -50,7 +51,7 @@ class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
     state = newList;
   }
 
-  void deleteOfFeedModel(FeedModel model) {
+  void deleteOfFeedModel(SubscFeedSiteModel model) {
     state = [...state.where((item) => item != model)];
   }
 
@@ -59,41 +60,41 @@ class SubscriptionSiteListNotifier extends StateNotifier<List<FeedModel>> {
   }
 }
 
-final subscriptionSiteListProvider =
-    StateNotifierProvider<SubscriptionSiteListNotifier, List<FeedModel>>((ref) {
+final subscriptionSiteListProvider = StateNotifierProvider<
+    SubscriptionSiteListNotifier, List<SubscFeedSiteModel>>((ref) {
   return SubscriptionSiteListNotifier();
 });
 
-List<FeedModel> _webSitesToFeedModels(List<WebSite> sites) {
-  var items = <FeedModel>[];
+List<SubscFeedSiteModel> _webSitesToFeedModels(List<WebSite> sites) {
+  var items = <SubscFeedSiteModel>[];
   int currentCategoryKey = 7000;
   for (var site in sites) {
     if (items.isEmpty) {
-      items.add(FeedModel(
+      items.add(SubscFeedSiteModel(
           key: currentCategoryKey.toString(),
           name: site.category,
           url: "",
           newCount: 0,
           category: site.category,
           categoryOrSite: CategoryOrSite.category,
-          nodes: [FeedModel.from(site)]));
+          nodes: [SubscFeedSiteModel.from(site)]));
     }
     if (items.any((element) => element.category == site.category)) {
       //Nodeを追加する
       var findCategoryIndex =
           items.indexWhere((element) => site.category == element.category);
-      items[findCategoryIndex].nodes.add(FeedModel.from(site));
+      items[findCategoryIndex].nodes.add(SubscFeedSiteModel.from(site));
     } else {
       //カテゴリーを追加
       currentCategoryKey += 1 + items.length;
-      items.add(FeedModel(
+      items.add(SubscFeedSiteModel(
           key: currentCategoryKey.toString(),
           name: site.category,
           url: "",
           newCount: 0,
           category: site.category,
           categoryOrSite: CategoryOrSite.category,
-          nodes: [FeedModel.from(site)]));
+          nodes: [SubscFeedSiteModel.from(site)]));
     }
   }
   return items;

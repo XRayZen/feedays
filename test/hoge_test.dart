@@ -1,5 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
-import 'package:feedays/ui/model/feed_model.dart';
+import 'package:feedays/ui/model/subsc_feed_site_model.dart';
 import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -9,7 +9,10 @@ List<RssFeed> genFakeRssFeeds(int num) {
         title: "Fake Site:$i",
         description: "Description:$i",
         link: "none",
-        image: ByteData(0)));
+        image: ByteData(0),
+        site: "none",
+        category: "Fake"
+        ));
   }
   return fakeFeeds;
 }

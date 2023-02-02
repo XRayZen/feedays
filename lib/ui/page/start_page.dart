@@ -1,13 +1,10 @@
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
-import 'package:feedays/ui/page/pages.dart';
 import 'package:feedays/ui/page/read_later.dart';
 import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/page/today_page.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
-import 'package:feedays/ui/widgets/reorderable_tree_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../util.dart';
 
@@ -70,10 +67,8 @@ class _StartPageState extends State<StartPage> {
     // ウィジェットのインスタンスを個別に変更するのではなく、更新が必要なものを再構築するだけで済むようになっています。
     return Scaffold(
         key: scaffoldStateKey,
-        drawer: Expanded(
-          child: AppDrawerMenu(
-            scaffoldKey: scaffoldStateKey,
-          ),
+        drawer: AppDrawerMenu(
+          scaffoldKey: scaffoldStateKey,
         ),
         //TODO:ページを入れ替える必要がある
         body: barpages[_currentPageIndex],
@@ -85,7 +80,7 @@ class _StartPageState extends State<StartPage> {
             selectedIndex: _currentPageIndex,
             animationDuration: const Duration(seconds: 1),
             elevation: 25.0, //標高
-            height: 100,
+            height: getResponsiveValue(context, 100, 100, 70),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             backgroundColor: Colors.black,
             surfaceTintColor: Colors.black,
