@@ -1,3 +1,4 @@
+import 'package:feedays/ui/widgets/feeds_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -105,9 +106,12 @@ class FeedsTabBarView extends StatelessWidget {
       controller: tabController,
       children: const <Widget>[
         Center(
-          child: Text('野球', style: TextStyle(fontSize: 32.0)),
+          //PLAN:Todaypageはカテゴリごとにサイトの直近フィードを表示する
+          //が、今は個別サイトのフィードを完成させる
+          child: FeedListView(),
         ),
         Center(
+          //PLAN:トレンドはapiにリクエストして表示する
           child: Text('サッカー', style: TextStyle(fontSize: 32.0)),
         ),
       ],

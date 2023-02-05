@@ -62,6 +62,7 @@ class WebSite {
 }
 
 class RssFeed {
+  final int index;
   final String title;
   final String description;
   final String link;
@@ -69,6 +70,7 @@ class RssFeed {
   final String site;
   final String category;
   RssFeed({
+    required this.index,
     required this.title,
     required this.description,
     required this.link,

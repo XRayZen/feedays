@@ -1,3 +1,4 @@
+import 'package:feedays/domain/entities/entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final isFeedsEditModeProvider = StateProvider<FeedsEditMode>((ref) {
@@ -8,10 +9,22 @@ final feedTypeProvider = StateProvider<FeedsType>((ref) {
   return FeedsType.all;
 });
 
-final selectedSiteProvider = StateProvider<String>((ref) {
-  return "";
-});
+
+class SelectedSiteNotifier extends StateNotifier<WebSite> {
+  SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));
+  void selectSite(WebSite webSite) {
+    state = webSite;
+  }
+
+  WebSite read() {
+    return state;
+  }
+}
+
+final selectWebSiteProvider =
+    StateNotifierProvider<SelectedSiteNotifier, WebSite>(
+        (ref) => SelectedSiteNotifier());
 
 enum FeedsEditMode { edit, noEdit }
-enum FeedsType { site, all }
 
+enum FeedsType { site, all }
