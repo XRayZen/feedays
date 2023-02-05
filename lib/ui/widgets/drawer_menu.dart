@@ -1,4 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/reorderable_tree_view.dart';
@@ -54,7 +55,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   Widget _feedsList() {
     // ignore: prefer_const_constructors
     return ExpansionTile(
-      title:  Text("Feeds"),
+      title: Text("Feeds"),
       // ignore: prefer_const_literals_to_create_immutables
       children: [
         //Sliverにしてもだめだったからheightは動的にするしかないか
@@ -117,7 +118,10 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
             var temp3 = WebSite.mock("3", "site3", "Manga");
             var temp4 = WebSite.mock("4", "site4", "Manga");
             var temp5 = WebSite.mock("5", "site5", "Anime");
-            hoge.add([temp1, temp2, temp3, temp4,temp5]);
+            hoge.add([temp1, temp2, temp3, temp4, temp5]);
+            ref.watch(webUsecaseProvider).genFakeWebsite(temp1);
+            temp1 = ref.watch(webUsecaseProvider).webSites[0];
+            ref.watch(selectWebSiteProvider.notifier).selectSite(temp1);
           },
         ),
         const Divider(thickness: 1.0, height: 0.05),

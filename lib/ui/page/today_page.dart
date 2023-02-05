@@ -104,15 +104,15 @@ class FeedsTabBarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBarView(
       controller: tabController,
-      children: const <Widget>[
+      children: <Widget>[
         Center(
           //PLAN:Todaypageはカテゴリごとにサイトの直近フィードを表示する
           //が、今は個別サイトのフィードを完成させる
           child: FeedListView(),
         ),
-        Center(
+        const Center(
           //PLAN:トレンドはapiにリクエストして表示する
-          child: Text('サッカー', style: TextStyle(fontSize: 32.0)),
+          child: Text('Trend', style: TextStyle(fontSize: 32.0)),
         ),
       ],
     );

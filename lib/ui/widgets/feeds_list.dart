@@ -1,15 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ffi';
-
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
-import 'package:feedays/ui/provider/rss_feeds_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import 'indicator/empty_list_indicator.dart';
+import 'indicator/error_indicator.dart';
 
 class FeedListView extends ConsumerStatefulWidget {
   const FeedListView({super.key});
@@ -29,35 +27,30 @@ class _FeedListState extends ConsumerState<FeedListView> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
-
     super.initState();
   }
 
   Future<void> _fetchPage(int pageKey) async {
-    //ページを要求されたら取得処理をするコードを書く
-    ref.watch(webUsecaseProvider).genFakeWebsite();
-    var length = ref.watch(webUsecaseProvider).webSites.length;
-    print("length:{$length}");
-    final site = ref.watch(selectWebSiteProvider);
-    // 要求するページ数と
-    var datas =
-        ref.watch(webUsecaseProvider).fetchFeed(site, pageKey, pageSize: 10);
-    final previouslyFetchedItemsCount =
-        // 2 itemListは、PagingControllerのプロパティです。
-        //これまでに読み込まれたすべてのアイテムを保持します。
-        //itemListの初期値はnullなので、?条件付きプロパティアクセスを使用しています。
-        _pagingController.itemList?.length ?? 0;
-    //取得したページがラストなのかどうか判定する
-    if (ref
-        .watch(webUsecaseProvider)
-        .isLastFeed(site, previouslyFetchedItemsCount)) {
-      _pagingController.appendLastPage(datas!);
-    } else {
-      final nextPageKey = pageKey + 1;
-      _pagingController.appendPage(datas!, nextPageKey);
-    }
     try {
-      //レポジトリで新しいページを要求する
+      //1 ページを要求されたら取得処理をするコードを書く
+      final site = ref.watch(selectWebSiteProvider);
+      var datas = ref
+          .watch(webUsecaseProvider)
+          .fetchFeedDetail(site, pageKey, pageSize: 10);
+      final previouslyFetchedItemsCount =
+          // 2 itemListは、PagingControllerのプロパティです。
+          //これまでに読み込まれたすべてのアイテムを保持します。
+          //itemListの初期値はnullなので、?条件付きプロパティアクセスを使用しています。
+          _pagingController.itemList?.length ?? 0;
+      //取得したページがラストなのかどうか判定する
+      if (ref
+          .watch(webUsecaseProvider)
+          .isLastFeed(site, previouslyFetchedItemsCount)) {
+        _pagingController.appendLastPage(datas!);
+      } else {
+        final nextPageKey = datas!.last.index;
+        _pagingController.appendPage(datas, nextPageKey);
+      }
     } catch (e) {
       // 4 エラーが発生した場合は、コントローラのerrorプロパティにその値を指定します。
       _pagingController.error = e;
@@ -66,7 +59,6 @@ class _FeedListState extends ConsumerState<FeedListView> {
 
   @override
   void dispose() {
-    // 4 コントローラを dispose() するのを忘れないように
     _pagingController.dispose();
     super.dispose();
   }
@@ -74,10 +66,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
   @override
   Widget build(BuildContext context) {
     //サイトが選択もしくはAllが選択されたらビジネスロジックを呼んでサイトのフィードを取得してリストに追加して表示する
-    //flutterのビジネスロジックインスタンス・依存性注入のやり方が分かったら再開できるか
-    //リストはパッケージのinfinite_scroll_paginationを使う
     //これで遅延読み込みを習得する
-    var feeds = ref.watch(rssFeedsProvider);
     return RefreshIndicator(
       onRefresh: () => Future.sync(
         // 2 PagingController は refresh() というデータを更新する関数を定義している
@@ -91,43 +80,41 @@ class _FeedListState extends ConsumerState<FeedListView> {
           itemBuilder: (context, feed, index) {
             //アイテムをデザインする
             //カードにするか
+            //PLAN:Todayモードだとカテゴリごとに表示する
+            //その時はpagekeyではなく読み込むインデックスを初期化する
             return ListTile(
               title: Text(feed.title),
             );
           },
+          animateTransitions: true,
           firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
             error: _pagingController.error,
             onTryAgain: () => _pagingController.refresh(),
-            context: context,
           ),
           noItemsFoundIndicatorBuilder: (context) =>
-              EmptyListIndicator(context: context),
+              EmptyListIndicator(),
+          noMoreItemsIndicatorBuilder: (context) => NoMoreItemIndicator(
+            onTryAgain: () => _pagingController.refresh(),
+          ),
         ),
       ),
     );
   }
 }
 
-class ErrorIndicator extends StatelessWidget {
-  const ErrorIndicator(
-      {super.key,
-      required this.error,
-      required this.onTryAgain,
-      required this.context});
-  final BuildContext context;
-  final Object error;
+class NoMoreItemIndicator extends ConsumerWidget {
+  const NoMoreItemIndicator({super.key, required this.onTryAgain});
   final Function onTryAgain;
   @override
-  Widget build(BuildContext context) {
-    return  Text("Error :{$error}");
-  }
-}
-
-class EmptyListIndicator extends StatelessWidget {
-  const EmptyListIndicator({super.key, required this.context});
-  final BuildContext context;
-  @override
-  Widget build(BuildContext context) {
-    return  const Text("Empty List");
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        const Text("No more item"),
+        TextButton(
+          child: const Text("Retry"),
+          onPressed: () => onTryAgain,
+        ),
+      ],
+    );
   }
 }
