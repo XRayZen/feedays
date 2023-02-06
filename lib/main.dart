@@ -32,9 +32,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      // darkTheme: ThemeData.dark(useMaterial3: true), // ダーク用テーマ
-      themeMode: ThemeMode.system,
-      home: const StartPage(title: 'Flutter Demo Home Page'),
+      home: StartPageView(title: ''),
       builder: (context, child) => ResponsiveWrapper.builder(child,
           maxWidth: 1200,
           minWidth: 480,
@@ -43,13 +41,13 @@ class MyApp extends StatelessWidget {
             const ResponsiveBreakpoint.resize(480, name: MOBILE),
             const ResponsiveBreakpoint.autoScale(800, name: TABLET),
             const ResponsiveBreakpoint.resize(1000,
-                name: DESKTOP, scaleFactor: 0.90),
+                name: DESKTOP, scaleFactor: 0.90,),
             const ResponsiveBreakpoint.autoScale(1200,
-                name: DESKTOP, scaleFactor: 0.70),
+                name: DESKTOP, scaleFactor: 0.70,),
             // const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
           ],
-          background: Container(color: Color.fromARGB(255, 0, 0, 0))),
-      initialRoute: "/",
+          background: Container(color: const Color.fromARGB(255, 0, 0, 0)),),
+      initialRoute: '/',
     );
   }
 }

@@ -6,8 +6,8 @@ import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DragReorderTreeSLiverListView extends ConsumerStatefulWidget {
-  const DragReorderTreeSLiverListView({
+class SiteFeedSLiverView extends ConsumerStatefulWidget {
+  const SiteFeedSLiverView({
     super.key,
   });
   @override
@@ -15,13 +15,12 @@ class DragReorderTreeSLiverListView extends ConsumerStatefulWidget {
       _ReorderableTreeListViewState();
 }
 
-class _ReorderableTreeListViewState
-    extends ConsumerState<DragReorderTreeSLiverListView> {
+class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
   @override
   Widget build(BuildContext context) {
-    var res = ref.watch(subscriptionSiteListProvider.notifier);
+    final res = ref.watch(subscriptionSiteListProvider.notifier);
     //PLAN:このフラグがオンなら色々とアイコンの位置をずらす必要がある
-    var isEditFlg = _isEditMode(ref.watch(isFeedsEditModeProvider));
+    final isEditFlg = _isEditMode(ref.watch(isFeedsEditModeProvider));
     if (res.isEmpty()) {
       return const SliverToBoxAdapter(child: Center(child: Text('リストが空です')));
     } else {
@@ -40,9 +39,9 @@ class _ReorderableTreeListViewState
         //スライバと互換性のあるリストを返すかどうか。sliver として使用する場合は true を設定する。
         //true の場合、[scrollController] を提供する必要がある。ウィジェットのみで使用する場合は false に設定する。
         sliverList: true,
-        scrollController: scrollController,//親スクロールコントローラーとつなげる
+        scrollController: scrollController, //親スクロールコントローラーとつなげる
         // ScrollController(),
-        listPadding: const EdgeInsets.all(5),
+        // listPadding: const EdgeInsets.all(3),
         itemDivider: Divider(
           thickness: 2,
           height: 2,
@@ -63,28 +62,27 @@ class _ReorderableTreeListViewState
           ],
         ),
         listGhost: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0),
+          padding: const EdgeInsets.symmetric(vertical: 30),
           child: Center(
             child: Container(
               padding:
-                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 100.0),
+                  const EdgeInsets.symmetric(vertical: 30, horizontal: 100),
               decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.circular(7.0),
+                borderRadius: BorderRadius.circular(7),
               ),
               child: const Icon(Icons.add_box),
             ),
           ),
         ),
         itemGhost: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2.0),
+          padding: const EdgeInsets.symmetric(),
           child: Center(
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
               decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: const Icon(Icons.add_box),
             ),
@@ -92,7 +90,7 @@ class _ReorderableTreeListViewState
         ),
         lastItemTargetHeight: 10,
         addLastItemTargetHeightToTop: true,
-        lastListTargetSize: 40,
+        lastListTargetSize: 0,
         listDragHandle: _buildDragHandle(isList: true, isEditMode: isEditFlg),
         itemDragHandle: _buildDragHandle(isEditMode: isEditFlg),
         itemOnAccept: _dragItemAccept,
@@ -107,11 +105,11 @@ class _ReorderableTreeListViewState
     //これは null のままにしておく必要があります。[onItemReorder] または [onItemAdd] は、この後に呼び出されます。
   }
 
-  _isEditMode(FeedsEditMode isMode) {
+  bool _isEditMode(FeedsEditMode isMode) {
     return isMode == FeedsEditMode.edit ? true : false;
   }
 
-  _buildDragHandle({bool isList = false, bool isEditMode = false}) {
+  DragHandle? _buildDragHandle({bool isList = false, bool isEditMode = false}) {
     //位置がずれるのを直せた
     //参考:https://www.youtube.com/watch?v=HmiaGyf55ZM
     final alignment = isList
@@ -128,24 +126,29 @@ class _ReorderableTreeListViewState
   }
 
   //個別のアイテムの入れ替え
-  _onChildItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+  void _onChildItemReorder(
+    int oldItemIndex,
+    int oldListIndex,
+    int newItemIndex,
+    int newListIndex,
+  ) {
     ref
         .watch(subscriptionSiteListProvider.notifier)
         .onItemReorder(oldItemIndex, oldListIndex, newItemIndex, newListIndex);
   }
 
-  _onListReorder(int oldListIndex, int newListIndex) {
+  void _onListReorder(int oldListIndex, int newListIndex) {
     ref
         .watch(subscriptionSiteListProvider.notifier)
         .onListReorder(oldListIndex, newListIndex);
   }
 
-  _buildList(List<SubscFeedSiteModel> nodes) {
-    List<DragAndDropListExpansion> widgets = [];
+  List<DragAndDropListExpansion> _buildList(List<SubscFeedSiteModel> nodes) {
+    final widgets = <DragAndDropListExpansion>[];
 
-    for (var node in nodes) {
-      widgets.add(DragAndDropListExpansion(
+    for (final node in nodes) {
+      widgets.add(
+        DragAndDropListExpansion(
           //この項目がドラッグ可能かどうか。並べ替えが可能な場合は true を設定します。固定でなければならない場合はfalseに設定します。
           canDrag: _isEditMode(ref.watch(isFeedsEditModeProvider)),
           // initiallyExpanded: true,
@@ -173,7 +176,9 @@ class _ReorderableTreeListViewState
             //   }
             // });
           },
-          children: _buildTreeChildNode(node.nodes)));
+          children: _buildTreeChildNode(node.nodes),
+        ),
+      );
     }
     return widgets;
   }
@@ -221,14 +226,16 @@ class _ExpansionTileAnimeState
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
+      Tween<double>(begin: 0, end: 0.5);
   // late final AnimationController _controller;
   late Animation<double> _iconTurns;
   @override
   void initState() {
     super.initState();
     final controller = AnimationController(
-        duration: const Duration(milliseconds: 400), vsync: this);
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
     expansionTileCustomAnimePro.add(controller);
     _iconTurns =
         expansionTileCustomAnimePro[0].drive(_halfTween.chain(_easeInTween));

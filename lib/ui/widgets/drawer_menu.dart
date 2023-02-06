@@ -1,12 +1,13 @@
+// ignore_for_file: avoid_bool_literals_in_conditional_expressions
+
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/subsc_sites_provider.dart';
-import 'package:feedays/ui/widgets/drag_sliver_list_view.dart';
+import 'package:feedays/ui/widgets/site_feed_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-//TODO:プロバイダーを使うにはこれをRiverPod仕様のwidgetに変換する必要がある
 class AppDrawerMenu extends ConsumerStatefulWidget {
   const AppDrawerMenu({super.key, required this.scaffoldKey});
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -18,7 +19,6 @@ class AppDrawerMenu extends ConsumerStatefulWidget {
 final scrollController = ScrollController();
 
 class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
-  final ScrollController _scrollController = ScrollController();
   late bool _isExpanded;
   @override
   void initState() {
@@ -28,11 +28,11 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
 
   @override
   Widget build(BuildContext context) {
-    var res = ref.watch(subscriptionSiteListProvider.notifier).isEmpty();
     return Drawer(
-        backgroundColor: Colors.black.withOpacity(0.5),
-        //NOTE:feedlyのメニューをパクる
-        child: _sliver());
+      backgroundColor: Colors.black.withOpacity(0.5),
+      //NOTE:feedlyのメニューをパクる
+      child: _sliver(),
+    );
   }
 
   Widget _sliver() {
@@ -41,25 +41,34 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
       slivers: [
         SliverToBoxAdapter(child: _editButton()),
         SliverToBoxAdapter(child: _pageListTiles()),
-        SliverToBoxAdapter(child: customExpansion("Feed")),
-        _dragTreeListView(_isExpanded),
+        SliverToBoxAdapter(child: customExpansion('Feed')),
+        SliverVisibility(
+          visible: _isExpanded,
+          sliver: _dragTreeListView(_isExpanded),
+          maintainState: true,
+          // maintainAnimation: true,
+          // maintainSize: true  ,
+        ),
+        // _dragTreeListView(_isExpanded),
         SliverToBoxAdapter(
           child: Column(
-            children: const [
-              ListTile(
-                leading: Icon(Icons.message),
-                title: Text('Messages'),
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  //TODO:Add Content Pageにタブを切り替える
+                },
+                child: const Text('Add Content'),
               ),
-              ListTile(
+              const ListTile(
                 //子要素としてはListTileを入れる
                 leading: Icon(Icons.message),
                 title: Text('Messages'),
               ),
-              ListTile(
+              const ListTile(
                 leading: Icon(Icons.account_circle),
                 title: Text('Profile'),
               ),
-              ListTile(
+              const ListTile(
                 leading: Icon(Icons.settings),
                 title: Text('Settings'),
               ),
@@ -73,11 +82,9 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   //既存のExpansionPanelはSliverを使えないためカスタマイズして動作を再現
   ElevatedButton customExpansion(String listTitle) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(shape: BeveledRectangleBorder()),
+      style: ElevatedButton.styleFrom(shape: const BeveledRectangleBorder()),
       onPressed: () {
-        setState(() {
-          _isExpanded = _isExpanded ? false : true;
-        });
+        setState(() => _isExpanded = _isExpanded ? false : true);
       },
       child: Row(
         children: <Widget>[
@@ -103,13 +110,15 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     if (!ignore) {
       return const SliverToBoxAdapter();
     } else {
-      return DragReorderTreeSLiverListView();
+      //無視しないと即座に反映されない
+      // ignore: prefer_const_constructors
+      return SiteFeedSLiverView();
     }
   }
 
   Widget _editButton() {
     return SafeArea(
-      minimum: const EdgeInsets.only(top: 5.0),
+      minimum: const EdgeInsets.only(top: 5),
       child: Align(
         alignment: Alignment.centerRight,
         child: TextButton(
@@ -133,42 +142,51 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(thickness: 1.0, height: 5),
+        const Divider(thickness: 1, height: 5),
         ListTile(
           leading: const Icon(Icons.menu_book),
           title: const Text('Today'),
           onTap: () {
             //PLAN:TodayPageに表示を切り替えてメニューを閉じる
-            
-            setState(
-              () {},
-            );
+            //BUG:これだとページ遷移出来ない
+            //どうやらメインページがsetStateしないと反映されない
+            //プロバイダーが働いていない
+            //
+            final fff = ref.watch(selectedMainPageProvider);
+            // fff.state = 2;
+            // fff.update((state) => state = 2);
+            // scaffoldStateKeyでも反映できない
+            // setState(
+            //   () {
+
+            //   },
+            // );
           },
         ),
-        const Divider(thickness: 1.0, height: 0.05),
+        const Divider(thickness: 1, height: 0.05),
         ListTile(
           leading: const Icon(Icons.bookmark_border),
           title: const Text('Read Later'),
           onTap: () {
             setState(() {
               //今はテスト用にリストを挿入している
-              var hoge = ref.watch(subscriptionSiteListProvider.notifier);
-              var temp1 = WebSite.mock("1", "site1", "Anime");
-              var temp2 = WebSite.mock("2", "site2", "Anime");
-              var temp3 = WebSite.mock("3", "site3", "Manga");
-              var temp4 = WebSite.mock("4", "site4", "Manga");
-              var temp5 = WebSite.mock("5", "site5", "Anime");
-              hoge.add([temp1, temp2, temp3, temp4, temp5]);
+              final fakeFeeds = ref.watch(subscriptionSiteListProvider.notifier);
+              var temp1 = WebSite.mock('1', 'site1', 'Anime');
+              final temp2 = WebSite.mock('2', 'site2', 'Anime');
+              final temp3 = WebSite.mock('3', 'site3', 'Manga');
+              final temp4 = WebSite.mock('4', 'site4', 'Manga');
+              final temp5 = WebSite.mock('5', 'site5', 'Anime');
+              fakeFeeds.add([temp1, temp2, temp3, temp4, temp5]);
               ref.watch(webUsecaseProvider).genFakeWebsite(temp1);
-              temp1 = ref.watch(webUsecaseProvider).webSites[0];
+              temp1 = ref.watch(webUsecaseProvider).user.subscribeSites[0];
               ref.watch(selectWebSiteProvider.notifier).selectSite(temp1);
             });
           },
         ),
-        const Divider(thickness: 1.0, height: 0.05),
+        const Divider(thickness: 1, height: 0.05),
         Tooltip(
           waitDuration: const Duration(milliseconds: 700),
-          message: "今はまだ有料化するほどの機能はない",
+          message: '今はまだ有料化するほどの機能はない',
           child: ListTile(
             leading: const Icon(Icons.upcoming),
             title: const Text('Upgrade'),

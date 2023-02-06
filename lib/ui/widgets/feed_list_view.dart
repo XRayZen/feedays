@@ -2,6 +2,7 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/indicator/no_more_item_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -24,9 +25,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
   @override
   void initState() {
     // 3 新しいページの要求をリッスンしてそれを処理する関数を登録する
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    _pagingController.addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -34,7 +33,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
     try {
       //1 ページを要求されたら取得処理をするコードを書く
       final site = ref.watch(selectWebSiteProvider);
-      var datas = await ref
+      final datas = await ref
           .watch(webUsecaseProvider)
           .fetchFeedDetail(site, pageKey, pageSize: 10);
       final previouslyFetchedItemsCount =
@@ -92,7 +91,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
             error: _pagingController.error,
             onTryAgain: () => _pagingController.refresh(),
           ),
-          noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
+          noItemsFoundIndicatorBuilder: (context) => const EmptyListIndicator(),
           noMoreItemsIndicatorBuilder: (context) => NoMoreItemIndicator(
             onTryAgain: () => _pagingController.refresh(),
           ),
@@ -102,19 +101,4 @@ class _FeedListState extends ConsumerState<FeedListView> {
   }
 }
 
-class NoMoreItemIndicator extends ConsumerWidget {
-  const NoMoreItemIndicator({super.key, required this.onTryAgain});
-  final Function onTryAgain;
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        const Text("No more item"),
-        TextButton(
-          child: const Text("Retry"),
-          onPressed: () => onTryAgain,
-        ),
-      ],
-    );
-  }
-}
+

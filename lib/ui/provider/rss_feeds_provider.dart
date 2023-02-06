@@ -2,8 +2,8 @@ import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class rssFeedsNotifier extends StateNotifier<List<RssFeed>> {
-  rssFeedsNotifier() : super([]);
+class RssFeedsNotifier extends StateNotifier<List<RssFeed>> {
+  RssFeedsNotifier() : super([]);
   void add(RssFeed feed) {
     state = [...state, feed];
   }
@@ -14,7 +14,7 @@ class rssFeedsNotifier extends StateNotifier<List<RssFeed>> {
     // 代わりに、既存と新規を含む新しいリストを作成します。
     // Dart のスプレッド演算子を使うと便利ですよ!
     //カテゴリーに基づいてノードを作る必要がある
-    var n = state;
+    final n = state;
     n.addAll(sites);
     state = n;
     // `notifyListeners` などのメソッドを呼ぶ必要はありません。
@@ -31,6 +31,6 @@ class rssFeedsNotifier extends StateNotifier<List<RssFeed>> {
 }
 
 final rssFeedsProvider =
-    StateNotifierProvider<rssFeedsNotifier, List<RssFeed>>((ref) {
-  return rssFeedsNotifier();
+    StateNotifierProvider<RssFeedsNotifier, List<RssFeed>>((ref) {
+  return RssFeedsNotifier();
 });

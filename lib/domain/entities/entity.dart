@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/foundation.dart';
-
 import 'package:feedays/domain/entities/activity.dart';
+import 'package:flutter/foundation.dart';
 
 import './app_config.dart';
 
@@ -21,7 +20,25 @@ class UserConfig {
       required this.subscribeSites,
       required this.config,
       required this.identInfo,
-      required this.accountType});
+      required this.accountType,});
+
+  factory UserConfig.defaultUserConfig() {
+    return UserConfig(
+        userName: 'userName',
+        userID: 'userID',
+        isGuest: true,
+        subscribeSites: List.empty(growable: true),
+        config: AppConfig(
+            apiRequestConfig: ApiRequestLimitConfig(
+                trendRequestLimit: 10,
+                noneRssFeedRequestLimit: 10,
+                sendActivityMinute: 10,),),
+        identInfo: UserIdentInfo(
+            ip: '0',
+            macAddress: 'macAddress',
+            accessPlatform: UserAccessPlatform.mobile,),
+        accountType: UserAccountType.guest,);
+  }
 }
 
 class WebSite {
@@ -51,13 +68,13 @@ class WebSite {
     return WebSite(
         key: key,
         name: name,
-        url: "",
+        url: '',
         newCount: 0,
         readLateCount: 0,
         category: category,
-        tags: [],
-        feeds: [],
-        fav: false);
+        tags: List.empty(growable: true),
+        feeds: List.empty(growable: true),
+        fav: false,);
   }
 }
 
@@ -68,6 +85,8 @@ class RssFeed {
   final String link;
   final ByteData image;
   final String site;
+
+  ///必要ないかも
   final String category;
   RssFeed({
     required this.index,

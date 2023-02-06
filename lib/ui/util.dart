@@ -10,7 +10,7 @@ TextStyle genResponsiveTextStyle(
     double tabletValue,
     double? letterSpacing,
     FontWeight? fontWeight,
-    Color? color) {
+    Color? color,) {
   final value = ResponsiveValue(
     context,
     defaultValue: 25.0,
@@ -25,7 +25,7 @@ TextStyle genResponsiveTextStyle(
       color: color,
       fontSize: value,
       letterSpacing: letterSpacing,
-      fontWeight: fontWeight);
+      fontWeight: fontWeight,);
 }
 
 double getResponsiveValue(
@@ -34,7 +34,7 @@ double getResponsiveValue(
   double mobileValue,
   double tabletValue,
 ) {
-  var res = ResponsiveValue(
+  final res = ResponsiveValue(
     context,
     defaultValue: defaultValue,
     valueWhen: [

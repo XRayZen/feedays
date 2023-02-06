@@ -3,54 +3,43 @@ import 'package:feedays/ui/page/add_content_page.dart';
 import 'package:feedays/ui/page/read_later.dart';
 import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/page/today_sliver_page.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../util.dart';
 
-class StartPage extends StatefulWidget {
-  const StartPage({super.key, required this.title});
-
-  // このウィジェットは、アプリケーションのトップページになります。このウィジェットはステートフルです。
-  // つまり、Stateオブジェクト(以下で定義)を持ち、このオブジェクトには見た目に影響を与えるフィールドが含まれています。
-
-  // このクラスは、Stateのコンフィギュレーションです。親(この場合はAppウィジェット)から提供され、
-  // ステートのビルドメソッドで使用される値(この場合はタイトル)を保持します。
-  // Widgetのサブクラスのフィールドは、常に「final」とマークされます。
-
+class StartPageView extends ConsumerStatefulWidget {
+  StartPageView({required this.title, super.key});
   final String title;
-
   @override
-  State<StartPage> createState() => _StartPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _StartPageViewState();
 }
 
-class _StartPageState extends State<StartPage> {
-  int _counter = 0;
+class _StartPageViewState extends ConsumerState<StartPageView> {
   int _currentPageIndex = 0;
   // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  void _incrementCounter() {
-    setState(() {
-      // このsetStateの呼び出しは、FlutterフレームワークにこのStateで何かがハングアップしたことを伝え、
-      // 以下のbuildメソッドを再実行させ、ディスプレイに更新された値を反映させることができるようにします。
-      //setState()を呼ばずに_counterを変更した場合、buildメソッドは再び呼ばれないため、何も起こらないように見える。
-      //アーキテクチャ
-      _counter++;
-    });
+  @override
+  void initState() {
+    // TODO: implement initStat
+    super.initState();
+    //BUG:リストごと入れるのではなく個別のページに分ける
+    // ref.read(mainNavigationPageProvider.notifier).add(barpages);
   }
 
   void _selectedDestination(int value, BuildContext context) {
-    setState(() => _currentPageIndex = value);
+    setState(() {
+      _currentPageIndex = value;
+      ref.watch(selectedMainPageProvider.notifier).state = value;
+    });
     //PLAN:もしくはページ遷移
     if (value == 0) {
       scaffoldStateKey.currentState!.openDrawer();
     }
   }
 
-  List<Widget> _addPages() {
-    return const [SearchPage(), AddContentPage()];
-  }
-
+  //TODO:プロバイダーに移行する
   List<Widget> barpages = [
     ExampleWidget(counter: 0, currentPageIndex: 0),
     ReadlaterPage(),
@@ -58,28 +47,29 @@ class _StartPageState extends State<StartPage> {
     AddContentPage(),
     SearchPage()
   ];
-
   @override
   Widget build(BuildContext context) {
-    // このメソッドは、例えば上記の_incrementCounterメソッドで行われるように、setStateが呼び出されるたびに再実行される。
-    //flutterでビジネスロジックを書いたクラスをRiverpodと組み合わせたい
-    // Flutter フレームワークは、ビルドメソッドの再実行が高速になるように最適化されており、
-    // ウィジェットのインスタンスを個別に変更するのではなく、更新が必要なものを再構築するだけで済むようになっています。
+    //BUG:なぜか変更されたのに更新しない
+    final index = ref.watch(selectedMainPageProvider.notifier).state;
+    
+    //scaffoldStateKeyでステートを呼び出せばsetState出来る
     return Scaffold(
         key: scaffoldStateKey,
         drawer: AppDrawerMenu(
           scaffoldKey: scaffoldStateKey,
         ),
-        //TODO:ページを入れ替える必要がある
-        body: barpages[_currentPageIndex],
+        //TODO:プロバイダーによってページを入れ替える必要がある
+        
+        body: barpages[index],
+        // barpages[_currentPageIndex],
         bottomNavigationBar: DefaultTextStyle.merge(
-          style: genResponsiveTextStyle(context, 28.0, 35.0, null, null, null),
+          style: genResponsiveTextStyle(context, 28, 35, null, null, null),
           child: NavigationBar(
             onDestinationSelected: (value) =>
                 _selectedDestination(value, context),
             selectedIndex: _currentPageIndex,
             animationDuration: const Duration(seconds: 1),
-            elevation: 25.0, //標高
+            elevation: 25, //標高
             height: getResponsiveValue(context, 100, 100, 70),
             labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
             backgroundColor: Colors.black,
@@ -88,27 +78,27 @@ class _StartPageState extends State<StartPage> {
               NavigationDestination(
                 icon: Icon(Icons.menu),
                 label: 'Menu',
-                tooltip: "open a menu",
+                tooltip: 'open a menu',
               ),
               NavigationDestination(
                 icon: Icon(Icons.bookmark_border),
                 label: 'ReadLater',
-                tooltip: "Read later",
+                tooltip: 'Read later',
               ),
               NavigationDestination(
                 icon: Icon(Icons.menu_book),
                 label: 'TodayArticle',
-                tooltip: "Today articles",
+                tooltip: 'Today articles',
               ),
               NavigationDestination(
                 icon: Icon(Icons.add_circle_outline_sharp),
-                label: "AddContent",
+                label: 'AddContent',
                 tooltip: 'Add Content',
               ),
               NavigationDestination(
                 icon: Icon(Icons.search),
-                label: "Search",
-                tooltip: "Search Content",
+                label: 'Search',
+                tooltip: 'Search Content',
               )
             ],
           ),
@@ -140,7 +130,7 @@ class ExampleWidget extends StatelessWidget {
         child: SingleChildScrollView(
           child: DefaultTextStyle.merge(
             style:
-                genResponsiveTextStyle(context, 25.0, 40.0, null, null, null),
+                genResponsiveTextStyle(context, 25, 40, null, null, null),
             child: Column(
               // Column はレイアウトウィジェットでもあります。
               //子供のリストを受け取り、それらを縦に並べます。
@@ -160,11 +150,11 @@ class ExampleWidget extends StatelessWidget {
                 ),
                 Text(
                   '$_counter',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Text(
                   '$_currentPageIndex',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 )
               ],
             ),

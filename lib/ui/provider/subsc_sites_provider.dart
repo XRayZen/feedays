@@ -14,7 +14,13 @@ class SubscriptionSiteListNotifier
     // Dart のスプレッド演算子を使うと便利ですよ!
     //カテゴリーに基づいてノードを作る必要がある
     List<SubscFeedSiteModel> items = _webSitesToFeedModels(sites);
-    state = items;
+    if (state.isEmpty) {
+      state = items;
+    } else {
+      var list = state;
+      list.addAll(items);
+      state = list;
+    }
     // `notifyListeners` などのメソッドを呼ぶ必要はありません。
     // `state =` により必要なときに UI側 に通知が届き、ウィジェットが更新されます。
   }
@@ -27,6 +33,11 @@ class SubscriptionSiteListNotifier
     final SubscFeedSiteModel movedItem =
         newList[oldListIndex + point].nodes.removeAt(oldItemIndex);
     newList[newListIndex].nodes.insert(newItemIndex, movedItem);
+    //TODO:ビジネスロジックにも反映させる
+    //NOTE:別のカテゴリに移動したらそれも検知する
+    final oldCategory = newList[oldListIndex + point].category;
+    final newCategory = newList[newListIndex].category;
+    final movedItmeKey = movedItem.url;
     state = newList;
   }
 
@@ -35,7 +46,7 @@ class SubscriptionSiteListNotifier
     if (oldListIndex < newListIndex) {
       newListIndex -= 1;
     }
-    final SubscFeedSiteModel node = newList.removeAt(oldListIndex);
+    final node = newList.removeAt(oldListIndex);
     newList.insert(newListIndex, node);
     state = newList;
   }

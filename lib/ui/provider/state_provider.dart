@@ -9,6 +9,9 @@ final feedTypeProvider = StateProvider<FeedsType>((ref) {
   return FeedsType.all;
 });
 
+final selectedMainPageProvider = StateProvider<int>((ref) {
+  return 0;
+});
 
 class SelectedSiteNotifier extends StateNotifier<WebSite> {
   SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));

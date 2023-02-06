@@ -4,6 +4,7 @@ import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/feed_list_view.dart';
 import 'package:feedays/ui/widgets/indicator/empty_list_indicator.dart';
 import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
+import 'package:feedays/ui/widgets/indicator/no_more_item_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -17,7 +18,6 @@ class FeedSliverListView extends ConsumerStatefulWidget {
 }
 
 class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
-//TODO:exampleのsliverを参考にする
   final _pagingController = PagingController<int, RssFeed>(
     // 2 firstPageKey パラメータを使って、ページ初期値を設定する必要がある
     //今回使う`API`の場合、ページキーは1から始まりますが、他のAPIの場合は0から始まるかもしれない
@@ -26,9 +26,7 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
   @override
   void initState() {
     // 3 新しいページの要求をリッスンしてそれを処理する関数を登録する
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    _pagingController.addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -38,7 +36,7 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
       final site = ref.watch(selectWebSiteProvider);
       var datas = await ref
           .watch(webUsecaseProvider)
-          .fetchFeedDetail(site, pageKey, pageSize: 10);
+          .fetchFeedDetail(site, pageKey, pageSize: 20);
       final previouslyFetchedItemsCount =
           // 2 itemListは、PagingControllerのプロパティです。
           //これまでに読み込まれたすべてのアイテムを保持します。
@@ -89,11 +87,11 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
             animateTransitions: true,
             firstPageErrorIndicatorBuilder: (context) => ErrorIndicator(
               error: _pagingController.error,
-              onTryAgain: () => _pagingController.refresh(),
+              onTryAgain: _pagingController.refresh,
             ),
             noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
             noMoreItemsIndicatorBuilder: (context) => NoMoreItemIndicator(
-              onTryAgain: () => _pagingController.refresh(),
+              onTryAgain: _pagingController.refresh,
             ),
           ),
         )
