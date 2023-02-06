@@ -2,7 +2,7 @@ import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
 import 'package:feedays/ui/page/read_later.dart';
 import 'package:feedays/ui/page/search_page.dart';
-import 'package:feedays/ui/page/today_page.dart';
+import 'package:feedays/ui/page/today_sliver_page.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +54,7 @@ class _StartPageState extends State<StartPage> {
   List<Widget> barpages = [
     ExampleWidget(counter: 0, currentPageIndex: 0),
     ReadlaterPage(),
-    ToDayPage(),
+    TodaySilverPage(),
     AddContentPage(),
     SearchPage()
   ];

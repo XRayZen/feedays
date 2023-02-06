@@ -18,8 +18,8 @@ class WebUsecase {
   }
 
   ///リストから指定された上限と下限の件数を抜き出す
-  List<RssFeed>? fetchFeedDetail(WebSite site, int pageNum,
-      {int pageSize = 10}) {
+  Future<List<RssFeed>?> fetchFeedDetail(WebSite site, int pageNum,
+      {int pageSize = 10}) async {
     if (webSites.any((element) => element.name == site.name)) {
       List<RssFeed> list = [];
       for (var element in webSites
@@ -44,7 +44,8 @@ class WebUsecase {
       return webSites
               .firstWhere((element) => element.name == site.name)
               .feeds
-              .length <=
+              .last
+              .index <=
           pageNum;
     } else {
       return false;

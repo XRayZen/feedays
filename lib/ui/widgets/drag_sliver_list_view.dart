@@ -2,11 +2,12 @@ import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:feedays/ui/model/subsc_feed_site_model.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/subsc_sites_provider.dart';
+import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DragReorderableListView extends ConsumerStatefulWidget {
-  const DragReorderableListView({
+class DragReorderTreeSLiverListView extends ConsumerStatefulWidget {
+  const DragReorderTreeSLiverListView({
     super.key,
   });
   @override
@@ -15,20 +16,18 @@ class DragReorderableListView extends ConsumerStatefulWidget {
 }
 
 class _ReorderableTreeListViewState
-    extends ConsumerState<DragReorderableListView> {
+    extends ConsumerState<DragReorderTreeSLiverListView> {
   @override
   Widget build(BuildContext context) {
     var res = ref.watch(subscriptionSiteListProvider.notifier);
     //PLAN:このフラグがオンなら色々とアイコンの位置をずらす必要がある
     var isEditFlg = _isEditMode(ref.watch(isFeedsEditModeProvider));
     if (res.isEmpty()) {
-      //PLAN:これをSilverToBoxで囲えばSliverでも高さ設定無し出来るか
-      return const Center(child: Text('リストが空です'));
+      return const SliverToBoxAdapter(child: Center(child: Text('リストが空です')));
     } else {
       //カテゴリータイルにドラッグアンドドロップしたらそれを特定して
       //入れ替え処理を行う
       //編集モードの切替で右にメニューアイコンを表示させてドラッグ可能か判断できるようにする
-      //NOTE:`DragAndDropLists`はページなら高さ設定は要らないが、ドロワーメニューでは高さ設定が必要
       return DragAndDropLists(
         children: _buildList(ref.watch(subscriptionSiteListProvider)),
         onItemReorder: _onChildItemReorder,
@@ -38,11 +37,11 @@ class _ReorderableTreeListViewState
         //リストのドラッグを長押しと短押しのどちらで行うかを指定します。
         //trueの場合、長押しの後にリストがドラッグされます。falseの場合、リストはすぐにドラッグされます。
         listDragOnLongPress: isEditFlg,
-        //PLAN:いずれはスライバ(Sliver)を使うべき
-        //ウィジェットまたはスライバと互換性のあるリストを返すかどうか。sliver として使用する場合は true を設定する。
+        //スライバと互換性のあるリストを返すかどうか。sliver として使用する場合は true を設定する。
         //true の場合、[scrollController] を提供する必要がある。ウィジェットのみで使用する場合は false に設定する。
-        // sliverList: true,
-        // scrollController: ScrollController(),
+        sliverList: true,
+        scrollController: scrollController,//親スクロールコントローラーとつなげる
+        // ScrollController(),
         listPadding: const EdgeInsets.all(5),
         itemDivider: Divider(
           thickness: 2,
@@ -154,7 +153,7 @@ class _ReorderableTreeListViewState
           listKey: ObjectKey(node),
           title: Text(node.name),
           leading: const Icon(Icons.ac_unit),
-          //feedlyを真似てアロートグルを右に寄せる
+          //PLAN:feedlyを真似てアロートグルを右に寄せる
           //書き換えてもトグルスイッチの時にアニメコントローラーに指示しないと動かない
           // trailing: ExpansionTileCustomAnimeWidget(),
           onExpansionChanged: (bool value) {

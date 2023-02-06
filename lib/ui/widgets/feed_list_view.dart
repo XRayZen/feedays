@@ -34,7 +34,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
     try {
       //1 ページを要求されたら取得処理をするコードを書く
       final site = ref.watch(selectWebSiteProvider);
-      var datas = ref
+      var datas = await ref
           .watch(webUsecaseProvider)
           .fetchFeedDetail(site, pageKey, pageSize: 10);
       final previouslyFetchedItemsCount =
@@ -75,6 +75,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
         () => _pagingController.refresh(),
       ),
       child: PagedListView(
+        primary: false,
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<RssFeed>(
           itemBuilder: (context, feed, index) {
@@ -91,8 +92,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
             error: _pagingController.error,
             onTryAgain: () => _pagingController.refresh(),
           ),
-          noItemsFoundIndicatorBuilder: (context) =>
-              EmptyListIndicator(),
+          noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
           noMoreItemsIndicatorBuilder: (context) => NoMoreItemIndicator(
             onTryAgain: () => _pagingController.refresh(),
           ),
