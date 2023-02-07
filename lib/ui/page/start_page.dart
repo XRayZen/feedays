@@ -11,8 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 
 class StartPageView extends ConsumerStatefulWidget {
-  StartPageView({required this.title, super.key});
-  final String title;
+  const StartPageView({super.key});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _StartPageViewState();
 }
@@ -47,7 +46,6 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   void _selectedDestination(int value, BuildContext context) {
     setState(() {
-      ref.watch(selectedMainPageProvider.notifier).state = value;
       ref.watch(pageTypeProvider.notifier).state = howPageIndex(value);
     });
     if (value == 0) {

@@ -1,3 +1,4 @@
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/feed_silver_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,12 +33,22 @@ class _TodaySilverPageState extends ConsumerState<TodaySilverPage> {
                 ),
                 forceElevated: innerBoxIsScrolled,
               ),
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: TabBar(
-                  tabs: [
+                  tabs: const [
                     Tab(text: 'Today', icon: Icon(Icons.book_outlined)),
                     Tab(text: 'Trend', icon: Icon(Icons.trending_up)),
                   ],
+                  onTap: (value) {
+                    //feedモードを切り替える
+                    if (value == 1) {
+                      ref.watch(feedTypeProvider.notifier).state =
+                          FeedsType.today;
+                    } else if (value == 2) {
+                      ref.watch(feedTypeProvider.notifier).state =
+                          FeedsType.trend;
+                    }
+                  },
                 ),
               ),
             ];
@@ -47,7 +58,6 @@ class _TodaySilverPageState extends ConsumerState<TodaySilverPage> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               //PLAN:Todaypageはカテゴリごとにサイトの直近フィードを表示する
-              //が、今は個別サイトのフィードを完成させる
               // ignore: prefer_const_constructors
               FeedSliverListView(),
               const Center(

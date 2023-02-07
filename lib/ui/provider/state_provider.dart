@@ -1,6 +1,11 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+
+final visibleTextProvider = StateProvider<bool>((ref) {
+  return true;
+});
+
 final isFeedsEditModeProvider = StateProvider<FeedsEditMode>((ref) {
   return FeedsEditMode.noEdit;
 });
@@ -35,8 +40,8 @@ class SelectedSiteNotifier extends StateNotifier<WebSite> {
 
 final selectWebSiteProvider =
     StateNotifierProvider<SelectedSiteNotifier, WebSite>(
-        (ref) => SelectedSiteNotifier());
+        (ref) => SelectedSiteNotifier(),);
 
 enum FeedsEditMode { edit, noEdit }
 
-enum FeedsType { site, all }
+enum FeedsType { site, all, trend, today }

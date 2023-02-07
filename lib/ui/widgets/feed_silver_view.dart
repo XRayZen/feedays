@@ -34,7 +34,7 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
     try {
       //1 ページを要求されたら取得処理をするコードを書く
       final site = ref.watch(selectWebSiteProvider);
-      var datas = await ref
+      final datas = await ref
           .watch(webUsecaseProvider)
           .fetchFeedDetail(site, pageKey, pageSize: 20);
       final previouslyFetchedItemsCount =
@@ -80,8 +80,10 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
               //カードにするか
               //PLAN:Todayモードだとカテゴリごとに表示する
               //その時はpagekeyではなく読み込むインデックスを初期化する
-              return ListTile(
-                title: Text(feed.title),
+              //TODO:Widgetクラス化してモードによって表示を切り替える
+              //それらのノウハウはノートに書き留めておく
+              return FeedItemView(
+                feed: feed,
               );
             },
             animateTransitions: true,
@@ -89,13 +91,29 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
               error: _pagingController.error,
               onTryAgain: _pagingController.refresh,
             ),
-            noItemsFoundIndicatorBuilder: (context) => EmptyListIndicator(),
+            noItemsFoundIndicatorBuilder: (context) =>
+                const EmptyListIndicator(),
             noMoreItemsIndicatorBuilder: (context) => NoMoreItemIndicator(
               onTryAgain: _pagingController.refresh,
             ),
           ),
         )
       ],
+    );
+  }
+}
+
+class FeedItemView extends StatelessWidget {
+  const FeedItemView({
+    super.key,
+    required this.feed,
+  });
+  final RssFeed feed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(feed.title),
     );
   }
 }

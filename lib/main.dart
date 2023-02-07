@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: StartPageView(title: ''),
+      // ignore: prefer_const_constructors
+      home: StartPageView(),
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
         maxWidth: 1200,
