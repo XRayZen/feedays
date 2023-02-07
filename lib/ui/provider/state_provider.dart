@@ -13,6 +13,15 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+final pageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
+
+enum PageType {
+  readLater,
+  toDay,
+  addContent,
+  search,
+}
+
 class SelectedSiteNotifier extends StateNotifier<WebSite> {
   SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));
   void selectSite(WebSite webSite) {

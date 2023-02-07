@@ -2,6 +2,8 @@ import 'package:feedays/ui/widgets/feed_silver_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final todayPageScaffoldKey = GlobalKey<ScaffoldState>();
+
 class TodaySilverPage extends ConsumerStatefulWidget {
   const TodaySilverPage({super.key});
 
@@ -14,6 +16,7 @@ class _TodaySilverPageState extends ConsumerState<TodaySilverPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: todayPageScaffoldKey,
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_bool_literals_in_conditional_expressions
 
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/subsc_sites_provider.dart';
@@ -9,8 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppDrawerMenu extends ConsumerStatefulWidget {
-  const AppDrawerMenu({super.key, required this.scaffoldKey});
-  final GlobalKey<ScaffoldState> scaffoldKey;
+  const AppDrawerMenu({
+    super.key,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _DrawerMenuState();
@@ -46,21 +48,19 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           visible: _isExpanded,
           sliver: _dragTreeListView(_isExpanded),
           maintainState: true,
-          // maintainAnimation: true,
-          // maintainSize: true  ,
         ),
-        // _dragTreeListView(_isExpanded),
         SliverToBoxAdapter(
           child: Column(
             children: [
               ElevatedButton(
                 onPressed: () {
-                  //TODO:Add Content Pageにタブを切り替える
+                  ref.read(pageTypeProvider.notifier).state =
+                      PageType.addContent;
+                  startPageScaffoldKey.currentState!.closeDrawer();
                 },
                 child: const Text('Add Content'),
               ),
               const ListTile(
-                //子要素としてはListTileを入れる
                 leading: Icon(Icons.message),
                 title: Text('Messages'),
               ),
@@ -148,19 +148,12 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           title: const Text('Today'),
           onTap: () {
             //PLAN:TodayPageに表示を切り替えてメニューを閉じる
-            //BUG:これだとページ遷移出来ない
-            //どうやらメインページがsetStateしないと反映されない
-            //プロバイダーが働いていない
-            //
-            final fff = ref.watch(selectedMainPageProvider);
-            // fff.state = 2;
-            // fff.update((state) => state = 2);
-            // scaffoldStateKeyでも反映できない
-            // setState(
-            //   () {
-
-            //   },
-            // );
+            startPageScaffoldKey.currentState!.setState(() {
+              var fff = ref.watch(pageTypeProvider.notifier).state;
+              fff = PageType.toDay;
+              ref.watch(pageTypeProvider.notifier).state = fff;
+            });
+            startPageScaffoldKey.currentState!.closeDrawer();
           },
         ),
         const Divider(thickness: 1, height: 0.05),
@@ -170,7 +163,8 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           onTap: () {
             setState(() {
               //今はテスト用にリストを挿入している
-              final fakeFeeds = ref.watch(subscriptionSiteListProvider.notifier);
+              final fakeFeeds =
+                  ref.watch(subscriptionSiteListProvider.notifier);
               var temp1 = WebSite.mock('1', 'site1', 'Anime');
               final temp2 = WebSite.mock('2', 'site2', 'Anime');
               final temp3 = WebSite.mock('3', 'site3', 'Manga');
