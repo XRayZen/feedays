@@ -36,21 +36,21 @@ class MyApp extends StatelessWidget {
       home: StartPageView(),
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
-        maxWidth: 1200,
+        // maxWidth: 1200,
         minWidth: 480,
         defaultScale: true,
         breakpoints: [
           const ResponsiveBreakpoint.resize(480, name: MOBILE),
           const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-          const ResponsiveBreakpoint.resize(
-            1000,
-            name: DESKTOP,
-            scaleFactor: 0.90,
-          ),
+          const ResponsiveBreakpoint.resize(1000, name: DESKTOP, scaleFactor: 1
+              // 0.90,
+              ),
           const ResponsiveBreakpoint.autoScale(
             1200,
             name: DESKTOP,
-            scaleFactor: 0.70,
+            scaleFactor:
+                // 1,
+                0.70,
           ),
           // const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
         ],

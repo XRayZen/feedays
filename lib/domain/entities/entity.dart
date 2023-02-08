@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:feedays/domain/entities/activity.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:feedays/domain/entities/activity.dart';
 
 import './app_config.dart';
 
@@ -13,31 +14,41 @@ class UserConfig {
   final AppConfig config;
   final UserIdentInfo identInfo;
   final UserAccountType accountType;
-  UserConfig(
-      {required this.userName,
-      required this.userID,
-      required this.isGuest,
-      required this.subscribeSites,
-      required this.config,
-      required this.identInfo,
-      required this.accountType,});
+  //URLは””で囲んでおく
+  final List<String> searchHistory;
+  UserConfig({
+    required this.userName,
+    required this.userID,
+    required this.isGuest,
+    required this.subscribeSites,
+    required this.config,
+    required this.identInfo,
+    required this.accountType,
+    required this.searchHistory,
+  });
 
   factory UserConfig.defaultUserConfig() {
     return UserConfig(
-        userName: 'userName',
-        userID: 'userID',
-        isGuest: true,
-        subscribeSites: List.empty(growable: true),
-        config: AppConfig(
-            apiRequestConfig: ApiRequestLimitConfig(
-                trendRequestLimit: 10,
-                noneRssFeedRequestLimit: 10,
-                sendActivityMinute: 10,),),
-        identInfo: UserIdentInfo(
-            ip: '0',
-            macAddress: 'macAddress',
-            accessPlatform: UserAccessPlatform.mobile,),
-        accountType: UserAccountType.guest,);
+      userName: 'userName',
+      userID: 'userID',
+      isGuest: true,
+      subscribeSites: List.empty(growable: true),
+      config: AppConfig(
+        apiRequestConfig: ApiRequestLimitConfig(
+          trendRequestLimit: 10,
+          noneRssFeedRequestLimit: 10,
+          sendActivityMinute: 10,
+        ),
+      ),
+      identInfo: UserIdentInfo(
+        ip: '0',
+        macAddress: 'macAddress',
+        token: 'token',
+        accessPlatform: UserAccessPlatform.mobile,
+      ),
+      accountType: UserAccountType.guest,
+      searchHistory: [],
+    );
   }
 }
 
@@ -66,15 +77,16 @@ class WebSite {
   });
   factory WebSite.mock(String key, String name, String category) {
     return WebSite(
-        key: key,
-        name: name,
-        url: '',
-        newCount: 0,
-        readLateCount: 0,
-        category: category,
-        tags: List.empty(growable: true),
-        feeds: List.empty(growable: true),
-        fav: false,);
+      key: key,
+      name: name,
+      url: '',
+      newCount: 0,
+      readLateCount: 0,
+      category: category,
+      tags: List.empty(growable: true),
+      feeds: List.empty(growable: true),
+      fav: false,
+    );
   }
 }
 
@@ -100,3 +112,35 @@ class RssFeed {
 }
 
 enum UserAccountType { guest, free, pro, ultimate }
+
+class SearchRequest {
+  final SearchType searchType;
+  final SearchQueryType queryType;
+  final String word;
+  final String userID;
+  final UserIdentInfo identInfo;
+  final UserAccountType accountType;
+  SearchRequest({
+    required this.searchType,
+    required this.queryType,
+    required this.word,
+    required this.userID,
+    required this.identInfo,
+    required this.accountType,
+  });
+}
+
+enum SearchQueryType { url, word }
+
+enum SearchType { addContent, powerSearch }
+
+class SearchResult {
+  final ApiRequestType apiRequestType;
+  //PLAN:AddContentならサイトを返す
+  //PowerSearchなら記事を返す
+  SearchResult({
+    required this.apiRequestType,
+  });
+}
+
+enum ApiRequestType { refuse, accept }

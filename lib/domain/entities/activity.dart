@@ -32,16 +32,18 @@ class UserSubscribeActivity {
 class UserIdentInfo {
   final String ip;
   final String macAddress;
-  final String? uUid;
+  final String? uUid; //端末で取得出来たら
+  //初回起動時にサーバーから付与されるパスワードのようなもの
+  //サーバーにはそれに対応したSHAハッシュ値のみ登録される
+  final String token;
   final UserAccessPlatform accessPlatform;
   UserIdentInfo({
     required this.ip,
     required this.macAddress,
     this.uUid,
+    required this.token,
     required this.accessPlatform,
   });
 }
 
-enum UserAccessPlatform{
-  pc,web,mobile,tablet
-}
+enum UserAccessPlatform { pc, web, mobile, tablet }

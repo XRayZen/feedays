@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 
 import 'exception_indicator.dart';
@@ -7,9 +5,9 @@ import 'exception_indicator.dart';
 /// Indicates that an unknown error occurred.
 class GenericErrorIndicator extends StatelessWidget {
   const GenericErrorIndicator({
-    Key? key,
+    super.key,
     required this.onTryAgain,
-  }) : super(key: key);
+  });
 
   final VoidCallback onTryAgain;
 

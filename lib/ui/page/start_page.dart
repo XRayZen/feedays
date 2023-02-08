@@ -8,8 +8,6 @@ import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../util.dart';
-
 class StartPageView extends ConsumerStatefulWidget {
   const StartPageView({super.key});
   @override
@@ -61,45 +59,41 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
       drawer: AppDrawerMenu(),
       // ignore: prefer_const_constructors
       body: ViewPage(),
-      bottomNavigationBar: DefaultTextStyle.merge(
-        style: genResponsiveTextStyle(context, 28, 35, null, null, null),
-        child: NavigationBar(
-          onDestinationSelected: (value) =>
-              _selectedDestination(value, context),
-          animationDuration: const Duration(seconds: 3),
-          elevation: 25, //標高
-          height: getResponsiveValue(context, 100, 100, 70),
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          backgroundColor: Colors.black,
-          surfaceTintColor: Colors.black,
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(Icons.menu),
-              label: 'Menu',
-              tooltip: 'open a menu',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.bookmark_border),
-              label: 'ReadLater',
-              tooltip: 'Read later',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.menu_book),
-              label: 'TodayArticle',
-              tooltip: 'Today articles',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.add_circle_outline_sharp),
-              label: 'AddContent',
-              tooltip: 'Add Content',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.search),
-              label: 'Search',
-              tooltip: 'Search Content',
-            )
-          ],
-        ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (value) => _selectedDestination(value, context),
+        animationDuration: const Duration(seconds: 3),
+        // elevation: 20, //標高
+        // height: getResponsiveValue(context, 100, 100, 70),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        backgroundColor: Colors.black,
+        surfaceTintColor: Colors.black,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.menu),
+            label: 'Menu',
+            tooltip: 'open a menu',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark_border),
+            label: 'ReadLater',
+            tooltip: 'Read later',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.menu_book),
+            label: 'TodayArticle',
+            tooltip: 'Today articles',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.add_circle_outline_sharp),
+            label: 'AddContent',
+            tooltip: 'Add Content',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.search),
+            label: 'Search',
+            tooltip: 'Search Content',
+          )
+        ],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:feedays/ui/page/add_content/web_sites.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,7 +46,7 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
           },
           body: const TabBarView(
             children: [
-              Center(child: Text('WebSites')),
+              WebSites(),
               Center(child: Text('Twitter')),
               Center(child: Text('Reddit')),
               Center(child: Text('NewsSites')),

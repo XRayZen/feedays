@@ -172,7 +172,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
               final temp5 = WebSite.mock('5', 'site5', 'Anime');
               fakeFeeds.add([temp1, temp2, temp3, temp4, temp5]);
               ref.watch(webUsecaseProvider).genFakeWebsite(temp1);
-              temp1 = ref.watch(webUsecaseProvider).user.subscribeSites[0];
+              temp1 = ref.watch(webUsecaseProvider).userCfg.subscribeSites[0];
               ref.watch(selectWebSiteProvider.notifier).selectSite(temp1);
             });
           },
