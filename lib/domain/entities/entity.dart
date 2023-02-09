@@ -115,12 +115,21 @@ enum UserAccountType { guest, free, pro, ultimate }
 
 class SearchRequest {
   final SearchType searchType;
+  final String word;
+  SearchRequest({
+    required this.searchType,
+    required this.word,
+  });
+}
+
+class ApiSearchRequest {
+  final SearchType searchType;
   final SearchQueryType queryType;
   final String word;
   final String userID;
   final UserIdentInfo identInfo;
   final UserAccountType accountType;
-  SearchRequest({
+  ApiSearchRequest({
     required this.searchType,
     required this.queryType,
     required this.word,
@@ -135,12 +144,16 @@ enum SearchQueryType { url, word }
 enum SearchType { addContent, powerSearch }
 
 class SearchResult {
-  final ApiRequestType apiRequestType;
+  final ApiResponseType apiResponse;
+  final String responseMessage;
   //PLAN:AddContentならサイトを返す
   //PowerSearchなら記事を返す
+  final SearchType searchType;
   SearchResult({
-    required this.apiRequestType,
+    required this.apiResponse,
+    required this.responseMessage,
+    required this.searchType,
   });
 }
 
-enum ApiRequestType { refuse, accept }
+enum ApiResponseType { refuse, accept }

@@ -1,19 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:feedays/domain/entities/app_config.dart';
+
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/mock/gen_data.dart';
 import 'package:feedays/util.dart';
 
+typedef ErrorMessageCallback = Future<void> Function(String message);
+
 class WebUsecase {
   WebUsecase({
-    required this.webRepo,
-    required this.backendApiRepo,
+    required WebRepositoryInterface webRepo,
+    required BackendApiRepository backendApiRepo,
     required this.userCfg,
-  });
-  final WebRepositoryInterface webRepo;
-  final BackendApiRepository backendApiRepo;
+    required this.noticeError,
+  })  : _backendApiRepo = backendApiRepo,
+        _webRepo = webRepo;
+  final WebRepositoryInterface _webRepo;
+  final BackendApiRepository _backendApiRepo;
+  Future<void> Function(String message) noticeError;
   UserConfig userCfg;
   //NOTE:プロバイダー経由でクラス変数に代入できるか試す→出来た
 
@@ -21,6 +26,7 @@ class WebUsecase {
   void genFakeWebsite(WebSite site) {
     userCfg.subscribeSites.add(site);
     userCfg.subscribeSites.first.feeds.addAll(genFakeRssFeeds(50));
+    userCfg.searchHistory.add('40010');
   }
 
   void onReorderSite(
@@ -70,36 +76,48 @@ class WebUsecase {
   ///ワードがURLならRSS登録処理
   ///それ以外ならクラウドで検索リクエスト
   ///検索リクエストは無制限
-  Future<SearchResult?> searchWord(
-    String word,
-    SearchType searchType,
+  Future<SearchResult> searchWord(
+    SearchRequest request,
   ) async {
+    _editRecentSearches(request.word);
     //ワードがURLかどうか判定する
-    final urlRes = parseUrls(word);
+    final urlRes = parseUrls(request.word);
     if (urlRes is List<String>) {
+      //切り分けているが一つしか処理しない
       //urlならRSS登録をする
       //非RSSならバックエンドに問い合わせてクラウドフィード対応サイトか問い合わせる
     } else {
       //検索程度ならワードでも制限をかけないが将来的な可能性を考慮すると
       //クラウドリクエスト中間クラスで制限設定を参照しながらリクエスト可否を判定したい
-      return backendApiRepo.searchWord(
-        SearchRequest(
-          searchType: searchType,
+      final res = await _backendApiRepo.searchWord(
+        ApiSearchRequest(
+          searchType: request.searchType,
           queryType: SearchQueryType.word,
-          word: word,
+          word: request.word,
           userID: userCfg.userID,
           identInfo: userCfg.identInfo,
           accountType: userCfg.accountType,
         ),
       );
-      //
+      switch (res.apiResponse) {
+        case ApiResponseType.refuse:
+          //refuseならエラーメッセージを通知する
+          //関数形式でエラーメッセージ処理を
+          await noticeError(res.responseMessage);
+          throw Exception(
+            'Api SearchRequest error: ${res.responseMessage}',
+          );
+        case ApiResponseType.accept:
+          return res;
+      }
     }
-    return null;
+    throw Exception();
   }
 
-  void editRecentSearches(String text, {bool isAddOrRemove = true}) {
+  //FIXME:サーチが走るたびにこれを呼べばいいから外部に公開する必要はない
+  void _editRecentSearches(String text, {bool isAddOrRemove = true}) {
     if (isAddOrRemove) {
-      if (userCfg.searchHistory.contains(text)) {
+      if (!userCfg.searchHistory.contains(text)) {
         //PLAN:入力履歴はローカル・クラウド両方に保存しておく
         userCfg.searchHistory.add(text);
       }

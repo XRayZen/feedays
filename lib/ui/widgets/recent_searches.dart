@@ -1,6 +1,7 @@
+import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecentSearchesListView extends ConsumerStatefulWidget {
@@ -24,24 +25,32 @@ class _RecentSearchesListViewState
             key: UniqueKey(),
             onDismissed: (direction) {
               setState(() {
-                ref
-                    .watch(webUsecaseProvider)
-                    .editRecentSearches(txt, isAddOrRemove: false);
+                //FIXME:Future形式の関数呼び出しは必ずFutureProvider経由でやる
+                // ref.watch(webUsecaseProvider).searchWord();
               });
             },
-            background: ColoredBox(
+            //どんなに方向を変えても必ず左に配置されてしまう
+            background: Container(
               color: Colors.red,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  children: const [
-                    Text('delete', style: TextStyle(color: Colors.white)),
-                    Icon(Icons.delete_sweep, color: Colors.white),
-                  ],
-                ),
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: const [
+                  Padding(padding: EdgeInsets.all(10)),
+                  Icon(Icons.delete_sweep, color: Colors.white),
+                  Padding(padding: EdgeInsets.all(5)),
+                  Text('Delete', style: TextStyle(color: Colors.white)),
+                ],
               ),
             ),
-            child: ListTile(title: Text(txt)),
+            child: ListTile(
+              onTap: () {
+                //これを検索に入れて検索開始
+                // テキストフィールドのコントローラーからテキストを入れてイベントを起こす
+                ref.watch(searchTextFieldControllerProvider).text = txt;
+                //TODO:UIを検索結果にもとづいて切り替えるためプロバイダーにキーワードを一旦入れておく
+              },
+              title: Text(txt),
+            ),
           );
         },
         childCount: list.length,

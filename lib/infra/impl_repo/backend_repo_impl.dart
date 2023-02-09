@@ -1,4 +1,3 @@
-
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
@@ -11,7 +10,7 @@ class BackendApiRepoImpl extends BackendApiRepository {
   }
 
   @override
-  Future<SearchResult> searchWord(SearchRequest request) {
+  Future<SearchResult> searchWord(ApiSearchRequest request) {
     // TODO: implement searchWord
     throw UnimplementedError();
   }
@@ -21,5 +20,4 @@ class BackendApiRepoImpl extends BackendApiRepository {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
-
 }

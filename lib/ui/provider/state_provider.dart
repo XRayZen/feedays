@@ -18,6 +18,7 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+
 final pageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
 
 enum PageType {
