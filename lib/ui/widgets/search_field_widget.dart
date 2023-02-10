@@ -1,5 +1,6 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,19 +12,18 @@ DateTime _lastChangedDate = DateTime.now();
 
 class SearchFieldWidget extends ConsumerWidget {
   const SearchFieldWidget({super.key});
-
-  //TODO:UIプロバイダーに移行する
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(searchTextFieldControllerProvider);
     return TextFormField(
       controller: controller,
       autofocus: true,
-      onFieldSubmitted: (value) {
+      onFieldSubmitted: (txt) {
         //PLAN:入力履歴はローカル・クラウド両方に保存しておく
         //プロバイダーにテキストを送信して処理をする
-        // ref.watch(webUsecaseProvider).editRecentSearches(value);
+        ref
+            .watch(searchRequestProvider.notifier)
+            .add(SearchRequest(searchType: SearchType.addContent, word: txt));
       },
       onChanged: (val) => onChangedSearch(val, ref),
       decoration: InputDecoration(
@@ -52,10 +52,10 @@ class SearchFieldWidget extends ConsumerWidget {
       if (nowDate.difference(_lastChangedDate).inMilliseconds >
           searchDelayMillSec) {
         _lastChangedDate = nowDate;
-        //WARNING:プロバイダーに渡せたがUIの切り替えはここからでは出来ない
-        //TODO:ここから直接サーチを実行するのではなくStateProviderに検索キーワードを入れて検索を実行させた方がいい
-        final req = SearchRequest(searchType: SearchType.addContent, word: txt);
-        //TODO:カスタムクラスを使うためAsyncNotifierで状態管理
+        //ここから直接サーチを実行するのではなくStateProviderに検索キーワードを入れて検索を実行
+        ref
+            .watch(searchRequestProvider.notifier)
+            .add(SearchRequest(searchType: SearchType.addContent, word: txt));
       }
     });
     //キーワードが入力されるごとに、検索処理を待たずに_lastChangedDateを更新する

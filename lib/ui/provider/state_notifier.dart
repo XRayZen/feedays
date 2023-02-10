@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:feedays/domain/entities/entity.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchRequestProvider =
@@ -19,6 +18,9 @@ class SearchNotifier extends AsyncNotifier<SearchRequest> {
     //Stateの状態を読み込みモードにする
     state = const AsyncValue.loading();
     // stateを更新
-    state = AsyncValue.data(re);
+    //BUG:ここにバグがある ステートを変更出来ていない
+    state = await AsyncValue.guard(() async {
+      return re;
+    });
   }
 }

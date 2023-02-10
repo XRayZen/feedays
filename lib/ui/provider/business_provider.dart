@@ -5,8 +5,8 @@ import 'package:feedays/domain/usecase/web_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tuple/tuple.dart';
 
 final backendApiRepoProvider = Provider<BackendApiRepository>((ref) {
   //テスト時はモックに上書きする
@@ -39,11 +39,17 @@ final webUsecaseProvider = Provider<WebUsecase>((ref) {
   return webUsecase;
 });
 
-final searchProvider =
-    FutureProvider<SearchResult>((ref,) async {
+final searchProvider = FutureProvider<SearchResult>((
+  ref,
+) async {
   //検索notifierを監視する
-  final req =await ref.watch(searchRequestProvider.future);
-  final result = await ref.watch(webUsecaseProvider).searchWord(req);
+  //BUG:検索リクエストしても変化しない/来ない
+  final req = ref.watch(searchRequestProvider);
+  late SearchRequest request;
+  req.whenData((value) => request = value);
+  final result = await ref.watch(webUsecaseProvider).searchWord(request);
+  //テキストフィールドをタップしたら元に戻す
+  ref.watch(recentOrResultProvider.notifier).state = RecentOrResult.result;
   return result;
 });
 

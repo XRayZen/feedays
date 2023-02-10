@@ -6,6 +6,10 @@ final visibleTextProvider = StateProvider<bool>((ref) {
   return true;
 });
 
+final visibleRecentTextProvider = StateProvider<bool>((ref) {
+  return true;
+});
+
 final isFeedsEditModeProvider = StateProvider<FeedsEditMode>((ref) {
   return FeedsEditMode.noEdit;
 });
@@ -18,6 +22,12 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+
+enum RecentOrResult{recent,result}
+
+final recentOrResultProvider = StateProvider<RecentOrResult>((ref) {
+  return RecentOrResult.recent;
+});
 
 final pageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
 

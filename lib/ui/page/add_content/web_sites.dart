@@ -1,4 +1,6 @@
+import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/recent_searches.dart';
 import 'package:feedays/ui/widgets/search_field_widget.dart';
@@ -86,15 +88,76 @@ class __SearchTextFieldState extends ConsumerState<_SearchTextField> {
             //ここから下は履歴か検索結果を切り替えて表示する
             //入力フォームの下に入力履歴がスライドしたらリムーブするリストタイルが縦で羅列している
             // 切り替えは関数化して個別Widgetはクラス化して描画を細かく分ける
-            SliverToBoxAdapter(
-              child: Wrap(
-                children: const [Text('Recent Searches')],
+            SliverVisibility(
+              visible: ref.watch(visibleRecentTextProvider),
+              sliver: SliverToBoxAdapter(
+                child: Wrap(
+                  children: const [Text('Recent Searches')],
+                ),
               ),
             ),
-            RecentSearchesListView()
+            // RecentSearchesListView(),
+            RecentOrResultView(),
           ];
         },
         body: const SizedBox(),
+      ),
+    );
+  }
+}
+
+class RecentOrResultView extends ConsumerWidget {
+  const RecentOrResultView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //先に履歴か検索結果かのモードを入れておいたほうが良いか
+    final mode = ref.watch(recentOrResultProvider);
+    return _RecentOrResultWidget(mode);
+  }
+
+  Widget _RecentOrResultWidget(RecentOrResult result) {
+    switch (result) {
+      case RecentOrResult.recent:
+        return RecentSearchesListView();
+      case RecentOrResult.result:
+        return SearchResultView();
+    }
+  }
+}
+
+class SearchResultView extends ConsumerWidget {
+  const SearchResultView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //ここから下は履歴か検索結果を切り替えて表示する
+    final res = ref.watch(searchProvider);
+    return res.when(
+      data: _buildSearchResultList,
+      error: (error, stackTrace) {
+        return SliverToBoxAdapter(
+          child: ListTile(title: Text(error.toString())),
+        );
+      },
+      loading: () {
+        return const SliverToBoxAdapter(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _buildSearchResultList(SearchResult res) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final item = res.websites[index];
+          //FIXME:検索結果表示Widgetはまだ動作確認用に仮組みに留めておく
+          //feedlyを参考にカード形式が良いのか
+          return ListTile(
+            title: Text(item.name),
+          );
+        },
+        childCount: res.websites.length,
       ),
     );
   }

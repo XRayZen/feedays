@@ -20,4 +20,10 @@ class BackendApiRepoImpl extends BackendApiRepository {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> editRecentSearches(String text, {bool isAddOrRemove = true}) {
+    // TODO: implement editRecentSearches
+    throw UnimplementedError();
+  }
 }

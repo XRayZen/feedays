@@ -79,7 +79,7 @@ class WebUsecase {
   Future<SearchResult> searchWord(
     SearchRequest request,
   ) async {
-    _editRecentSearches(request.word);
+    editRecentSearches(request.word);
     //ワードがURLかどうか判定する
     final urlRes = parseUrls(request.word);
     if (urlRes is List<String>) {
@@ -114,8 +114,7 @@ class WebUsecase {
     throw Exception();
   }
 
-  //FIXME:サーチが走るたびにこれを呼べばいいから外部に公開する必要はない
-  void _editRecentSearches(String text, {bool isAddOrRemove = true}) {
+  void editRecentSearches(String text, {bool isAddOrRemove = true}) {
     if (isAddOrRemove) {
       if (!userCfg.searchHistory.contains(text)) {
         //PLAN:入力履歴はローカル・クラウド両方に保存しておく

@@ -146,13 +146,17 @@ enum SearchType { addContent, powerSearch }
 class SearchResult {
   final ApiResponseType apiResponse;
   final String responseMessage;
-  //PLAN:AddContentならサイトを返す
+  //AddContentならサイトを返す
   //PowerSearchなら記事を返す
   final SearchType searchType;
+  final List<WebSite> websites;
+  final List<RssFeed> articles;
   SearchResult({
     required this.apiResponse,
     required this.responseMessage,
     required this.searchType,
+    required this.websites,
+    required this.articles,
   });
 }
 

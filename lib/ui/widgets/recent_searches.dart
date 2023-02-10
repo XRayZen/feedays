@@ -1,5 +1,6 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +26,9 @@ class _RecentSearchesListViewState
             key: UniqueKey(),
             onDismissed: (direction) {
               setState(() {
-                //FIXME:Future形式の関数呼び出しは必ずFutureProvider経由でやる
-                // ref.watch(webUsecaseProvider).searchWord();
+                ref
+                    .watch(webUsecaseProvider)
+                    .editRecentSearches(txt, isAddOrRemove: false);
               });
             },
             //どんなに方向を変えても必ず左に配置されてしまう
@@ -44,10 +46,15 @@ class _RecentSearchesListViewState
             ),
             child: ListTile(
               onTap: () {
-                //これを検索に入れて検索開始
-                // テキストフィールドのコントローラーからテキストを入れてイベントを起こす
+                // テキストフィールドのコントローラーからテキストを入れて検索
                 ref.watch(searchTextFieldControllerProvider).text = txt;
-                //TODO:UIを検索結果にもとづいて切り替えるためプロバイダーにキーワードを一旦入れておく
+                //UIを検索結果にもとづいて切り替えるためプロバイダーにキーワードを一旦入れておく
+                ref.watch(searchRequestProvider.notifier).add(
+                      SearchRequest(
+                        searchType: SearchType.addContent,
+                        word: txt,
+                      ),
+                    );
               },
               title: Text(txt),
             ),
