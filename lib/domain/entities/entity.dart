@@ -142,10 +142,13 @@ class ApiSearchRequest {
 enum SearchQueryType { url, word }
 
 enum SearchType { addContent, powerSearch }
+enum SearchResultType {found,none}
 
 class SearchResult {
   final ApiResponseType apiResponse;
   final String responseMessage;
+  final SearchResultType resultType;
+  Exception? exception;
   //AddContentならサイトを返す
   //PowerSearchなら記事を返す
   final SearchType searchType;
@@ -154,6 +157,7 @@ class SearchResult {
   SearchResult({
     required this.apiResponse,
     required this.responseMessage,
+    required this.resultType,
     required this.searchType,
     required this.websites,
     required this.articles,

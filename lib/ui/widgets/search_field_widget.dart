@@ -1,6 +1,7 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,9 +22,8 @@ class SearchFieldWidget extends ConsumerWidget {
       onFieldSubmitted: (txt) {
         //PLAN:入力履歴はローカル・クラウド両方に保存しておく
         //プロバイダーにテキストを送信して処理をする
-        ref
-            .watch(searchRequestProvider.notifier)
-            .add(SearchRequest(searchType: SearchType.addContent, word: txt));
+        final req = SearchRequest(searchType: SearchType.addContent, word: txt);
+        onSearch(req, ref);
       },
       onChanged: (val) => onChangedSearch(val, ref),
       decoration: InputDecoration(
@@ -53,9 +53,8 @@ class SearchFieldWidget extends ConsumerWidget {
           searchDelayMillSec) {
         _lastChangedDate = nowDate;
         //ここから直接サーチを実行するのではなくStateProviderに検索キーワードを入れて検索を実行
-        ref
-            .watch(searchRequestProvider.notifier)
-            .add(SearchRequest(searchType: SearchType.addContent, word: txt));
+        final req = SearchRequest(searchType: SearchType.addContent, word: txt);
+        ref.watch(searchProvider(req));
       }
     });
     //キーワードが入力されるごとに、検索処理を待たずに_lastChangedDateを更新する

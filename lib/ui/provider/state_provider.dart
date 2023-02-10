@@ -38,6 +38,7 @@ enum PageType {
   search,
 }
 
+
 class SelectedSiteNotifier extends StateNotifier<WebSite> {
   SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));
   void selectSite(WebSite webSite) {

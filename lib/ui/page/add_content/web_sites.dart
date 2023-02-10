@@ -1,5 +1,6 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/recent_searches.dart';
@@ -132,18 +133,24 @@ class SearchResultView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //ここから下は履歴か検索結果を切り替えて表示する
-    final res = ref.watch(searchProvider);
-    return res.when(
-      data: _buildSearchResultList,
-      error: (error, stackTrace) {
-        return SliverToBoxAdapter(
-          child: ListTile(title: Text(error.toString())),
-        );
-      },
-      loading: () {
-        return const SliverToBoxAdapter(child: CircularProgressIndicator());
-      },
-    );
+    final res = ref.watch(searchResultProvider);
+    //TODO:デフォルトは拒否状態でメッセージが空だからそれに応じたuiにしてアクセプトにしたら変える
+    return howResult(res);
+  }
+
+  Widget howResult(SearchResult res) {
+    //TODO:非同期でリクエストするから出来るのならFutureProviderで監視したい
+    if (res.resultType==SearchResultType.none) {
+      //初期状態
+      return const SliverToBoxAdapter(child: CircularProgressIndicator());
+    } else if (res.apiResponse == ApiResponseType.refuse) {
+      //PLAN:exceptionも出力する予定
+      return SliverToBoxAdapter(
+        child: ListTile(title: Text(res.responseMessage)),
+      );
+    } else {
+      return _buildSearchResultList(res);
+    }
   }
 
   Widget _buildSearchResultList(SearchResult res) {

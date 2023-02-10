@@ -1,6 +1,7 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,12 +50,10 @@ class _RecentSearchesListViewState
                 // テキストフィールドのコントローラーからテキストを入れて検索
                 ref.watch(searchTextFieldControllerProvider).text = txt;
                 //UIを検索結果にもとづいて切り替えるためプロバイダーにキーワードを一旦入れておく
-                ref.watch(searchRequestProvider.notifier).add(
-                      SearchRequest(
-                        searchType: SearchType.addContent,
-                        word: txt,
-                      ),
-                    );
+                onSearch(
+                  SearchRequest(searchType: SearchType.addContent, word: txt),
+                  ref,
+                );
               },
               title: Text(txt),
             ),

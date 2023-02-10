@@ -1,26 +1,25 @@
-import 'dart:async';
-
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final searchRequestProvider =
-    AsyncNotifierProvider<SearchNotifier, SearchRequest>(() {
-  return SearchNotifier();
+final searchResultProvider =
+    StateNotifierProvider<SearchResultNotifier, SearchResult>((ref) {
+  return SearchResultNotifier();
 });
 
-class SearchNotifier extends AsyncNotifier<SearchRequest> {
-  @override
-  FutureOr<SearchRequest> build() {
-    return SearchRequest(searchType: SearchType.addContent, word: 'word');
-  }
+class SearchResultNotifier extends StateNotifier<SearchResult> {
+  SearchResultNotifier()
+      : super(
+          SearchResult(
+            apiResponse: ApiResponseType.refuse,
+            responseMessage: 'Default',
+            resultType: SearchResultType.none,
+            searchType: SearchType.addContent,
+            websites: [],
+            articles: [],
+          ),
+        );
 
-  Future<void> add(SearchRequest re) async {
-    //Stateの状態を読み込みモードにする
-    state = const AsyncValue.loading();
-    // stateを更新
-    //BUG:ここにバグがある ステートを変更出来ていない
-    state = await AsyncValue.guard(() async {
-      return re;
-    });
+  void add(SearchResult res) {
+    state = res;
   }
 }
