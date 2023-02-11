@@ -142,7 +142,8 @@ class ApiSearchRequest {
 enum SearchQueryType { url, word }
 
 enum SearchType { addContent, powerSearch }
-enum SearchResultType {found,none}
+
+enum SearchResultType { found, none, error }
 
 class SearchResult {
   final ApiResponseType apiResponse;

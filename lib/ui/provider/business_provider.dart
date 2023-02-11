@@ -43,22 +43,33 @@ void onSearch(SearchRequest request, WidgetRef ref) {
   ref.watch(searchProvider(request));
 }
 
-final searchProvider =
-    FutureProvider.autoDispose.family<SearchResult, SearchRequest>((
+final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
   ref,
   request,
 ) async {
   //検索notifierを監視する
-  //BUG:検索リクエストしても変化しない/来ない
   //guardにしても反応ないから普通のnotifierに変更するかStateを試す
-  //FIXME:やっても変わらないからこのプロバイダーに引数をつけて実行して結果を
+  //やっても変わらないからこのプロバイダーに引数をつけて実行して結果を
   //notifierに入れてからモードを切り替える方式を試す
-  final result = await ref.watch(webUsecaseProvider).searchWord(request);
+  late SearchResult result;
+  try {
+    result = await ref.watch(webUsecaseProvider).searchWord(request);
+  }on Exception catch (e) {
+    result = SearchResult(
+      apiResponse: ApiResponseType.refuse,
+      responseMessage: e.toString(),
+      resultType: SearchResultType.error,
+      searchType: request.searchType,
+      websites: [],
+      articles: [],
+    )
+    ..exception = e;
+  }
   //テキストフィールドをタップしたら元に戻す
   ref.watch(recentOrResultProvider.notifier).state = RecentOrResult.result;
-  //TODO:結果をnotifierに入れる
+  //結果をnotifierに入れる
   ref.watch(searchResultProvider.notifier).add(result);
-  return result;
+  // return result;
 });
 
 ///WebUsecaseの検索履歴を監視するプロバイダー

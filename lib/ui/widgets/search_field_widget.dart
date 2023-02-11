@@ -1,12 +1,9 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
-import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tuple/tuple.dart';
 
 const searchDelayMillSec = 1000;
 DateTime _lastChangedDate = DateTime.now();
@@ -54,7 +51,7 @@ class SearchFieldWidget extends ConsumerWidget {
         _lastChangedDate = nowDate;
         //ここから直接サーチを実行するのではなくStateProviderに検索キーワードを入れて検索を実行
         final req = SearchRequest(searchType: SearchType.addContent, word: txt);
-        ref.watch(searchProvider(req));
+        onSearch(req, ref);
       }
     });
     //キーワードが入力されるごとに、検索処理を待たずに_lastChangedDateを更新する

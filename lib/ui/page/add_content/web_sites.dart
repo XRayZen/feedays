@@ -1,8 +1,6 @@
 import 'package:feedays/domain/entities/entity.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/recent_searches.dart';
 import 'package:feedays/ui/widgets/search_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +16,10 @@ class WebSites extends ConsumerWidget {
     //NOTE:若干feedlyとUI動作は異なるが速度優先で仕上げる
     final con = TextEditingController();
     return Column(
+      key: const Key('column'),
       children: [
         TextFormField(
+          key: const Key('SearchTextFieldTap'),
           controller: con,
           onChanged: (value) {
             con.clear();
@@ -63,7 +63,7 @@ class WebSites extends ConsumerWidget {
 }
 
 class _SearchTextField extends ConsumerStatefulWidget {
-  const _SearchTextField({super.key});
+  const _SearchTextField();
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -114,10 +114,10 @@ class RecentOrResultView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //先に履歴か検索結果かのモードを入れておいたほうが良いか
     final mode = ref.watch(recentOrResultProvider);
-    return _RecentOrResultWidget(mode);
+    return _recentOrResultWidget(mode);
   }
 
-  Widget _RecentOrResultWidget(RecentOrResult result) {
+  Widget _recentOrResultWidget(RecentOrResult result) {
     switch (result) {
       case RecentOrResult.recent:
         return RecentSearchesListView();
@@ -140,16 +140,17 @@ class SearchResultView extends ConsumerWidget {
 
   Widget howResult(SearchResult res) {
     //TODO:非同期でリクエストするから出来るのならFutureProviderで監視したい
-    if (res.resultType==SearchResultType.none) {
-      //初期状態
-      return const SliverToBoxAdapter(child: CircularProgressIndicator());
-    } else if (res.apiResponse == ApiResponseType.refuse) {
-      //PLAN:exceptionも出力する予定
-      return SliverToBoxAdapter(
-        child: ListTile(title: Text(res.responseMessage)),
-      );
-    } else {
-      return _buildSearchResultList(res);
+    switch (res.resultType) {
+      case SearchResultType.found:
+        return _buildSearchResultList(res);
+      case SearchResultType.none:
+        //初期状態
+        return const SliverToBoxAdapter(child: CircularProgressIndicator());
+      case SearchResultType.error:
+        //PLAN:exceptionも出力する予定
+        return SliverToBoxAdapter(
+          child: ListTile(title: Text(res.exception.toString())),
+        );
     }
   }
 
