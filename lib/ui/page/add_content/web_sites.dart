@@ -16,7 +16,7 @@ class WebSites extends ConsumerWidget {
     //NOTE:若干feedlyとUI動作は異なるが速度優先で仕上げる
     final con = TextEditingController();
     return Column(
-      key: const Key('column'),
+      key: const Key('WebsitesColumn'),
       children: [
         TextFormField(
           key: const Key('SearchTextFieldTap'),
@@ -86,6 +86,7 @@ class __SearchTextFieldState extends ConsumerState<_SearchTextField> {
               pinned: true,
               centerTitle: true,
               expandedHeight: 5,
+              //FIXME:バックしたら検索結果をクリアするため手動でバックボタンを実装する
             ),
             const SliverPadding(padding: EdgeInsets.all(10)),
             //ここから下は履歴か検索結果を切り替えて表示する

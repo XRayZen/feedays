@@ -56,7 +56,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
     return Scaffold(
       key: startPageScaffoldKey,
       // ignore: prefer_const_constructors
-      drawer: AppDrawerMenu(),
+      drawer: AppDrawerMenu(key: Key('DrawerMenu')),
       // ignore: prefer_const_constructors
       body: ViewPage(),
       bottomNavigationBar: NavigationBar(

@@ -6,16 +6,26 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import 'ui/page/start_page.dart';
 
-void main() {
-  runApp(
-    ProviderScope(
-      overrides: [
-        //FIXME:緊急避難的に上書き
-        backendApiRepoProvider.overrideWithValue(MockApiRepository())
-      ],
-      child: MyApp(),
-    ),
-  );
+void main({bool isProviderOverRide = false}) {
+  if (isProviderOverRide) {
+    runApp(
+      //統合テスト用にプロバイダー上書きを切り替える
+      ProviderScope(
+        overrides: [
+          //但し、この方法だとスタブを臨機応変に変えることは出来ない
+          backendApiRepoProvider.overrideWithValue(MockApiRepository())
+        ],
+        // ignore: prefer_const_constructors
+        child: MyApp(),
+      ),
+    );
+  } else {
+    runApp(
+      const ProviderScope(
+        child: MyApp(),
+      ),
+    );
+  }
 }
 
 final startPageScaffoldKey = GlobalKey<ScaffoldState>();

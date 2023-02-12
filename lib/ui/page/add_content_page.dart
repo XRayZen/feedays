@@ -35,10 +35,10 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
               const SliverToBoxAdapter(
                 child: TabBar(
                   tabs: [
-                    Tab(text: 'WebSites'),
-                    Tab(text: 'Twitter'),
-                    Tab(text: 'Reddit'),
-                    Tab(text: 'NewsSites'),
+                    Tab(key: Key('TabWebSites'),text: 'WebSites'),
+                    Tab(key: Key('TabTwitter'),text: 'Twitter'),
+                    Tab(key: Key('TabReddit'),text: 'Reddit'),
+                    Tab(key: Key('TabNewsSites'),text: 'NewsSites'),
                   ],
                 ),
               )
