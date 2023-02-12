@@ -5,10 +5,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
 
-import 'package:feedays/domain/entities/activity.dart' as _i6;
 import 'package:feedays/domain/entities/entity.dart' as _i2;
-import 'package:feedays/domain/repositories/api/backend_repository_interface.dart'
-    as _i5;
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
@@ -34,25 +31,11 @@ class _FakeWebSite_0 extends _i1.SmartFake implements _i2.WebSite {
         );
 }
 
-class _FakeSearchResult_1 extends _i1.SmartFake implements _i2.SearchResult {
-  _FakeSearchResult_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [WebRepositoryInterface].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockWebRepositoryInterface extends _i1.Mock
     implements _i3.WebRepositoryInterface {
-  MockWebRepositoryInterface() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i4.Future<_i2.WebSite> getFeeds(_i2.WebSite? site) => (super.noSuchMethod(
         Invocation.method(
@@ -66,62 +49,12 @@ class MockWebRepositoryInterface extends _i1.Mock
             [site],
           ),
         )),
-      ) as _i4.Future<_i2.WebSite>);
-}
-
-/// A class which mocks [BackendApiRepository].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockBackendApiRepository extends _i1.Mock
-    implements _i5.BackendApiRepository {
-  MockBackendApiRepository() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i4.Future<bool> login() => (super.noSuchMethod(
-        Invocation.method(
-          #login,
-          [],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
-  @override
-  _i4.Future<bool> userRegister(_i6.UserIdentInfo? identInfo) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #userRegister,
-          [identInfo],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
-  @override
-  _i4.Future<_i2.SearchResult> searchWord(_i2.ApiSearchRequest? request) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #searchWord,
-          [request],
-        ),
-        returnValue: _i4.Future<_i2.SearchResult>.value(_FakeSearchResult_1(
+        returnValueForMissingStub: _i4.Future<_i2.WebSite>.value(_FakeWebSite_0(
           this,
           Invocation.method(
-            #searchWord,
-            [request],
+            #getFeeds,
+            [site],
           ),
         )),
-      ) as _i4.Future<_i2.SearchResult>);
-  @override
-  _i4.Future<void> editRecentSearches(
-    String? text, {
-    bool? isAddOrRemove = true,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #editRecentSearches,
-          [text],
-          {#isAddOrRemove: isAddOrRemove},
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+      ) as _i4.Future<_i2.WebSite>);
 }

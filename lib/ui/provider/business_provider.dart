@@ -54,7 +54,7 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
   late SearchResult result;
   try {
     result = await ref.watch(webUsecaseProvider).searchWord(request);
-  }on Exception catch (e) {
+  } on Exception catch (e) {
     result = SearchResult(
       apiResponse: ApiResponseType.refuse,
       responseMessage: e.toString(),
@@ -62,11 +62,12 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
       searchType: request.searchType,
       websites: [],
       articles: [],
-    )
-    ..exception = e;
+    )..exception = e;
   }
   //テキストフィールドをタップしたら元に戻す
   ref.watch(recentOrResultProvider.notifier).state = RecentOrResult.result;
+  //resultなら消しておく
+  ref.watch(visibleRecentTextProvider.notifier).state = false;
   //結果をnotifierに入れる
   ref.watch(searchResultProvider.notifier).add(result);
   // return result;

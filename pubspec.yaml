@@ -41,12 +41,14 @@ dependencies:
   infinite_scroll_pagination: ^3.2.0
   functional_widget: ^0.10.1
   tuple: ^2.0.1
-  mockito: ^5.3.2
+  mockito: any
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
-  build_runner:
+  build_runner: any
   riverpod_generator: ^1.1.1
 
   # The "flutter_lints" package below contains a set of recommended lints to

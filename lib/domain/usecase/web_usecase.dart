@@ -21,7 +21,6 @@ class WebUsecase {
   Future<void> Function(String message) noticeError;
   UserConfig userCfg;
   //NOTE:プロバイダー経由でクラス変数に代入できるか試す→出来た
-
   ///今はテスト用にfakeの`feed`を生成する
   void genFakeWebsite(WebSite site) {
     userCfg.subscribeSites.add(site);

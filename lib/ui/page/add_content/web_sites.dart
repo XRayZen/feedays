@@ -73,14 +73,16 @@ class _SearchTextField extends ConsumerStatefulWidget {
 class __SearchTextFieldState extends ConsumerState<_SearchTextField> {
   @override
   Widget build(BuildContext context) {
+    final isVisible = ref.watch(visibleRecentTextProvider);
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
+            //TODO:ページをバックしたら検索結果をクリアする
             SliverAppBar(
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
               titleSpacing: 5,
-              title: SearchFieldWidget(),
+              title: const SearchFieldWidget(key: Key('SearchFieldWidget')),
               pinned: true,
               centerTitle: true,
               expandedHeight: 5,
@@ -89,16 +91,18 @@ class __SearchTextFieldState extends ConsumerState<_SearchTextField> {
             //ここから下は履歴か検索結果を切り替えて表示する
             //入力フォームの下に入力履歴がスライドしたらリムーブするリストタイルが縦で羅列している
             // 切り替えは関数化して個別Widgetはクラス化して描画を細かく分ける
+            //BUG:非表示が確認出来ないから別クラスにするかプロバイダー監視を上に置く
             SliverVisibility(
-              visible: ref.watch(visibleRecentTextProvider),
+              visible: isVisible,
               sliver: SliverToBoxAdapter(
+                key: const Key('RecentSearchesText'),
                 child: Wrap(
                   children: const [Text('Recent Searches')],
                 ),
               ),
             ),
             // RecentSearchesListView(),
-            RecentOrResultView(),
+            const RecentOrResultView(),
           ];
         },
         body: const SizedBox(),
@@ -114,14 +118,16 @@ class RecentOrResultView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //先に履歴か検索結果かのモードを入れておいたほうが良いか
     final mode = ref.watch(recentOrResultProvider);
-    return _recentOrResultWidget(mode);
+    return _recentOrResultWidget(mode, ref);
   }
 
-  Widget _recentOrResultWidget(RecentOrResult result) {
+  Widget _recentOrResultWidget(RecentOrResult result, WidgetRef ref) {
     switch (result) {
       case RecentOrResult.recent:
         return RecentSearchesListView();
       case RecentOrResult.result:
+        //resultなら消しておく
+        ref.watch(visibleRecentTextProvider.notifier).state = false;
         return SearchResultView();
     }
   }
@@ -134,7 +140,7 @@ class SearchResultView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //ここから下は履歴か検索結果を切り替えて表示する
     final res = ref.watch(searchResultProvider);
-    //TODO:デフォルトは拒否状態でメッセージが空だからそれに応じたuiにしてアクセプトにしたら変える
+    //デフォルトはリザルトタイプがnoneだからそれに応じたuiにしてアクセプトにしたら変える
     return howResult(res);
   }
 
@@ -155,18 +161,38 @@ class SearchResultView extends ConsumerWidget {
   }
 
   Widget _buildSearchResultList(SearchResult res) {
+    late final int searchResultLength;
+    if (res.articles.isNotEmpty) {
+      searchResultLength = res.articles.length;
+    } else {
+      searchResultLength = res.websites.length;
+    }
     return SliverList(
+      key: const Key('SearchResultListView'),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final item = res.websites[index];
-          //FIXME:検索結果表示Widgetはまだ動作確認用に仮組みに留めておく
-          //feedlyを参考にカード形式が良いのか
-          return ListTile(
-            title: Text(item.name),
-          );
+          if (res.articles.isNotEmpty) {
+            return _rssItemWidget(res.articles[index]);
+          } else {
+            return _webSiteItem(res.websites[index]);
+          }
         },
-        childCount: res.websites.length,
+        childCount: searchResultLength,
       ),
+    );
+  }
+
+  Widget _rssItemWidget(RssFeed feed) {
+    //FIXME:検索結果表示Widgetはまだ動作確認用に仮組みに留めておく
+    //feedlyを参考にカード形式が良いのか
+    return ListTile(
+      title: Text(feed.title),
+    );
+  }
+
+  Widget _webSiteItem(WebSite site) {
+    return ListTile(
+      title: Text(site.name),
     );
   }
 }

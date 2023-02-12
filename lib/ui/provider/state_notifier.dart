@@ -22,4 +22,15 @@ class SearchResultNotifier extends StateNotifier<SearchResult> {
   void add(SearchResult res) {
     state = res;
   }
+
+  void clear() {
+    state = SearchResult(
+      apiResponse: ApiResponseType.refuse,
+      responseMessage: 'Default',
+      resultType: SearchResultType.none,
+      searchType: SearchType.addContent,
+      websites: [],
+      articles: [],
+    );
+  }
 }

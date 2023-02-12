@@ -7,15 +7,15 @@ import './app_config.dart';
 
 ///これはユーザーごとの設定としてサーバーでデータベースに登録され各プラットフォームで同期できる
 class UserConfig {
-  final String userName;
-  final String userID; //ユーザーidは初回起動時でサーバーから割り振っれるユニークなid
-  final bool isGuest;
-  final List<WebSite> subscribeSites;
-  final AppConfig config;
-  final UserIdentInfo identInfo;
-  final UserAccountType accountType;
+  String userName;
+  String userID; //ユーザーidは初回起動時でサーバーから割り振っれるユニークなid
+  bool isGuest;
+  List<WebSite> subscribeSites;
+  AppConfig config;
+  UserIdentInfo identInfo;
+  UserAccountType accountType;
   //URLは””で囲んでおく
-  final List<String> searchHistory;
+  List<String> searchHistory;
   UserConfig({
     required this.userName,
     required this.userID,

@@ -14,6 +14,7 @@ class SearchFieldWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(searchTextFieldControllerProvider);
     return TextFormField(
+      key:const Key('SearchTextFormField'),
       controller: controller,
       autofocus: true,
       onFieldSubmitted: (txt) {

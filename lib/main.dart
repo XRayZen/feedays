@@ -1,3 +1,5 @@
+import 'package:feedays/mock/mock_repository.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -5,7 +7,15 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'ui/page/start_page.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        //FIXME:緊急避難的に上書き
+        backendApiRepoProvider.overrideWithValue(MockApiRepository())
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 final startPageScaffoldKey = GlobalKey<ScaffoldState>();
@@ -42,9 +52,10 @@ class MyApp extends StatelessWidget {
         breakpoints: [
           const ResponsiveBreakpoint.resize(480, name: MOBILE),
           const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-          const ResponsiveBreakpoint.resize(1000, name: DESKTOP, scaleFactor: 1
-              // 0.90,
-              ),
+          const ResponsiveBreakpoint.resize(
+            1000, name: DESKTOP, scaleFactor: 1,
+            // 0.90,
+          ),
           const ResponsiveBreakpoint.autoScale(
             1200,
             name: DESKTOP,
