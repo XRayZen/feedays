@@ -1,14 +1,12 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-final visibleTextProvider = StateProvider<bool>((ref) {
+final visibleRecentViewProvider = StateProvider<bool>((ref) {
   return true;
 });
 
-final visibleRecentTextProvider = StateProvider<bool>((ref) {
-  return true;
-});
+///TODO:このプロバイダーの処理がややこしいからUI側では変更せずプロバイダー側でのみ変更する
+
 
 final isFeedsEditModeProvider = StateProvider<FeedsEditMode>((ref) {
   return FeedsEditMode.noEdit;
@@ -22,11 +20,16 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+enum SearchResultViewStatus {
+  result,
+  none,
+  ///テキストフィールド外をタップしたら結果ビューに半透明のウィジェットをかける
+  shadow
+}
 
-enum RecentOrResult{recent,result}
-
-final recentOrResultProvider = StateProvider<RecentOrResult>((ref) {
-  return RecentOrResult.recent;
+final SearchResultViewStatusProvider =
+    StateProvider<SearchResultViewStatus>((ref) {
+  return SearchResultViewStatus.none;
 });
 
 final pageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
@@ -37,7 +40,6 @@ enum PageType {
   addContent,
   search,
 }
-
 
 class SelectedSiteNotifier extends StateNotifier<WebSite> {
   SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));
@@ -52,7 +54,8 @@ class SelectedSiteNotifier extends StateNotifier<WebSite> {
 
 final selectWebSiteProvider =
     StateNotifierProvider<SelectedSiteNotifier, WebSite>(
-        (ref) => SelectedSiteNotifier(),);
+  (ref) => SelectedSiteNotifier(),
+);
 
 enum FeedsEditMode { edit, noEdit }
 

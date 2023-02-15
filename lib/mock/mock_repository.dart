@@ -2,6 +2,7 @@
 
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/activity.dart';
+import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 
 import 'mock_util.dart';
@@ -21,9 +22,9 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<SearchResult> searchWord(ApiSearchRequest request) async {
+  Future<PreSearchResult> searchWord(ApiSearchRequest request) async {
     final fakeRssFeeds = genFakeRssFeeds(10);
-    final fakeSearchResult = SearchResult(
+    final fakeSearchResult = PreSearchResult(
       apiResponse: ApiResponseType.accept,
       responseMessage: 'fake',
       resultType: SearchResultType.found,

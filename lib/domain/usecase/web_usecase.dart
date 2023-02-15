@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/mock/gen_data.dart';
@@ -75,7 +76,7 @@ class WebUsecase {
   ///ワードがURLならRSS登録処理
   ///それ以外ならクラウドで検索リクエスト
   ///検索リクエストは無制限
-  Future<SearchResult> searchWord(
+  Future<PreSearchResult> searchWord(
     SearchRequest request,
   ) async {
     editRecentSearches(request.word);

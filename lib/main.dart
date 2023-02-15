@@ -6,7 +6,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import 'ui/page/start_page.dart';
 
-void main({bool isProviderOverRide = false}) {
+void main({bool isProviderOverRide = true}) {
   if (isProviderOverRide) {
     runApp(
       //統合テスト用にプロバイダー上書きを切り替える

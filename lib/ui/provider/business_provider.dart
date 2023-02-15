@@ -1,9 +1,11 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/domain/usecase/web_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
+import 'package:feedays/ui/provider/saerch_vm.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,15 +49,13 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
   ref,
   request,
 ) async {
-  //検索notifierを監視する
-  //guardにしても反応ないから普通のnotifierに変更するかStateを試す
-  //やっても変わらないからこのプロバイダーに引数をつけて実行して結果を
+  // このプロバイダーに引数をつけて実行して結果を
   //notifierに入れてからモードを切り替える方式を試す
-  late SearchResult result;
+  late PreSearchResult result;
   try {
     result = await ref.watch(webUsecaseProvider).searchWord(request);
   } on Exception catch (e) {
-    result = SearchResult(
+    result = PreSearchResult(
       apiResponse: ApiResponseType.refuse,
       responseMessage: e.toString(),
       resultType: SearchResultType.error,
@@ -64,8 +64,9 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
       articles: [],
     )..exception = e;
   }
-  //テキストフィールドをタップしたら元に戻す
-  ref.watch(recentOrResultProvider.notifier).state = RecentOrResult.result;
+
+  ref.watch(SearchResultViewStatusProvider.notifier).state =
+      SearchResultViewStatus.result;
   //resultなら消しておく
   ref.watch(visibleRecentTextProvider.notifier).state = false;
   //結果をnotifierに入れる

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NoMoreItemIndicator extends ConsumerWidget {
-  const NoMoreItemIndicator({super.key, required this.onTryAgain});
-  final Function onTryAgain;
+  const NoMoreItemIndicator({super.key, this.onTryAgain});
+  final Function? onTryAgain;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -12,11 +12,20 @@ class NoMoreItemIndicator extends ConsumerWidget {
         Image.asset(
           'assets/empty-box.png',
         ),
-        TextButton(
-          child: const Text('Retry'),
-          onPressed: () => onTryAgain,
-        ),
+        hasTryAgain(onTryAgain)
       ],
+    );
+  }
+
+  Widget hasTryAgain(Function? onTryAgain) {
+    if (onTryAgain is Function) {
+      return TextButton(
+        child: const Text('Retry'),
+        onPressed: () => onTryAgain,
+      );
+    }
+    return const SizedBox(
+      width: 0,
     );
   }
 }

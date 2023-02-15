@@ -20,16 +20,28 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('RecentSearchesText')), findsNothing);
       expect(find.byKey(const Key('SearchResultListView')), findsOneWidget);
-      
     });
-    testWidgets('Failed SearchFlow', (widgetTester) async {
+    testWidgets('Failed SearchFlow', (tester) async {
       //失敗するフロー
+    });
+    testWidgets('Result Gone', (tester) async {
+      //次はバックボタンを押したら検索結果が消えてる動作をテストしたい
+      await goSearchPage(tester);
+      //SearchTextFormFieldにワードを入れて10件のリストが出てくる
+      await tester.enterText(
+        find.byKey(const Key('SearchTextFormField')),
+        'Test Search Word',
+      );
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
     });
   });
 }
 
 ///検索ページまで遷移する
 Future<void> goSearchPage(WidgetTester tester) async {
+  //統合テストの場合はアプリを起動してテストする
   app.main(isProviderOverRide: true);
   await tester.pumpAndSettle();
   //スタートページからadd_contentページに遷移する

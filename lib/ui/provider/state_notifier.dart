@@ -1,15 +1,16 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/search.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchResultProvider =
-    StateNotifierProvider<SearchResultNotifier, SearchResult>((ref) {
+    StateNotifierProvider<SearchResultNotifier, PreSearchResult>((ref) {
   return SearchResultNotifier();
 });
 
-class SearchResultNotifier extends StateNotifier<SearchResult> {
+class SearchResultNotifier extends StateNotifier<PreSearchResult> {
   SearchResultNotifier()
       : super(
-          SearchResult(
+          PreSearchResult(
             apiResponse: ApiResponseType.refuse,
             responseMessage: 'Default',
             resultType: SearchResultType.none,
@@ -19,12 +20,12 @@ class SearchResultNotifier extends StateNotifier<SearchResult> {
           ),
         );
 
-  void add(SearchResult res) {
+  void add(PreSearchResult res) {
     state = res;
   }
 
   void clear() {
-    state = SearchResult(
+    state = PreSearchResult(
       apiResponse: ApiResponseType.refuse,
       responseMessage: 'Default',
       resultType: SearchResultType.none,

@@ -13,11 +13,11 @@ class SubscriptionSiteListNotifier
     // 代わりに、既存と新規を含む新しいリストを作成します。
     // Dart のスプレッド演算子を使うと便利ですよ!
     //カテゴリーに基づいてノードを作る必要がある
-    List<SubscFeedSiteModel> items = _webSitesToFeedModels(sites);
+    final items = _webSitesToFeedModels(sites);
     if (state.isEmpty) {
       state = items;
     } else {
-      var list = state;
+      final list = state;
       list.addAll(items);
       state = list;
     }
@@ -27,10 +27,10 @@ class SubscriptionSiteListNotifier
 
   //入れ替えの場合はリストをコピーしてそのリストから入れ替え処理してリストを新規作成する
   void onItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex,) {
     const point = 0;
     final newList = [...state];
-    final SubscFeedSiteModel movedItem =
+    final movedItem =
         newList[oldListIndex + point].nodes.removeAt(oldItemIndex);
     newList[newListIndex].nodes.insert(newItemIndex, movedItem);
     //TODO:ビジネスロジックにも反映させる
@@ -38,6 +38,7 @@ class SubscriptionSiteListNotifier
     final oldCategory = newList[oldListIndex + point].category;
     final newCategory = newList[newListIndex].category;
     final movedItmeKey = movedItem.url;
+    
     state = newList;
   }
 
@@ -77,22 +78,22 @@ final subscriptionSiteListProvider = StateNotifierProvider<
 });
 
 List<SubscFeedSiteModel> _webSitesToFeedModels(List<WebSite> sites) {
-  var items = <SubscFeedSiteModel>[];
-  int currentCategoryKey = 7000;
+  final items = <SubscFeedSiteModel>[];
+  var currentCategoryKey = 7000;
   for (var site in sites) {
     if (items.isEmpty) {
       items.add(SubscFeedSiteModel(
           key: currentCategoryKey.toString(),
           name: site.category,
-          url: "",
+          url: '',
           newCount: 0,
           category: site.category,
           categoryOrSite: CategoryOrSite.category,
-          nodes: [SubscFeedSiteModel.from(site)]));
+          nodes: [SubscFeedSiteModel.from(site)],),);
     }
     if (items.any((element) => element.category == site.category)) {
       //Nodeを追加する
-      var findCategoryIndex =
+      final findCategoryIndex =
           items.indexWhere((element) => site.category == element.category);
       items[findCategoryIndex].nodes.add(SubscFeedSiteModel.from(site));
     } else {
@@ -101,11 +102,11 @@ List<SubscFeedSiteModel> _webSitesToFeedModels(List<WebSite> sites) {
       items.add(SubscFeedSiteModel(
           key: currentCategoryKey.toString(),
           name: site.category,
-          url: "",
+          url: '',
           newCount: 0,
           category: site.category,
           categoryOrSite: CategoryOrSite.category,
-          nodes: [SubscFeedSiteModel.from(site)]));
+          nodes: [SubscFeedSiteModel.from(site)],),);
     }
   }
   return items;
