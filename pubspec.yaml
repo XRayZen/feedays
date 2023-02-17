@@ -42,6 +42,7 @@ dependencies:
   functional_widget: ^0.10.1
   tuple: ^2.0.1
   mockito: any
+  sliver_tools: ^0.2.9
 
 dev_dependencies:
   integration_test:

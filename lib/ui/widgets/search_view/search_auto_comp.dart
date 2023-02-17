@@ -1,11 +1,11 @@
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
-import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/search_view/search_recent_item.dart';
-import 'package:feedays/ui/widgets/search_view/custom_text_field.dart';
+import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'custom_text_field.dart';
 
 class SearchAutoCompText extends ConsumerStatefulWidget {
   const SearchAutoCompText({super.key});
@@ -15,13 +15,13 @@ class SearchAutoCompText extends ConsumerStatefulWidget {
 }
 
 class _SearchAutoCompState extends ConsumerState<SearchAutoCompText> {
-  //TODO:ここも新しく作り変える
   @override
   Widget build(BuildContext context) {
     final recentList = ref.watch(recentSearchesProvider);
     return Autocomplete<String>(
       key: const Key('AutoCompField'),
       onSelected: (selectItem) {
+        ref.watch(onTextFieldTapProvider.notifier).state = false;
         onSearch(
           SearchRequest(searchType: SearchType.addContent, word: selectItem),
           ref,
@@ -55,6 +55,7 @@ class _SearchAutoCompState extends ConsumerState<SearchAutoCompText> {
   }
 }
 
+///入力候補の見た目
 class RecentViewWidget extends ConsumerWidget {
   const RecentViewWidget({
     super.key,
@@ -66,18 +67,15 @@ class RecentViewWidget extends ConsumerWidget {
   final void Function(String) onSelected;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isvisible = ref.watch(visibleRecentViewProvider);
+    final visible = ref.watch(visibleRecentViewProvider);
     return Visibility(
-      //TODO:履歴リストの外をタップすれば消す
-      //消えないしテキストフィールドに履歴リスト抹消
-      visible: isvisible,
+      visible: visible,
       child: ListView.builder(
         itemCount: list.length,
         itemBuilder: (context, index) {
           final txt = list.elementAt(index);
           //NOTE:候補Itemをカスタマイズする時はアイテムが選択された時の関数を返さなければならない
           return SearchRecentItem(txt: txt, onSelected: onSelected);
-          // MyWidget(txt: recentList[index]);
         },
       ),
     );

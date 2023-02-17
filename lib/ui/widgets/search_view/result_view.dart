@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
-import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:flutter/widgets.dart';
+import 'package:feedays/ui/widgets/search_view/result_list.dart';
+import 'package:feedays/ui/widgets/search_view/search_view.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ResultView extends ConsumerStatefulWidget {
   const ResultView({super.key});
@@ -13,22 +12,58 @@ class ResultView extends ConsumerStatefulWidget {
 }
 
 class _ResultViewState extends ConsumerState<ResultView> {
-  Future<void> fetch() async {
-
+  bool isVisibleShadowWidget(SearchResultViewMode status) {
+    switch (status) {
+      case SearchResultViewMode.result:
+        return false;
+      case SearchResultViewMode.none:
+        return false;
+      case SearchResultViewMode.shadow:
+        return true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    //TODO:検索フローで結果が帰ってくる件数に上限を設けていない問題　リソースが浪費される
-    //パフォーマンスを上げるためにスライバーリストの無限スクロールで
-    //無限スクロールだとStateNotifierではなくFutureProviderで対応できる
-    //TODO:テキストフィールドをタップしたらリザルト画面に半透明のウィジェットをかぶせて
+    //テキストフィールドをタップしたらリザルト画面に半透明のウィジェットをかぶせて
     //それへのタップで履歴リストを非表示する
-    final mode = ref.watch(SearchResultViewStatusProvider);
-    final res = ref.watch(searchResultProvider);
+    final mode = ref.watch(searchResultViewModeProvider);
     //シャドウモードならリザルト画面にリザルト画面に半透明のウィジェットをかぶせる
     //それをジェスチャーディテクターをラップする
-    return Container();
-    
+    //shadowと無限スクロールをスタックさせる
+    return SliverStack(
+      insetOnOverlap: true,
+      children: [
+        const ResultSLiverList(),
+        SliverPositioned.fill(
+          child: ShadowWidget(visible: isVisibleShadowWidget(mode)),
+        ),
+      ],
+    );
+  }
+}
+
+class ShadowWidget extends ConsumerWidget {
+  const ShadowWidget({required this.visible, super.key});
+  final bool visible;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SliverVisibility(
+      visible: visible,
+      sliver: AnimatedOpacity(
+        // 透明度の値を変数で指定
+        opacity: 0.5,
+        // アニメーションの時間を500ミリ秒に指定
+        duration: const Duration(milliseconds: 500),
+        // アニメーションのカーブをイーズインアウトに指定
+        curve: Curves.easeInOut,
+        // 青いコンテナを子ウィジェットとして指定
+        child: Container(
+          // width: 200,
+          // height: 100,
+          color: Colors.black,
+        ),
+      ),
+    );
   }
 }

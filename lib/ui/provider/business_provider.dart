@@ -8,6 +8,7 @@ import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/ui/provider/saerch_vm.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final backendApiRepoProvider = Provider<BackendApiRepository>((ref) {
@@ -42,6 +43,10 @@ final webUsecaseProvider = Provider<WebUsecase>((ref) {
 });
 
 void onSearch(SearchRequest request, WidgetRef ref) {
+  //空の文字は検索しない
+  if (request.word.isEmpty) {
+    //TODO:空の文字の場合はスナックバーでエラー警告を出す
+  }
   ref.watch(searchProvider(request));
 }
 
@@ -65,8 +70,8 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
     )..exception = e;
   }
 
-  ref.watch(SearchResultViewStatusProvider.notifier).state =
-      SearchResultViewStatus.result;
+  ref.watch(searchResultViewModeProvider.notifier).state =
+      SearchResultViewMode.result;
   //resultなら消しておく
   ref.watch(visibleRecentTextProvider.notifier).state = false;
   //結果をnotifierに入れる

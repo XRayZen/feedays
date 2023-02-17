@@ -1,10 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomTextField extends ConsumerWidget {
@@ -25,7 +24,11 @@ class CustomTextField extends ConsumerWidget {
       autofocus: true,
       //遡ったら処理が見当たらないからカスタムしても良いかもしれない
       onFieldSubmitted: (value) {
+        ref.watch(onTextFieldTapProvider.notifier).state = false;
         onFieldSubmitted();
+        if (value.isEmpty) {
+          editingController.clear();
+        }
         onSearch(
           SearchRequest(searchType: SearchType.addContent, word: value),
           ref,
@@ -46,19 +49,15 @@ class CustomTextField extends ConsumerWidget {
       ),
       onTap: () {
         //リザルトビューをシャドウモードにする
-        ref.watch(SearchResultViewStatusProvider.notifier).state =
-            SearchResultViewStatus.shadow;
+        ref.watch(searchResultViewModeProvider.notifier).state =
+            SearchResultViewMode.shadow;
+        ref.watch(visibleRecentViewProvider.notifier).state = true;
+        ref.watch(onTextFieldTapProvider.notifier).state = true;
       },
       onTapOutside: (event) {
-        //ここで履歴リストを消す
-        //BUG:タップしても反応ないから履歴削除機能は諦めるかもしれない
-        //リザルトページにジェスチャーをおいてタップすれば消せるか
-        ref.watch(SearchResultViewStatusProvider.notifier).state =
-            SearchResultViewStatus.result;
-        //TEST:RecentViewを消せるか試す
-        ref.watch(visibleRecentViewProvider.notifier).state = false;
-        final visibleRecentViewBool = ref.watch(visibleRecentViewProvider);
-        print('visibleRecentViewProvider:{$visibleRecentViewBool}');
+        //リザルトページにジェスチャーをおいてタップすれば消せるか→仕様上の制限で出来ない
+        ref.watch(searchResultViewModeProvider.notifier).state =
+            SearchResultViewMode.result;
       },
     );
   }

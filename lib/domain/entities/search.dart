@@ -56,36 +56,3 @@ class PreSearchResult {
     required this.articles,
   });
 }
-
-
-class SearchResultItem {
-  SearchResultItem({
-    required this.index,
-    required this.searchType,
-    required this.article,
-    required this.website,
-  });
-  final int index;
-  final SearchType searchType;
-  final WebSite? website;
-  final RssFeed? article;
-}
-
-class SearchResult {
-  final ApiResponseType apiResponse;
-  final String responseMessage;
-  final SearchResultType resultType;
-  Exception? exception;
-  //AddContentならサイトを返す
-  //PowerSearchなら記事を返す
-  final SearchType searchType;
-  final List<SearchResultItem> items;
-  SearchResult({
-    required this.apiResponse,
-    required this.responseMessage,
-    required this.resultType,
-    this.exception,
-    required this.searchType,
-    required this.items,
-  });
-}
