@@ -25,18 +25,18 @@ class _ResultViewState extends ConsumerState<ResultView> {
 
   @override
   Widget build(BuildContext context) {
-    //テキストフィールドをタップしたらリザルト画面に半透明のウィジェットをかぶせて
-    //それへのタップで履歴リストを非表示する
     final mode = ref.watch(searchResultViewModeProvider);
     //シャドウモードならリザルト画面にリザルト画面に半透明のウィジェットをかぶせる
-    //それをジェスチャーディテクターをラップする
     //shadowと無限スクロールをスタックさせる
     return SliverStack(
       insetOnOverlap: true,
       children: [
-        const ResultSLiverList(),
+        const ResultSLiverList(key: Key('SearchResultList')),
         SliverPositioned.fill(
-          child: ShadowWidget(visible: isVisibleShadowWidget(mode)),
+          child: ShadowWidget(
+            visible: isVisibleShadowWidget(mode),
+            key: const Key('ShadowWidget'),
+          ),
         ),
       ],
     );

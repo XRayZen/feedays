@@ -1,13 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ffi';
-
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:feedays/ui/provider/business_provider.dart';
-
 class SearchRecentItem extends ConsumerWidget {
-    const SearchRecentItem( {super.key, 
+  const SearchRecentItem({
+    super.key,
     required this.txt,
     required this.onSelected,
   });
@@ -25,9 +23,10 @@ class SearchRecentItem extends ConsumerWidget {
             .editRecentSearches(txt, isAddOrRemove: false);
       },
       //どんなに方向を変えても必ず左に配置されてしまう
-      background: const Expanded(
-        child: ColoredBox(
-          color: Colors.red,
+      background: const ColoredBox(
+        color: Colors.red,
+        child: FittedBox(
+          alignment: Alignment.topLeft,
           child: Text('Delete', style: TextStyle(color: Colors.white)),
         ),
       ),

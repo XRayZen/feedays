@@ -1,9 +1,8 @@
 //複雑化したため、どのプロジェクトでも使い回せる検索ページを実装する
-//TODO:プロバイダーが使えなくなり動的に描画できなくなるのでやめておく
+//NOTE:プロバイダーが使えなくなり動的に描画できなくなるのでやめておく
 //コンストラクタで検索関数や結果を受け取るNotifierや結果アイテムビューWidgetを渡す
 
 import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/search_view/result_view.dart';
 import 'package:feedays/ui/widgets/search_view/search_auto_comp.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +59,12 @@ class _SearchViewState extends ConsumerState<SearchViewPage> {
               leading: SearchViewPageBackButton(
                 ref: ref,
               ),
+              actions: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('test'),
+                )
+              ],
             ),
           ];
         },
