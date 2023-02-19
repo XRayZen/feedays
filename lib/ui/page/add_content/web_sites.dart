@@ -1,3 +1,5 @@
+import 'package:feedays/ui/provider/state_notifier.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,20 +21,14 @@ class WebSites extends ConsumerWidget {
           controller: con,
           onChanged: (value) {
             con.clear();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SearchViewPage(),
-              ),
-            );
+            //FIXME:feedlyでは遷移ではなくタブバービューを変えている
+            ref.watch(barpageTypeProvider.notifier).state = PageType.searchView;
           },
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SearchViewPage(),
-              ),
-            );
+            ref.watch(searchResultViewModeProvider.notifier).state =
+                SearchResultViewMode.none;
+            ref.watch(searchResultProvider.notifier).clear();
+            ref.watch(barpageTypeProvider.notifier).state = PageType.searchView;
           },
           decoration: InputDecoration(
             border: const OutlineInputBorder(),

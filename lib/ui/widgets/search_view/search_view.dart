@@ -3,6 +3,7 @@
 //コンストラクタで検索関数や結果を受け取るNotifierや結果アイテムビューWidgetを渡す
 
 import 'package:feedays/ui/provider/state_notifier.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/search_view/result_view.dart';
 import 'package:feedays/ui/widgets/search_view/search_auto_comp.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,9 @@ class _SearchViewState extends ConsumerState<SearchViewPage> {
               ),
               actions: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //詳細フィルター・設定を検討
+                  },
                   child: const Text('test'),
                 )
               ],
@@ -106,7 +109,7 @@ class SearchViewPageBackButton extends StatelessWidget {
           ref.watch(searchResultViewModeProvider.notifier).state =
               SearchResultViewMode.none;
           ref.watch(searchResultProvider.notifier).clear();
-          Navigator.pop(context);
+          ref.watch(barpageTypeProvider.notifier).state = PageType.addContent;
         }
       },
       icon: const Icon(Icons.arrow_back),

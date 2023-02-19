@@ -1,10 +1,11 @@
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
+import 'package:feedays/ui/page/power_search_page.dart';
 import 'package:feedays/ui/page/read_later.dart';
-import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/page/today_sliver_page.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
+import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,11 +15,12 @@ class StartPageView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _StartPageViewState();
 }
 
-final List<Widget> pageList = <Widget>[
+const List<Widget> pageList = <Widget>[
   ReadlaterPage(),
   TodaySilverPage(),
   AddContentPage(),
-  SearchPage(),
+  PowerSearchPage(),
+  SearchViewPage()
 ];
 
 class _StartPageViewState extends ConsumerState<StartPageView> {
@@ -36,7 +38,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
     } else if (value == 3) {
       return PageType.addContent;
     } else if (value == 4) {
-      return PageType.search;
+      return PageType.powerSearch;
     } else {
       return PageType.toDay;
     }
@@ -44,7 +46,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   void _selectedDestination(int value, BuildContext context) {
     setState(() {
-      ref.watch(pageTypeProvider.notifier).state = howPageIndex(value);
+      ref.watch(barpageTypeProvider.notifier).state = howPageIndex(value);
     });
     if (value == 0) {
       startPageScaffoldKey.currentState!.openDrawer();
@@ -111,14 +113,16 @@ class ViewPage extends ConsumerWidget {
         return pageList[1];
       case PageType.addContent:
         return pageList[2];
-      case PageType.search:
+      case PageType.powerSearch:
         return pageList[3];
+      case PageType.searchView:
+        return pageList[4];
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageType = ref.watch(pageTypeProvider);
+    final pageType = ref.watch(barpageTypeProvider);
     return howPage(pageType);
   }
 }

@@ -54,7 +54,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  ref.read(pageTypeProvider.notifier).state =
+                  ref.read(barpageTypeProvider.notifier).state =
                       PageType.addContent;
                   startPageScaffoldKey.currentState!.closeDrawer();
                 },
@@ -149,9 +149,9 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           onTap: () {
             //PLAN:TodayPageに表示を切り替えてメニューを閉じる
             startPageScaffoldKey.currentState!.setState(() {
-              var fff = ref.watch(pageTypeProvider.notifier).state;
+              var fff = ref.watch(barpageTypeProvider.notifier).state;
               fff = PageType.toDay;
-              ref.watch(pageTypeProvider.notifier).state = fff;
+              ref.watch(barpageTypeProvider.notifier).state = fff;
             });
             startPageScaffoldKey.currentState!.closeDrawer();
           },

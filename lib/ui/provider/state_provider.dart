@@ -13,14 +13,9 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-final pageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
+final barpageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
 
-enum PageType {
-  readLater,
-  toDay,
-  addContent,
-  search,
-}
+enum PageType { readLater, toDay, addContent, powerSearch, searchView }
 
 class SelectedSiteNotifier extends StateNotifier<WebSite> {
   SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));

@@ -23,9 +23,9 @@ class WebUsecase {
   UserConfig userCfg;
   //NOTE:プロバイダー経由でクラス変数に代入できるか試す→出来た
   ///今はテスト用にfakeの`feed`を生成する
-  void genFakeWebsite(WebSite site) {
+  Future<void> genFakeWebsite(WebSite site)async {
     userCfg.subscribeSites.add(site);
-    userCfg.subscribeSites.first.feeds.addAll(genFakeRssFeeds(50));
+    userCfg.subscribeSites.first.feeds.addAll(await genFakeRssFeeds(50));
     userCfg.searchHistory.add('40010');
   }
 

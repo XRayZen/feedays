@@ -23,7 +23,7 @@ class MockApiRepository extends BackendApiRepository {
 
   @override
   Future<PreSearchResult> searchWord(ApiSearchRequest request) async {
-    final fakeRssFeeds = genFakeRssFeeds(10, request.word);
+    final fakeRssFeeds =await genFakeRssFeeds(10, request.word);
     final word = request.word;
     final fakeSearchResult = PreSearchResult(
       apiResponse: ApiResponseType.accept,
