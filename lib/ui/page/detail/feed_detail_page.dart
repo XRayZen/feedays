@@ -1,9 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, inference_failure_on_instance_creation
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/main.dart';
+import 'package:feedays/ui/widgets/search_view/custom_text_field.dart';
+import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 
 class FeedDetailPage extends ConsumerWidget {
   final List<RssFeed> articles;
@@ -27,23 +30,52 @@ class FeedDetailPage extends ConsumerWidget {
     final article = articles[index];
     return Scaffold(
       appBar: AppBar(
-          //バーはリーディングはシンプルにバックボタン（自動で実装か）
-          //多分アクションにテーマやサイズを設定できる小ウインドウを表示させるAaアイコンボタン
-          //ReadLaterフラグを立てるアイコン・ボタン
-          //お気に入り登録するアイコン・ボタン
-          //プラットフォームごとに動作するシェアボタン
-          //外部サービスと連携して記事を送信できる3ポイントアイコン・ボタン
-          ),
+        //バーはリーディングはシンプルにバックボタン（自動で実装か）
+        //だがスワイプで前後にページ遷移するからいちいちとなりの記事に遷移せずResultに戻りたい
+        //だから手動でバックボタンを実装する
+        leading: BackButton(
+          onPressed: () {
+            //リザルトにバックした時に候補を非表示にしておく
+            ref.watch(searchResultViewModeProvider.notifier).state =
+                SearchResultViewMode.result;
+            ref.watch(visibleRecentViewProvider.notifier).state = false;
+            ref.watch(isSearchTxtAutoFocus.notifier).state =
+                false; //オートフォーカスをオフにしておく
+            //BUG:リザルトのテキストフィールドが空になっている→テキストフィールドがステートレスだから
+            //TODO:テキストフィールドのテキストを随時ステートプロバイダーに保存して
+            //描画する時に入れておく
+            //リザルトビューでバックボタンしたらそれも空にしておく
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+          },
+        ),
+        //多分アクションにテーマやサイズを設定できる小ウインドウを表示させるAaアイコンボタン
+        //ReadLaterフラグを立てるアイコン・ボタン
+        //お気に入り登録するアイコン・ボタン
+        //プラットフォームごとに動作するシェアボタン
+        //外部サービスと連携して記事を送信できる3ポイントアイコン・ボタン
+        actions: [
+          IconButton(
+            tooltip: 'Set theme and size',
+            onPressed: () {
+              //テーマやサイズを設定できる小ウインドウを表示
+            },
+            icon: const Icon(Icons.format_size),
+          )
+        ],
+      ),
       body: Stack(
         children: [
           //記事オブジェクト
           Center(
             child: Column(
               children: [
+                //長かったら折り返す
                 //一番上に太字でタイトル
                 Text(article.title),
                 //その下に小さくサイト名/by {Domain}/記事日時
-                
+                Text(
+                  '${article.site}/by ${article.link.split('//').elementAt(1).split('/').elementAt(0)}/${article.lastModified}',
+                ),
               ],
             ),
           ),
@@ -52,17 +84,21 @@ class FeedDetailPage extends ConsumerWidget {
             behavior: HitTestBehavior.translucent,
             onHorizontalDragEnd: (details) {
               if (details.primaryVelocity! < 0) {
+                //左スワイプで次
                 showSnack(
                   context,
                   500,
-                  '左 swipe',
+                  '右から左 swipe',
                 );
+                nextPageNavigate(context, false);
               } else if (details.primaryVelocity! > 0) {
+                // 右スワイプで前
                 showSnack(
                   context,
                   500,
-                  '右 swipe',
+                  '左から右 swipe',
                 );
+                nextPageNavigate(context, true);
               }
             },
           ),
@@ -117,11 +153,24 @@ class FeedDetailPage extends ConsumerWidget {
     );
   }
 
+  Widget slideTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Widget child,
+  ) {
+    const begin = Offset(1, 0);
+    const end = Offset.zero;
+    const curve = Curves.ease;
+    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    return SlideTransition(
+      position: animation.drive(tween),
+      child: child,
+    );
+  }
+
   //画面配置に成功した例
   GestureDetector rowStan(BuildContext context) {
     return GestureDetector(
-      //BUG:スワイプを検知出来ていない
-      onHorizontalDragUpdate: detectSwipe,
       child: Row(
         children: [
           Expanded(
@@ -164,42 +213,30 @@ class FeedDetailPage extends ConsumerWidget {
     );
   }
 
-  ///左右どちらにスワイプしたか検知
-  void detectSwipe(DragUpdateDetails details) {
-    const sensitivity = 8;
-    if (details.delta.dx > sensitivity) {
-      //右にスワイプ
-      //前のインデックスのフィードに遷移
-      scaffoldMessengerKey.currentState!
-          .showSnackBar(const SnackBar(content: Text('右にswipe')));
-    } else if (details.delta.dx < -sensitivity) {
-      //左にスワイプ
-      scaffoldMessengerKey.currentState!
-          .showSnackBar(const SnackBar(content: Text('左にswipe')));
-    }
-  }
-
-  void pageNavigate(BuildContext context) {
-    if (articles.length < index + 1) {
-      // Right edge tap
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          //アニメーション
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              FeedDetailPage(index: index + 1, articles: articles),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1, 0);
-            const end = Offset.zero;
-            const curve = Curves.ease;
-            final tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-        ),
-      );
+  void nextPageNavigate(BuildContext context, bool backOrNext) {
+    if (backOrNext) {
+      //前の記事に遷移
+      //マイナスになったら遷移しない
+      if (0 <= index - 1) {
+        Navigator.of(context).push(
+          PageTransition(
+            child: FeedDetailPage(index: index - 1, articles: articles),
+            type: PageTransitionType.leftToRightJoined,
+            childCurrent: this,
+          ),
+        );
+      }
+    } else {
+      if (articles.length > index + 1) {
+        // 次の記事に遷移
+        Navigator.of(context).push(
+          PageTransition(
+            child: FeedDetailPage(index: index + 1, articles: articles),
+            type: PageTransitionType.rightToLeft,
+            childCurrent: this,
+          ),
+        );
+      }
     }
   }
 }

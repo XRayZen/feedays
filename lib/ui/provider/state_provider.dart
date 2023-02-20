@@ -13,7 +13,7 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-final barpageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
+final barPageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
 
 enum PageType { readLater, toDay, addContent, powerSearch, searchView }
 

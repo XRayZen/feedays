@@ -16,6 +16,7 @@ List<RssFeed> genFakeRssFeeds(int num) {
         image: ByteData(0),
         site: 'fakeSite:{$i}',
         category: 'MockedCategory',
+        lastModified: DateTime.now(),
       ),
     );
   }

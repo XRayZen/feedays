@@ -22,13 +22,13 @@ class WebSites extends ConsumerWidget {
           onChanged: (value) {
             con.clear();
             //FIXME:feedlyでは遷移ではなくタブバービューを変えている
-            ref.watch(barpageTypeProvider.notifier).state = PageType.searchView;
+            ref.watch(barPageTypeProvider.notifier).state = PageType.searchView;
           },
           onTap: () {
             ref.watch(searchResultViewModeProvider.notifier).state =
                 SearchResultViewMode.none;
             ref.watch(searchResultProvider.notifier).clear();
-            ref.watch(barpageTypeProvider.notifier).state = PageType.searchView;
+            ref.watch(barPageTypeProvider.notifier).state = PageType.searchView;
           },
           decoration: InputDecoration(
             border: const OutlineInputBorder(),

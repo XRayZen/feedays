@@ -4,6 +4,7 @@
 
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/search_view/custom_text_field.dart';
 import 'package:feedays/ui/widgets/search_view/result_view.dart';
 import 'package:feedays/ui/widgets/search_view/search_auto_comp.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +110,8 @@ class SearchViewPageBackButton extends StatelessWidget {
           ref.watch(searchResultViewModeProvider.notifier).state =
               SearchResultViewMode.none;
           ref.watch(searchResultProvider.notifier).clear();
-          ref.watch(barpageTypeProvider.notifier).state = PageType.addContent;
+          ref.watch(isSearchTxtAutoFocus.notifier).state = true; //オートフォーカスも戻す
+          ref.watch(barPageTypeProvider.notifier).state = PageType.addContent;
         }
       },
       icon: const Icon(Icons.arrow_back),

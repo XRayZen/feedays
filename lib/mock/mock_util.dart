@@ -16,6 +16,7 @@ Future<List<RssFeed>> genFakeRssFeeds(int num, String word) async {
         image: await getAssetData('assets/confused-face.png'),
         site: 'fakeSite:{$i}',
         category: 'MockedCategory',
+        lastModified: DateTime.now(),
       ),
     );
   }

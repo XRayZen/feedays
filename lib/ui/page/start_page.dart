@@ -46,7 +46,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   void _selectedDestination(int value, BuildContext context) {
     setState(() {
-      ref.watch(barpageTypeProvider.notifier).state = howPageIndex(value);
+      ref.watch(barPageTypeProvider.notifier).state = howPageIndex(value);
     });
     if (value == 0) {
       startPageScaffoldKey.currentState!.openDrawer();
@@ -122,7 +122,7 @@ class ViewPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageType = ref.watch(barpageTypeProvider);
+    final pageType = ref.watch(barPageTypeProvider);
     return howPage(pageType);
   }
 }

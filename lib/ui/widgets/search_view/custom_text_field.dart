@@ -5,9 +5,13 @@ import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final isClearButtonProvider = StateProvider<bool>((ref) {
+final isSearchTxtClearBtn = StateProvider<bool>((ref) {
   return false;
 });
+final isSearchTxtAutoFocus = StateProvider<bool>((ref) {
+  return true;
+});
+
 
 class CustomTextField extends ConsumerWidget {
   final TextEditingController editingController;
@@ -26,7 +30,7 @@ class CustomTextField extends ConsumerWidget {
         TextFormField(
           controller: editingController,
           focusNode: focusNode,
-          autofocus: true,
+          autofocus: ref.watch(isSearchTxtAutoFocus),
           //遡ったら処理が見当たらないからカスタムしても良いかもしれない
           onFieldSubmitted: (value) {
             ref.watch(onTextFieldTapProvider.notifier).state = false;
@@ -43,9 +47,9 @@ class CustomTextField extends ConsumerWidget {
           },
           onChanged: (value) {
             if (value.isEmpty) {
-              ref.watch(isClearButtonProvider.notifier).state = false;
+              ref.watch(isSearchTxtClearBtn.notifier).state = false;
             } else {
-              ref.watch(isClearButtonProvider.notifier).state = true;
+              ref.watch(isSearchTxtClearBtn.notifier).state = true;
             }
           },
           decoration: InputDecoration(
@@ -68,7 +72,7 @@ class CustomTextField extends ConsumerWidget {
             ref.watch(visibleRecentViewProvider.notifier).state = true;
             ref.watch(onTextFieldTapProvider.notifier).state = true;
             if (editingController.text.isNotEmpty) {
-              ref.watch(isClearButtonProvider.notifier).state = true;
+              ref.watch(isSearchTxtClearBtn.notifier).state = true;
             }
           },
           onTapOutside: (event) {
@@ -96,7 +100,7 @@ class ClearButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isClearButton = ref.watch(isClearButtonProvider);
+    final isClearButton = ref.watch(isSearchTxtClearBtn);
     return Visibility(
       visible: isClearButton,
       child: Align(

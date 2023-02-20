@@ -28,8 +28,9 @@ void main({bool isProviderOverRide = true}) {
   }
 }
 
-final startPageScaffoldKey = GlobalKey<ScaffoldState>();
-final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+GlobalKey<ScaffoldState> startPageScaffoldKey = GlobalKey<ScaffoldState>();
+GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

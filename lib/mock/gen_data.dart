@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ Future<List<RssFeed>> genFakeRssFeeds(int num, {int start = 0})async {
         image:await getAssetData('assets/confused-face.png'),
         site: 'none',
         category: 'Fake',
+        lastModified: DateTime.now(),
       ),
     );
     start++;

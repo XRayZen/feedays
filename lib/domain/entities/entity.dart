@@ -97,6 +97,7 @@ class RssFeed {
   final String link;
   final ByteData image;
   final String site;
+  final DateTime lastModified;
 
   ///必要ないかも
   final String category;
@@ -108,6 +109,7 @@ class RssFeed {
     required this.image,
     required this.site,
     required this.category,
+    required this.lastModified,
   });
 }
 
