@@ -1,18 +1,20 @@
-
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Future<List<RssFeed>> genFakeRssFeeds(int num, {int start = 0})async {
-  final fakeFeeds = <RssFeed>[];
+Future<List<RssFeedItem>> genFakeRssFeeds(int num, {int start = 0}) async {
+  final fakeFeeds = <RssFeedItem>[];
   for (var i = 0; i < num; i++) {
     fakeFeeds.add(
-      RssFeed(
+      RssFeedItem(
         index: start,
         title: 'Fake Site:$start fake:{$i} ',
         description: 'Description:$start',
         link: 'none',
-        image:await getAssetData('assets/confused-face.png'),
+        image: RssFeedImage(
+          link: 'assets/confused-face.png',
+          image: await getAssetData('assets/confused-face.png'),
+        ),
         site: 'none',
         category: 'Fake',
         lastModified: DateTime.now(),
@@ -21,6 +23,10 @@ Future<List<RssFeed>> genFakeRssFeeds(int num, {int start = 0})async {
     start++;
   }
   return fakeFeeds;
+}
+
+void genFakeSites() {
+  //偽サイトを生成
 }
 
 Future<ByteData> getAssetData(String key) async {

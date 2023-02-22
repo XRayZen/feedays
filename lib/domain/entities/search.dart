@@ -3,8 +3,6 @@ import 'package:feedays/domain/entities/entity.dart';
 
 import 'activity.dart';
 
-
-
 class SearchRequest {
   final SearchType searchType;
   final String word;
@@ -46,7 +44,7 @@ class PreSearchResult {
   //PowerSearchなら記事を返す
   final SearchType searchType;
   final List<WebSite> websites;
-  final List<RssFeed> articles;
+  final List<RssFeedItem> articles;
   PreSearchResult({
     required this.apiResponse,
     required this.responseMessage,

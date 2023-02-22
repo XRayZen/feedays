@@ -61,7 +61,7 @@ class WebSite {
   final int readLateCount;
   final String category;
   final List<String> tags;
-  final List<RssFeed> feeds;
+  final List<RssFeedItem> feeds;
   final bool fav;
   WebSite({
     required this.key,
@@ -90,18 +90,18 @@ class WebSite {
   }
 }
 
-class RssFeed {
+class RssFeedItem {
   final int index;
   final String title;
   final String description;
   final String link;
-  final ByteData image;
+  final RssFeedImage image;
   final String site;
   final DateTime lastModified;
 
   ///必要ないかも
   final String category;
-  RssFeed({
+  RssFeedItem({
     required this.index,
     required this.title,
     required this.description,
@@ -110,6 +110,15 @@ class RssFeed {
     required this.site,
     required this.category,
     required this.lastModified,
+  });
+}
+
+class RssFeedImage {
+  final String link;
+  final ByteData image;
+  RssFeedImage({
+    required this.link,
+    required this.image,
   });
 }
 

@@ -17,7 +17,7 @@ class FeedListView extends ConsumerStatefulWidget {
 }
 
 class _FeedListState extends ConsumerState<FeedListView> {
-  final _pagingController = PagingController<int, RssFeed>(
+  final _pagingController = PagingController<int, RssFeedItem>(
     // 2 firstPageKey パラメータを使って、ページ初期値を設定する必要がある
     //今回使う`API`の場合、ページキーは1から始まりますが、他のAPIの場合は0から始まるかもしれない
     firstPageKey: 0,
@@ -76,7 +76,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
       child: PagedListView(
         primary: false,
         pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<RssFeed>(
+        builderDelegate: PagedChildBuilderDelegate<RssFeedItem>(
           itemBuilder: (context, feed, index) {
             //アイテムをデザインする
             //カードにするか
@@ -100,5 +100,3 @@ class _FeedListState extends ConsumerState<FeedListView> {
     );
   }
 }
-
-

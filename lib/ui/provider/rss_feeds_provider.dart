@@ -2,13 +2,13 @@ import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RssFeedsNotifier extends StateNotifier<List<RssFeed>> {
+class RssFeedsNotifier extends StateNotifier<List<RssFeedItem>> {
   RssFeedsNotifier() : super([]);
-  void add(RssFeed feed) {
+  void add(RssFeedItem feed) {
     state = [...state, feed];
   }
 
-  void addList(List<RssFeed> sites) {
+  void addList(List<RssFeedItem> sites) {
     // ステート自体もイミュータブルなため、`state.add(item)`
     // のような操作はできません。
     // 代わりに、既存と新規を含む新しいリストを作成します。
@@ -31,6 +31,6 @@ class RssFeedsNotifier extends StateNotifier<List<RssFeed>> {
 }
 
 final rssFeedsProvider =
-    StateNotifierProvider<RssFeedsNotifier, List<RssFeed>>((ref) {
+    StateNotifierProvider<RssFeedsNotifier, List<RssFeedItem>>((ref) {
   return RssFeedsNotifier();
 });

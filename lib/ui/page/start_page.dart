@@ -46,11 +46,12 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   void _selectedDestination(int value, BuildContext context) {
     setState(() {
-      ref.watch(barPageTypeProvider.notifier).state = howPageIndex(value);
+      if (value == 0) {
+        startPageScaffoldKey.currentState!.openDrawer();
+      } else {
+        ref.watch(barPageTypeProvider.notifier).state = howPageIndex(value);
+      }
     });
-    if (value == 0) {
-      startPageScaffoldKey.currentState!.openDrawer();
-    }
   }
 
   @override
@@ -64,7 +65,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (value) => _selectedDestination(value, context),
         animationDuration: const Duration(seconds: 3),
-        // elevation: 20, //標高
+        elevation: 20, //標高
         // height: getResponsiveValue(context, 100, 100, 70),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         backgroundColor: Colors.black,

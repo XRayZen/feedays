@@ -70,8 +70,7 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
     )..exception = e;
   }
 
-  ref.watch(searchResultViewModeProvider.notifier).state =
-      SearchResultViewMode.result;
+  ref.watch(searchResultViewMode.notifier).state = SearchResultViewMode.result;
   //resultなら消しておく
   ref.watch(visibleRecentTextProvider.notifier).state = false;
   //結果をnotifierに入れる

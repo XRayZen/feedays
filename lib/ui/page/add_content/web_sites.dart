@@ -25,7 +25,7 @@ class WebSites extends ConsumerWidget {
             ref.watch(barPageTypeProvider.notifier).state = PageType.searchView;
           },
           onTap: () {
-            ref.watch(searchResultViewModeProvider.notifier).state =
+            ref.watch(searchResultViewMode.notifier).state =
                 SearchResultViewMode.none;
             ref.watch(searchResultProvider.notifier).clear();
             ref.watch(barPageTypeProvider.notifier).state = PageType.searchView;

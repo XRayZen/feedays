@@ -18,7 +18,7 @@ class FeedSliverListView extends ConsumerStatefulWidget {
 }
 
 class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
-  final _pagingController = PagingController<int, RssFeed>(
+  final _pagingController = PagingController<int, RssFeedItem>(
     // 2 firstPageKey パラメータを使って、ページ初期値を設定する必要がある
     //今回使う`API`の場合、ページキーは1から始まりますが、他のAPIの場合は0から始まるかもしれない
     firstPageKey: 0,
@@ -74,7 +74,7 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
         // ),
         PagedSliverList(
           pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<RssFeed>(
+          builderDelegate: PagedChildBuilderDelegate<RssFeedItem>(
             itemBuilder: (context, feed, index) {
               //アイテムをデザインする
               //カードにするか
@@ -108,7 +108,7 @@ class FeedItemView extends StatelessWidget {
     super.key,
     required this.feed,
   });
-  final RssFeed feed;
+  final RssFeedItem feed;
 
   @override
   Widget build(BuildContext context) {

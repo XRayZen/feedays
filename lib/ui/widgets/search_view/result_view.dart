@@ -25,7 +25,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
 
   @override
   Widget build(BuildContext context) {
-    final mode = ref.watch(searchResultViewModeProvider);
+    final mode = ref.watch(searchResultViewMode);
     //シャドウモードならリザルト画面にリザルト画面に半透明のウィジェットをかぶせる
     //shadowと無限スクロールをスタックさせる
     return SliverStack(

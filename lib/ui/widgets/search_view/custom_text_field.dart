@@ -12,7 +12,6 @@ final isSearchTxtAutoFocus = StateProvider<bool>((ref) {
   return true;
 });
 
-
 class CustomTextField extends ConsumerWidget {
   final TextEditingController editingController;
   final FocusNode focusNode;
@@ -67,7 +66,7 @@ class CustomTextField extends ConsumerWidget {
           ),
           onTap: () {
             //リザルトビューをシャドウモードにする
-            ref.watch(searchResultViewModeProvider.notifier).state =
+            ref.watch(searchResultViewMode.notifier).state =
                 SearchResultViewMode.shadow;
             ref.watch(visibleRecentViewProvider.notifier).state = true;
             ref.watch(onTextFieldTapProvider.notifier).state = true;
@@ -77,7 +76,7 @@ class CustomTextField extends ConsumerWidget {
           },
           onTapOutside: (event) {
             //リザルトページにジェスチャーをおいてタップすれば消せるか→仕様上の制限で出来ない
-            ref.watch(searchResultViewModeProvider.notifier).state =
+            ref.watch(searchResultViewMode.notifier).state =
                 SearchResultViewMode.result;
           },
         ),
@@ -109,7 +108,7 @@ class ClearButton extends ConsumerWidget {
           padding: const EdgeInsets.only(top: 15),
           child: IconButton(
             onPressed: () {
-              ref.watch(searchResultViewModeProvider.notifier).state =
+              ref.watch(searchResultViewMode.notifier).state =
                   SearchResultViewMode.shadow;
               ref.watch(visibleRecentViewProvider.notifier).state = true;
               ref.watch(onTextFieldTapProvider.notifier).state = true;

@@ -28,7 +28,7 @@ enum SearchResultViewMode {
   shadow
 }
 
-final searchResultViewModeProvider = StateProvider<SearchResultViewMode>((ref) {
+final searchResultViewMode = StateProvider<SearchResultViewMode>((ref) {
   return SearchResultViewMode.none;
 });
 
@@ -100,14 +100,14 @@ class SearchViewPageBackButton extends StatelessWidget {
       onPressed: () {
         //テキストフィールドにタップしていたら履歴を非表示してリザルトモードにする
         if (ref.watch(onTextFieldTapProvider)) {
-          ref.watch(searchResultViewModeProvider.notifier).state =
+          ref.watch(searchResultViewMode.notifier).state =
               SearchResultViewMode.result;
           ref.watch(visibleRecentViewProvider.notifier).state = false;
           ref.watch(onTextFieldTapProvider.notifier).state = false;
         } else {
           //バックしたら検索結果をクリア
           //リザルトタイプも元に戻す
-          ref.watch(searchResultViewModeProvider.notifier).state =
+          ref.watch(searchResultViewMode.notifier).state =
               SearchResultViewMode.none;
           ref.watch(searchResultProvider.notifier).clear();
           ref.watch(isSearchTxtAutoFocus.notifier).state = true; //オートフォーカスも戻す

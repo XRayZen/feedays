@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -31,11 +30,11 @@ TextStyle genResponsiveTextStyle(
 }
 
 double getResponsiveValue(
-  BuildContext context,
-  double defaultValue,
-  double mobileValue,
-  double tabletValue,
-) {
+  BuildContext context, {
+  double defaultValue = 10,
+  double mobileValue = 20,
+  double tabletValue = 15,
+}) {
   final res = ResponsiveValue(
     context,
     defaultValue: defaultValue,
@@ -48,6 +47,7 @@ double getResponsiveValue(
   ).value;
   return res ?? defaultValue;
 }
+
 ///テキスト内にURLが含まれていたら分割して返す<br/>
 ///無いならnull
 List<String>? parseUrls(String word) {

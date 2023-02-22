@@ -23,10 +23,11 @@ class WebUsecase {
   UserConfig userCfg;
   //NOTE:プロバイダー経由でクラス変数に代入できるか試す→出来た
   ///今はテスト用にfakeの`feed`を生成する
-  Future<void> genFakeWebsite(WebSite site)async {
+  Future<void> genFakeWebsite(WebSite site) async {
     userCfg.subscribeSites.add(site);
     userCfg.subscribeSites.first.feeds.addAll(await genFakeRssFeeds(50));
-    userCfg.searchHistory.add('40010');
+    userCfg.searchHistory.add('https://tks2.co.jp/2020/03/03/flutter-cloud-firestore-error/');
+
   }
 
   void onReorderSite(
@@ -38,7 +39,7 @@ class WebUsecase {
     //順位入れ替えを永続化させるため
   }
 
-  Future<List<RssFeed>?> fetchFeedDetail(
+  Future<List<RssFeedItem>?> fetchFeedDetail(
     WebSite site,
     int pageNum, {
     int pageSize = 10,
@@ -48,7 +49,7 @@ class WebUsecase {
       //TODO:レポジトリのモックを作る
     } else {
       final res = _pickupRssFeeds(site, pageNum, pageSize);
-      if (res is List<RssFeed>) {
+      if (res is List<RssFeedItem>) {
         //NOTE:詳細と言ってもxml取得時点で十分な情報を得ている
         //要求されたのが非RSSならバックエンドに要求しなければならない
         //アプリ自体にも非RSS取得機能をいくつか(ex:ロイターなどのニュースサイトスクレイピング)搭載する
@@ -86,6 +87,27 @@ class WebUsecase {
       //切り分けているが一つしか処理しない
       //urlならRSS登録をする
       //非RSSならバックエンドに問い合わせてクラウドフィード対応サイトか問い合わせる
+      final res = await _backendApiRepo.searchWord(
+        ApiSearchRequest(
+          searchType: request.searchType,
+          queryType: SearchQueryType.url,
+          word: request.word,
+          userID: userCfg.userID,
+          identInfo: userCfg.identInfo,
+          accountType: userCfg.accountType,
+        ),
+      );
+      switch (res.apiResponse) {
+        case ApiResponseType.refuse:
+          //refuseならエラーメッセージを通知する
+          //関数形式でエラーメッセージ処理を
+          await noticeError(res.responseMessage);
+          throw Exception(
+            'Api SearchRequest error: ${res.responseMessage}',
+          );
+        case ApiResponseType.accept:
+          return res;
+      }
     } else {
       //検索程度ならワードでも制限をかけないが将来的な可能性を考慮すると
       //クラウドリクエスト中間クラスで制限設定を参照しながらリクエスト可否を判定したい
@@ -111,6 +133,7 @@ class WebUsecase {
           return res;
       }
     }
+
     throw Exception();
   }
 
@@ -126,9 +149,9 @@ class WebUsecase {
   }
 
   ///リストから指定された上限と下限の件数を抜き出す
-  List<RssFeed>? _pickupRssFeeds(WebSite site, int pageNum, int pageMax) {
+  List<RssFeedItem>? _pickupRssFeeds(WebSite site, int pageNum, int pageMax) {
     if (userCfg.subscribeSites.any((element) => element.name == site.name)) {
-      final list = <RssFeed>[];
+      final list = <RssFeedItem>[];
       for (final element in userCfg.subscribeSites
           .firstWhere((element) => element.name == site.name)
           .feeds) {

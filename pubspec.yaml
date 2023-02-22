@@ -44,6 +44,13 @@ dependencies:
   mockito: any
   sliver_tools: ^0.2.9
   page_transition: ^2.0.9
+  webfeed: ^0.7.0
+  http: ^0.13.1
+  html: ^0.15.0
+  ogp_data_extract: ^0.1.2
+  metadata_fetch: ^0.4.1
+  # flutter_widget_from_html: ^0.9.1
+  flutter_html: any
 
 dev_dependencies:
   integration_test:
@@ -77,6 +84,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/
+    - assets/rss/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
