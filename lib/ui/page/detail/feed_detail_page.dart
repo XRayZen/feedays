@@ -284,7 +284,7 @@ class FeedDetailBody extends StatelessWidget {
                   padding: const EdgeInsets.all(9),
                   child: ElevatedButton(
                     onPressed: () {
-                      //
+                      //Shareダイアログ表示
                     },
                     style: ElevatedButton.styleFrom(
                       animationDuration: const Duration(seconds: 3),

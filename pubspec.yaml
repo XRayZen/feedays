@@ -37,20 +37,20 @@ dependencies:
   flutter_riverpod: ^2.1.3
   riverpod_annotation: ^1.1.1
   drag_and_drop_lists: ^0.3.3
-  flutter_sticky_header: ^0.6.5
   infinite_scroll_pagination: ^3.2.0
   functional_widget: ^0.10.1
-  tuple: ^2.0.1
   mockito: any
   sliver_tools: ^0.2.9
   page_transition: ^2.0.9
   webfeed: ^0.7.0
-  http: ^0.13.1
-  html: ^0.15.0
-  ogp_data_extract: ^0.1.2
-  metadata_fetch: ^0.4.1
-  # flutter_widget_from_html: ^0.9.1
+  http: any
+  html: any
+  ogp_data_extract: any
+  metadata_fetch: any
+  # flutter_widget_from_html: any
   flutter_html: any
+  # このアプリでは何故か使えない 他のアプリでは使える
+  # cached_network_image: any
 
 dev_dependencies:
   integration_test:
@@ -84,7 +84,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/
-    - assets/rss/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

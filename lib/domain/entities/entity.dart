@@ -57,23 +57,27 @@ class WebSite {
   final String name;
   final String url;
   final ByteData? icon;
+  final String iconLink;
   final int newCount;
   final int readLateCount;
   final String category;
   final List<String> tags;
   final List<RssFeedItem> feeds;
   final bool fav;
+  final String description;
   WebSite({
     required this.key,
     required this.name,
     required this.url,
     this.icon,
+    required this.iconLink,
     required this.newCount,
     required this.readLateCount,
     required this.category,
     required this.tags,
     required this.feeds,
     required this.fav,
+    required this.description,
   });
   factory WebSite.mock(String key, String name, String category) {
     return WebSite(
@@ -86,6 +90,8 @@ class WebSite {
       tags: List.empty(growable: true),
       feeds: List.empty(growable: true),
       fav: false,
+      iconLink: '',
+      description: 'fake mock',
     );
   }
 }

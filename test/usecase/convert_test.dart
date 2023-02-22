@@ -1,6 +1,6 @@
 import 'package:feedays/domain/Util/http_parse.dart';
 import 'package:feedays/domain/util/convert.dart';
-import 'package:feedays/domain/web/http_util.dart';
+import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/mock/mock_repository.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +12,9 @@ void main() {
   test(
     'convert to RssFeed',
     () async {
+      final webrepo = WebRepoImpl();
       const path = 'http://blog.esuteru.com/index.rdf';
-      final data = await getHttpByteData(path);
+      final data = await webrepo.fetchHttpByteData(path);
       final res = await convertXmlToRss(data);
       expect(res, isNotEmpty);
     },

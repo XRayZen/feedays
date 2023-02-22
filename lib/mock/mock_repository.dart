@@ -1,14 +1,12 @@
 //TODO:mokitoではスタブを形成できないため手動でモッククラスを作る
 
-import 'package:feedays/domain/Util/convert.dart';
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
-import 'package:feedays/domain/web/http_util.dart';
-import 'package:flutter/services.dart';
+import 'package:feedays/mock/mock_util.dart';
 
-import 'gen_data.dart';
+import 'package:flutter/services.dart';
 
 class MockApiRepository extends BackendApiRepository {
   // int ff = 0;//これの変数を次第で動作を変える予定
@@ -27,14 +25,14 @@ class MockApiRepository extends BackendApiRepository {
   @override
   Future<PreSearchResult> searchWord(ApiSearchRequest request) async {
     //webサイトようも作る
-    //TODO:偽データを生成sるより実際のサイトのrssファイルをアセットに取り込んでそれを読み込んでテスト
+    //TODO:偽データを生成するより実際のサイトのrssファイルを読み込んでテスト
     //NOTE:ここに来る前にビジネスロジックで通常のRSS登録処理が失敗したらサーバーにリクエストしてRSSフィードを取得しようとする
 
     switch (request.queryType) {
       case SearchQueryType.url:
         //来るのがurlだろうがhtmlの表示テストのためにiphone maniaのサイトを読み込んで返す
         const path = 'https://iphone-mania.jp/feed/';
-        final data = await getHttpByteData(path);
+        final data = await fetchHttpByteData(path);
         final rssItems = await convertXmlToRss(data);
         final fakeSearchResult = PreSearchResult(
           apiResponse: ApiResponseType.accept,
@@ -48,9 +46,7 @@ class MockApiRepository extends BackendApiRepository {
       case SearchQueryType.word:
         //サイトは5つの実際のサイトを参考に偽データを生成
         final word = request.word;
-        final fakes = await genFakeRssFeeds(
-          10,
-        );
+        final fakes = await genFakeRssFeeds(10, word);
         final fakeSearchResult = PreSearchResult(
           apiResponse: ApiResponseType.accept,
           responseMessage: 'fake :{$word}',

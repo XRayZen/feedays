@@ -133,8 +133,6 @@ class WebUsecase {
           return res;
       }
     }
-
-    throw Exception();
   }
 
   void editRecentSearches(String text, {bool isAddOrRemove = true}) {
