@@ -16,7 +16,18 @@ class WebRepoImpl extends WebRepositoryInterface {
   }
 
   @override
-  Future<WebSite?> fetchSiteOgpMeta(String url) async {
+  Future<bool> anyPath(String path) async {
+    final target = Uri.parse(path);
+    final response = await http.get(target);
+    if (response.statusCode != 200) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  @override
+  Future<WebSite> fetchSiteOgpMeta(String url) async {
     final data = await OgpDataExtract.execute(url);
     final meta = await MetadataFetch.extract(url);
     if (data != null) {
@@ -50,7 +61,20 @@ class WebRepoImpl extends WebRepositoryInterface {
         description: meta.description ?? '',
       );
     }
-    return null;
+    return WebSite(
+        //とりあえずkeyをurlにしておく
+        key: url,
+        name:  '',
+        url: url ,
+        feeds: [],
+        category: '',
+        fav: false,
+        newCount: 0,
+        readLateCount: 0,
+        tags: [],
+        iconLink:  '',
+        description:  '',
+      );
   }
 
   @override

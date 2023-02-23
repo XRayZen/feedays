@@ -61,8 +61,8 @@ class WebSite {
   final int newCount;
   final int readLateCount;
   final String category;
-  final List<String> tags;
-  final List<RssFeedItem> feeds;
+  List<String> tags;
+  List<RssFeedItem> feeds;
   final bool fav;
   final String description;
   WebSite({

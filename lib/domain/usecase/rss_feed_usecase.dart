@@ -12,17 +12,49 @@ class RssFeedUsecase {
   RssFeedUsecase({
     required this.webRepo,
   });
+  final addPaths = [
+    '/index.rdf',
+    '/news/rss_2.0/',
+    '/feed/',
+    '/rssfeeder/',
+    'index.xml',
+    '/rss/index.rdf'
+  ];
 
-  //WebSiteのRSSリンクを解析してRSSFeedで返す
-  Future<void> parseRss(String url) async {
-    //   - 下記URLでデータを取得できたら購読できる
-    // - `/index.rdf`
-    // - `/news/rss_2.0/`
-    // - `/feed/`
-    // - `/rssfeeder/`
-    // - `index.xml`
-    // - `/rss/index.rdf`
-    
+  ///WebSiteのRSSリンクを解析してRSSFeedで返す<br/>
+  ///無効ならnull
+  Future<WebSite?> parseRss(String url) async {
+    //下記URLでデータを取得できたら購読できる
+    final path = await anyRssPath(url);
+    if (path is String) {
+      var site = await webRepo.fetchSiteOgpMeta(url);
+      site.feeds = await convertFeedLinkToRssItems(path);
+      return site;
+    } else {
+      return null;
+    }
+  }
+
+  ///有効なRSSリンクを返す
+  Future<String?> anyRssPath(String url) async {
+    for (final element in addPaths) {
+      var path = '';
+      if (url.endsWith('/')) {
+        final lastIndex = url.length;
+        path = url.replaceRange(
+          lastIndex,
+          null,
+          element,
+        );
+      } else {
+        //URL末尾に/が無いのなら
+        path = url + element;
+      }
+      if (await webRepo.anyPath(path)) {
+        return path;
+      }
+    }
+    return null;
   }
 
   Future<List<RssFeedItem>> convertFeedLinkToRssItems(String url) async {
