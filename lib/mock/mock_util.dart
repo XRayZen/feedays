@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:feedays/domain/Util/http_parse.dart';
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter/foundation.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ogp_data_extract/ogp_data_extract.dart';

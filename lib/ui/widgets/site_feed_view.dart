@@ -132,15 +132,19 @@ class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
     int newItemIndex,
     int newListIndex,
   ) {
-    ref
-        .watch(subscriptionSiteListProvider.notifier)
-        .onItemReorder(oldItemIndex, oldListIndex, newItemIndex, newListIndex);
+    ref.watch(subscriptionSiteListProvider.notifier).onItemReorder(
+          oldItemIndex,
+          oldListIndex,
+          newItemIndex,
+          newListIndex,
+          ref,
+        );
   }
 
   void _onListReorder(int oldListIndex, int newListIndex) {
     ref
         .watch(subscriptionSiteListProvider.notifier)
-        .onListReorder(oldListIndex, newListIndex);
+        .onListReorder(oldListIndex, newListIndex, ref);
   }
 
   List<DragAndDropListExpansion> _buildList(List<SubscFeedSiteModel> nodes) {

@@ -1,4 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/model/subsc_feed_site_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,7 +28,12 @@ class SubscriptionSiteListNotifier
 
   //入れ替えの場合はリストをコピーしてそのリストから入れ替え処理してリストを新規作成する
   void onItemReorder(
-      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex,) {
+    int oldItemIndex,
+    int oldListIndex,
+    int newItemIndex,
+    int newListIndex,
+    WidgetRef ref,
+  ) {
     const point = 0;
     final newList = [...state];
     final movedItem =
@@ -37,12 +43,12 @@ class SubscriptionSiteListNotifier
     //NOTE:別のカテゴリに移動したらそれも検知する
     final oldCategory = newList[oldListIndex + point].category;
     final newCategory = newList[newListIndex].category;
-    final movedItmeKey = movedItem.url;
+    final movedItmeKey = movedItem.key;
     
     state = newList;
   }
 
-  void onListReorder(int oldListIndex, int newListIndex) {
+  void onListReorder(int oldListIndex, int newListIndex,WidgetRef ref) {
     final newList = [...state];
     if (oldListIndex < newListIndex) {
       newListIndex -= 1;
@@ -82,14 +88,17 @@ List<SubscFeedSiteModel> _webSitesToFeedModels(List<WebSite> sites) {
   var currentCategoryKey = 7000;
   for (var site in sites) {
     if (items.isEmpty) {
-      items.add(SubscFeedSiteModel(
+      items.add(
+        SubscFeedSiteModel(
           key: currentCategoryKey.toString(),
           name: site.category,
-          url: '',
+          siteUrl: '',
           newCount: 0,
           category: site.category,
           categoryOrSite: CategoryOrSite.category,
-          nodes: [SubscFeedSiteModel.from(site)],),);
+          nodes: [SubscFeedSiteModel.from(site)],
+        ),
+      );
     }
     if (items.any((element) => element.category == site.category)) {
       //Nodeを追加する
@@ -99,14 +108,17 @@ List<SubscFeedSiteModel> _webSitesToFeedModels(List<WebSite> sites) {
     } else {
       //カテゴリーを追加
       currentCategoryKey += 1 + items.length;
-      items.add(SubscFeedSiteModel(
+      items.add(
+        SubscFeedSiteModel(
           key: currentCategoryKey.toString(),
           name: site.category,
-          url: '',
+          siteUrl: '',
           newCount: 0,
           category: site.category,
           categoryOrSite: CategoryOrSite.category,
-          nodes: [SubscFeedSiteModel.from(site)],),);
+          nodes: [SubscFeedSiteModel.from(site)],
+        ),
+      );
     }
   }
   return items;

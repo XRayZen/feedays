@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 
 import 'activity.dart';
 

@@ -50,7 +50,7 @@ dependencies:
   # flutter_widget_from_html: any
   flutter_html: any
   # このアプリでは何故か使えない 他のアプリでは使える
-  # cached_network_image: any
+  cached_network_image: any
 
 dev_dependencies:
   integration_test:

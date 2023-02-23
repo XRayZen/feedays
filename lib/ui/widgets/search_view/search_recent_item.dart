@@ -20,7 +20,7 @@ class SearchRecentItem extends ConsumerWidget {
       onDismissed: (direction) {
         ref
             .watch(webUsecaseProvider)
-            .editRecentSearches(txt, isAddOrRemove: false);
+            .userCfg.editRecentSearches(txt, isAddOrRemove: false);
       },
       //どんなに方向を変えても必ず左に配置されてしまう
       background: const ColoredBox(

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/indicator/no_more_item_indicator.dart';
@@ -43,7 +44,7 @@ class _FeedListState extends ConsumerState<FeedListView> {
           _pagingController.itemList?.length ?? 0;
       //取得したページがラストなのかどうか判定する
       if (ref
-          .watch(webUsecaseProvider)
+          .watch(webUsecaseProvider).userCfg.rssFeedSites
           .isLastFeed(site, previouslyFetchedItemsCount)) {
         _pagingController.appendLastPage(datas!);
       } else {

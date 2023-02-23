@@ -2,6 +2,7 @@ import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
+import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/domain/usecase/web_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
@@ -37,7 +38,8 @@ final webUsecaseProvider = Provider<WebUsecase>((ref) {
     webRepo: webRepo,
     backendApiRepo: apiRepo,
     userCfg: userCOnfig,
-    noticeError: noticeError,
+    noticeError: noticeError, 
+    rssFeedUsecase: RssFeedUsecase(webRepo: webRepo),
   );
   return webUsecase;
 });
@@ -58,6 +60,7 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
   //notifierに入れてからモードを切り替える方式を試す
   late PreSearchResult result;
   try {
+    //TODO:ここでダイアログを出して進捗を出す
     result = await ref.watch(webUsecaseProvider).searchWord(request);
   } on Exception catch (e) {
     result = PreSearchResult(

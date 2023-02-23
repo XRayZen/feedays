@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, inference_failure_on_instance_creation
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/detail/html_view.dart';
 import 'package:feedays/ui/widgets/search_view/custom_text_field.dart';

@@ -6,6 +6,7 @@
 import 'dart:async' as _i4;
 
 import 'package:feedays/domain/entities/entity.dart' as _i2;
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
@@ -21,7 +22,7 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeWebSite_0 extends _i1.SmartFake implements _i2.WebSite {
+class _FakeWebSite_0 extends _i1.SmartFake implements WebSite {
   _FakeWebSite_0(
     Object parent,
     Invocation parentInvocation,
@@ -37,24 +38,24 @@ class _FakeWebSite_0 extends _i1.SmartFake implements _i2.WebSite {
 class MockWebRepositoryInterface extends _i1.Mock
     implements _i3.WebRepositoryInterface {
   @override
-  _i4.Future<_i2.WebSite> getFeeds(_i2.WebSite? site) => (super.noSuchMethod(
+  _i4.Future<WebSite> getFeeds(WebSite? site) => (super.noSuchMethod(
         Invocation.method(
           #getFeeds,
           [site],
         ),
-        returnValue: _i4.Future<_i2.WebSite>.value(_FakeWebSite_0(
+        returnValue: _i4.Future<WebSite>.value(_FakeWebSite_0(
           this,
           Invocation.method(
             #getFeeds,
             [site],
           ),
         )),
-        returnValueForMissingStub: _i4.Future<_i2.WebSite>.value(_FakeWebSite_0(
+        returnValueForMissingStub: _i4.Future<WebSite>.value(_FakeWebSite_0(
           this,
           Invocation.method(
             #getFeeds,
             [site],
           ),
         )),
-      ) as _i4.Future<_i2.WebSite>);
+      ) as _i4.Future<WebSite>);
 }

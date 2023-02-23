@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:feedays/domain/Util/http_parse.dart';
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ogp_data_extract/ogp_data_extract.dart';
@@ -35,12 +36,9 @@ class WebRepoImpl extends WebRepositoryInterface {
         //とりあえずkeyをurlにしておく
         key: url,
         name: data.siteName ?? '',
-        url: data.url ?? '',
+        siteUrl: data.url ?? '',
         feeds: [],
         category: '',
-        fav: false,
-        newCount: 0,
-        readLateCount: 0,
         tags: [],
         iconLink: data.image ?? data.imageSecureUrl ?? '',
         description: data.description ?? '',
@@ -50,31 +48,25 @@ class WebRepoImpl extends WebRepositoryInterface {
         //とりあえずkeyをurlにしておく
         key: url,
         name: meta.title ?? '',
-        url: meta.url ?? '',
+        siteUrl: meta.url ?? '',
         feeds: [],
         category: '',
-        fav: false,
-        newCount: 0,
-        readLateCount: 0,
         tags: [],
         iconLink: meta.image ?? '',
         description: meta.description ?? '',
       );
     }
     return WebSite(
-        //とりあえずkeyをurlにしておく
-        key: url,
-        name:  '',
-        url: url ,
-        feeds: [],
-        category: '',
-        fav: false,
-        newCount: 0,
-        readLateCount: 0,
-        tags: [],
-        iconLink:  '',
-        description:  '',
-      );
+      //とりあえずkeyをurlにしておく
+      key: url,
+      name: '',
+      siteUrl: url,
+      feeds: [],
+      category: '',
+      tags: [],
+      iconLink: '',
+      description: '',
+    );
   }
 
   @override

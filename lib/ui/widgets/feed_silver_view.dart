@@ -1,4 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/feed_list_view.dart';
@@ -45,6 +46,8 @@ class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
       //取得したページがラストなのかどうか判定する
       if (ref
           .watch(webUsecaseProvider)
+          .userCfg
+          .rssFeedSites
           .isLastFeed(site, previouslyFetchedItemsCount)) {
         _pagingController.appendLastPage(datas!);
       } else {

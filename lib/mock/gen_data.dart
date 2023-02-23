@@ -1,5 +1,5 @@
-import 'package:feedays/domain/entities/entity.dart';
-import 'package:flutter/material.dart';
+
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter/services.dart';
 
 Future<List<RssFeedItem>> genFakeRssFeeds(int num, {int start = 0}) async {

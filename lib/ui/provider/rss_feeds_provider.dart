@@ -1,4 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

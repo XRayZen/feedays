@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:feedays/domain/entities/entity.dart';
-import 'package:feedays/domain/entities/web_meta.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 
 abstract class WebRepositoryInterface {
   Future<WebSite> getFeeds(WebSite site);

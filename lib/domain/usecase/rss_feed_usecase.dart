@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 
 import 'package:feedays/domain/entities/entity.dart';
@@ -21,14 +22,44 @@ class RssFeedUsecase {
     '/rss/index.rdf'
   ];
 
+  ///RSSを更新する
+  Future<WebSite> refreshRss(WebSite site) async {
+    final newFeedItems = await convertFeedLinkToRssItems(site.rssUrl);
+    if (site.feeds.isEmpty) {
+      site.feeds.addAll(newFeedItems);
+      site.newCount = newFeedItems.length;
+      return site;
+    }
+    //既存と比べて新しいフィードをカウントする
+    site.newCount = 0;
+    // ignore: omit_local_variable_types, prefer_final_locals
+    List<RssFeedItem> newItems = <RssFeedItem>[];
+    for (final newItem in newFeedItems) {
+      if (site.feeds.any(
+        (x) =>
+            x.lastModified.millisecondsSinceEpoch <
+            newItem.lastModified.millisecondsSinceEpoch,
+      )) {
+        site.newCount++;
+        newItems.add(newItem);
+      }
+    }
+    //カウントしたら新しいのをインサートする
+    site.feeds.addAll(newItems);
+    return site;
+  }
+
   ///WebSiteのRSSリンクを解析してRSSFeedで返す<br/>
   ///無効ならnull
   Future<WebSite?> parseRss(String url) async {
     //下記URLでデータを取得できたら購読できる
-    final path = await anyRssPath(url);
-    if (path is String) {
+    final rssPath = await anyRssPath(url);
+    if (rssPath is String) {
+      // ignore: prefer_final_locals
       var site = await webRepo.fetchSiteOgpMeta(url);
-      site.feeds = await convertFeedLinkToRssItems(path);
+      site
+        ..feeds = await convertFeedLinkToRssItems(rssPath)
+        ..rssUrl = rssPath;
       return site;
     } else {
       return null;
