@@ -30,7 +30,7 @@ class UserConfig {
       userName: 'userName',
       userID: 'userID',
       isGuest: true,
-      rssFeedSites: RssWebSites(sites: []),
+      rssFeedSites: RssWebSites(folders: []),
       config: AppConfig(
         apiRequestConfig: ApiRequestLimitConfig(
           trendRequestLimit: 10,
@@ -48,7 +48,7 @@ class UserConfig {
       searchHistory: [],
     );
   }
-    void editRecentSearches(String text, {bool isAddOrRemove = true}) {
+  void editRecentSearches(String text, {bool isAddOrRemove = true}) {
     if (isAddOrRemove) {
       if (!searchHistory.contains(text)) {
         //PLAN:入力履歴はローカル・クラウド両方に保存しておく

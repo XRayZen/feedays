@@ -1,5 +1,6 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
@@ -34,11 +35,15 @@ final webUsecaseProvider = Provider<WebUsecase>((ref) {
     //PLAN:エラー通知プロバイダーに送信
     //どう通知するかはプロバイダーで決める
   }
+  Future<void> onAddSite(WebSite site) async {
+    // TODO:UI側のプロバイダーを更新する
+  }
   final webUsecase = WebUsecase(
     webRepo: webRepo,
     backendApiRepo: apiRepo,
     userCfg: userCOnfig,
-    noticeError: noticeError, 
+    noticeError: noticeError,
+    onAddSite: onAddSite,
     rssFeedUsecase: RssFeedUsecase(webRepo: webRepo),
   );
   return webUsecase;
@@ -86,5 +91,12 @@ final recentSearchesProvider = Provider<List<String>>((ref) {
   //更新の条件を限定
   final use = ref
       .watch(webUsecaseProvider.select((value) => value.userCfg.searchHistory));
+  return use;
+});
+
+final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
+  final use = ref.watch(
+    webUsecaseProvider.select((value) => value.userCfg.rssFeedSites.folders),
+  );
   return use;
 });

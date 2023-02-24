@@ -1,7 +1,7 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'package:feedays/ui/model/subsc_feed_site_model.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,17 +18,17 @@ class SiteFeedSLiverView extends ConsumerStatefulWidget {
 class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
   @override
   Widget build(BuildContext context) {
-    final res = ref.watch(subscriptionSiteListProvider.notifier);
+    final res = ref.watch(subscribeWebSitesProvider);
     //PLAN:このフラグがオンなら色々とアイコンの位置をずらす必要がある
     final isEditFlg = _isEditMode(ref.watch(isFeedsEditModeProvider));
-    if (res.isEmpty()) {
+    if (res.isEmpty) {
       return const SliverToBoxAdapter(child: Center(child: Text('リストが空です')));
     } else {
       //カテゴリータイルにドラッグアンドドロップしたらそれを特定して
       //入れ替え処理を行う
       //編集モードの切替で右にメニューアイコンを表示させてドラッグ可能か判断できるようにする
       return DragAndDropLists(
-        children: _buildList(ref.watch(subscriptionSiteListProvider)),
+        children: _buildList(ref.watch(subscribeWebSitesProvider)),
         onItemReorder: _onChildItemReorder,
         onListReorder: _onListReorder,
         //trueの場合、長押しした後にアイテムをドラッグします。falseの場合は、すぐにドラッグします。
@@ -106,7 +106,11 @@ class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
   }
 
   bool _isEditMode(FeedsEditMode isMode) {
-    return isMode == FeedsEditMode.edit ? true : false;
+    if (isMode == FeedsEditMode.edit) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   DragHandle? _buildDragHandle({bool isList = false, bool isEditMode = false}) {
@@ -132,22 +136,27 @@ class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
     int newItemIndex,
     int newListIndex,
   ) {
-    ref.watch(subscriptionSiteListProvider.notifier).onItemReorder(
-          oldItemIndex,
-          oldListIndex,
-          newItemIndex,
-          newListIndex,
-          ref,
-        );
+    setState(() {
+      ref.watch(webUsecaseProvider).userCfg.rssFeedSites.onReorderSiteIndex(
+            oldItemIndex,
+            oldListIndex,
+            newItemIndex,
+            newListIndex,
+          );
+    });
   }
 
   void _onListReorder(int oldListIndex, int newListIndex) {
-    ref
-        .watch(subscriptionSiteListProvider.notifier)
-        .onListReorder(oldListIndex, newListIndex, ref);
+    setState(() {
+      ref
+          .watch(webUsecaseProvider)
+          .userCfg
+          .rssFeedSites
+          .onReorderFolder(oldListIndex, newListIndex);
+    });
   }
 
-  List<DragAndDropListExpansion> _buildList(List<SubscFeedSiteModel> nodes) {
+  List<DragAndDropListExpansion> _buildList(List<WebSiteFolder> nodes) {
     final widgets = <DragAndDropListExpansion>[];
 
     for (final node in nodes) {
@@ -180,14 +189,14 @@ class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
             //   }
             // });
           },
-          children: _buildTreeChildNode(node.nodes),
+          children: _buildTreeChildNode(node.children),
         ),
       );
     }
     return widgets;
   }
 
-  List<DragAndDropItem> _buildTreeChildNode(List<SubscFeedSiteModel> models) {
+  List<DragAndDropItem> _buildTreeChildNode(List<WebSite> models) {
     if (models.isEmpty) {
       return [];
     }

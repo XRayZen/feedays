@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_bool_literals_in_conditional_expressions
 
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/provider/subsc_sites_provider.dart';
 import 'package:feedays/ui/widgets/site_feed_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -164,17 +162,22 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           onTap: () {
             setState(() {
               //今はテスト用にリストを挿入している
-              final fakeFeeds =
-                  ref.watch(subscriptionSiteListProvider.notifier);
+              final fakeFeeds = ref.watch(webUsecaseProvider);
               var temp1 = WebSite.mock('1', 'site1', 'Anime');
               final temp2 = WebSite.mock('2', 'site2', 'Anime');
               final temp3 = WebSite.mock('3', 'site3', 'Manga');
               final temp4 = WebSite.mock('4', 'site4', 'Manga');
               final temp5 = WebSite.mock('5', 'site5', 'Anime');
-              fakeFeeds.add([temp1, temp2, temp3, temp4, temp5]);
+              fakeFeeds.userCfg.rssFeedSites
+                  .add([temp1, temp2, temp3, temp4, temp5]);
               ref.watch(webUsecaseProvider).genFakeWebsite(temp1);
-              temp1 =
-                  ref.watch(webUsecaseProvider).userCfg.rssFeedSites.sites[0];
+              temp1 = ref
+                  .watch(webUsecaseProvider)
+                  .userCfg
+                  .rssFeedSites
+                  .folders[0]
+                  .children
+                  .first;
               ref.watch(selectWebSiteProvider.notifier).selectSite(temp1);
             });
           },

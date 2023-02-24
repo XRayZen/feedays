@@ -16,21 +16,23 @@ class WebUsecase {
   final BackendApiRepository backendApiRepo;
   final RssFeedUsecase rssFeedUsecase;
   Future<void> Function(String message) noticeError;
+  Future<void> Function(WebSite site) onAddSite;
   UserConfig userCfg;
   WebUsecase({
     required this.webRepo,
     required this.backendApiRepo,
     required this.rssFeedUsecase,
     required this.noticeError,
+    required this.onAddSite,
     required this.userCfg,
   });
   //NOTE:プロバイダー経由でクラス変数に代入できるか試す→出来た
   ///今はテスト用にfakeの`feed`を生成する
   Future<void> genFakeWebsite(WebSite site) async {
-    userCfg.rssFeedSites.addSite(site);
-    userCfg.rssFeedSites.sites.first.feeds.addAll((await genFakeRssFeeds(50)));
-    userCfg.searchHistory
-        .add('https://tks2.co.jp/2020/03/03/flutter-cloud-firestore-error/');
+    userCfg.rssFeedSites.add([site]);
+    userCfg.rssFeedSites.folders.first.children.first.feeds
+        .addAll(await genFakeRssFeeds(50));
+    userCfg.searchHistory.add('http://blog.esuteru.com/');
   }
 
   Future<List<RssFeedItem>?> fetchFeedDetail(
@@ -62,17 +64,25 @@ class WebUsecase {
   ) async {
     userCfg.editRecentSearches(request.word);
     //ワードがURLかどうか判定する
-    final urlRes = parseUrls(request.word);
-    if (urlRes is List<String>) {
+    if (parseUrls(request.word) is List<String>) {
       //存在するか調べて返す
       final meta = await webRepo.fetchSiteOgpMeta(request.word);
       if (userCfg.rssFeedSites.anySiteOfURL(meta.siteUrl)) {
         //あったらRSSを更新する
-        final oldSite =
-            userCfg.rssFeedSites.where((site) => site.name == meta.name).first;
+        final oldSite = userCfg.rssFeedSites
+            .where((site) => site.siteUrl == meta.siteUrl)
+            .first;
         //置き換える
         final newSite = await rssFeedUsecase.refreshRss(oldSite);
         userCfg.rssFeedSites.replaceWebSites(oldSite, newSite);
+        return PreSearchResult(
+          apiResponse: ApiResponseType.accept,
+          responseMessage: '',
+          resultType: SearchResultType.found,
+          searchType: SearchType.addContent,
+          websites: [newSite],
+          articles: [],
+        );
       } else {
         //なかったらRSS登録処理
         final resParseRssSite = await rssFeedUsecase.parseRss(request.word);
@@ -93,30 +103,10 @@ class WebUsecase {
           //非RSSならクラウドフィード対応か問い合わせる
           //クラウドフィードとはアプリ内からではなくapi経由でフィードを取得する方法
           //クライアントは許容された範囲内でapiにリクエストしてフィードを取得できる
-
+          // TODO: implement requestCloudFeed
+          throw UnimplementedError();
           //非対応ならUIでRefuseを通知する
         }
-      }
-      final res = await backendApiRepo.searchWord(
-        ApiSearchRequest(
-          searchType: request.searchType,
-          queryType: SearchQueryType.url,
-          word: request.word,
-          userID: userCfg.userID,
-          identInfo: userCfg.identInfo,
-          accountType: userCfg.accountType,
-        ),
-      );
-      switch (res.apiResponse) {
-        case ApiResponseType.refuse:
-          //refuseならエラーメッセージを通知する
-          //関数形式でエラーメッセージ処理を
-          await noticeError(res.responseMessage);
-          throw Exception(
-            'Api SearchRequest error: ${res.responseMessage}',
-          );
-        case ApiResponseType.accept:
-          return res;
       }
     } else {
       //検索程度ならワードでも制限をかけないが将来的な可能性を考慮すると
@@ -143,5 +133,11 @@ class WebUsecase {
           return res;
       }
     }
+  }
+
+  ///サイトを登録処理
+  void registerRssSite(WebSite site) {
+    userCfg.rssFeedSites.add([site]);
+    //PLAN:後々永続化処理
   }
 }
