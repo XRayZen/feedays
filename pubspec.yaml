@@ -49,8 +49,9 @@ dependencies:
   metadata_fetch: any
   # flutter_widget_from_html: any
   flutter_html: any
+  cached_network_image: ^3.2.3
   # このアプリでは何故か使えない 他のアプリでは使える
-  cached_network_image: any
+
 
 dev_dependencies:
   integration_test:

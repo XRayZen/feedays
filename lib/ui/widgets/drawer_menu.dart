@@ -4,7 +4,7 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/site_feed_view.dart';
+import 'package:feedays/ui/widgets/subsc_sites_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

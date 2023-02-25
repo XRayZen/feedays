@@ -4,12 +4,13 @@ import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/domain/usecase/web_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
+import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('description', () {
     final webRepo = WebRepoImpl();
-    final apiRepo = BackendApiRepoImpl();
+    final apiRepo = MockApiRepository();
     final rssFeedUse = RssFeedUsecase(webRepo: webRepo);
     var webUse = WebUsecase(
       webRepo: webRepo,
@@ -38,5 +39,14 @@ void main() {
       },
       timeout: const Timeout(Duration(minutes: 3)),
     );
+    test('Add word', () async {
+      const word = 'フェイクニュース';
+      final res = await webUse.searchWord(
+        SearchRequest(searchType: SearchType.addContent, word: word),
+      );
+      //複数のサイトからフィードを取得出来ているのを期待
+      //TODO:モックでサイトのフィード10件をむき出して返す
+      expect(res.articles.length, isNonZero);
+    });
   });
 }

@@ -31,7 +31,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
     return SliverStack(
       insetOnOverlap: true,
       children: [
-        const ResultSLiverList(key: Key('SearchResultList')),
+        const SearchResultList(key: Key('SearchResultList')),
         SliverPositioned.fill(
           child: ShadowWidget(
             visible: isVisibleShadowWidget(mode),

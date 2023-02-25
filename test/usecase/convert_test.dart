@@ -2,7 +2,7 @@ import 'package:feedays/domain/Util/http_parse.dart';
 import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/main.dart';
-import 'package:feedays/mock/mock_repository.dart';
+import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:feedays/mock/mock_util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

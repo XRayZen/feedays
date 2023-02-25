@@ -59,7 +59,7 @@ class WebUsecase {
   ///ワードがURLならRSS登録処理
   ///それ以外ならクラウドで検索リクエスト
   ///検索リクエストは無制限
-  Future<PreSearchResult> searchWord(
+  Future<SearchResult> searchWord(
     SearchRequest request,
   ) async {
     userCfg.editRecentSearches(request.word);
@@ -75,7 +75,7 @@ class WebUsecase {
         //置き換える
         final newSite = await rssFeedUsecase.refreshRss(oldSite);
         userCfg.rssFeedSites.replaceWebSites(oldSite, newSite);
-        return PreSearchResult(
+        return SearchResult(
           apiResponse: ApiResponseType.accept,
           responseMessage: '',
           resultType: SearchResultType.found,
@@ -89,16 +89,14 @@ class WebUsecase {
         if (resParseRssSite is WebSite) {
           //リザルトはサイトを返す
           //登録するかはUIで判断できるようにする
-          return PreSearchResult(
+          return SearchResult(
             apiResponse: ApiResponseType.accept,
             responseMessage: '',
             resultType: SearchResultType.found,
             searchType: SearchType.addContent,
             websites: [resParseRssSite],
-            articles: resParseRssSite.feeds,
+            articles: [],
           );
-          //登録処理は別メソッドで
-          //登録したらnotifierにも反映できるようにする
         } else {
           //非RSSならクラウドフィード対応か問い合わせる
           //クラウドフィードとはアプリ内からではなくapi経由でフィードを取得する方法

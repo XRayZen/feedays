@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:feedays/domain/Util/http_parse.dart';
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
+import 'package:html/parser.dart' show parse;
+import 'package:http/http.dart' as http;
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ogp_data_extract/ogp_data_extract.dart';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' show parse;
 
 class WebRepoImpl extends WebRepositoryInterface {
   @override
@@ -31,24 +30,13 @@ class WebRepoImpl extends WebRepositoryInterface {
   Future<WebSite> fetchSiteOgpMeta(String url) async {
     final data = await OgpDataExtract.execute(url);
     final meta = await MetadataFetch.extract(url);
-    if (data != null) {
+    final title = data?.siteName ?? '';
+    if (meta != null) {
       return WebSite(
         //とりあえずkeyをurlにしておく
         key: url,
-        name: data.siteName ?? '',
-        siteUrl: data.url ?? '',
-        feeds: [],
-        category: '',
-        tags: [],
-        iconLink: data.image ?? data.imageSecureUrl ?? '',
-        description: data.description ?? '',
-      );
-    } else if (meta != null) {
-      return WebSite(
-        //とりあえずkeyをurlにしておく
-        key: url,
-        name: meta.title ?? '',
-        siteUrl: meta.url ?? '',
+        name: title != '' ? title : meta.title ?? '',
+        siteUrl: url,
         feeds: [],
         category: '',
         tags: [],

@@ -1,4 +1,3 @@
-
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
@@ -12,7 +11,7 @@ class BackendApiRepoImpl extends BackendApiRepository {
   }
 
   @override
-  Future<PreSearchResult> searchWord(ApiSearchRequest request) {
+  Future<SearchResult> searchWord(ApiSearchRequest request) {
     // TODO: implement searchWord
     throw UnimplementedError();
   }
@@ -28,13 +27,13 @@ class BackendApiRepoImpl extends BackendApiRepository {
     // TODO: implement editRecentSearches
     throw UnimplementedError();
   }
-  
+
   @override
   Future<bool> isCompatibleCloudFeed(String url) {
     // TODO: implement isCompatibleCloudFeed
     throw UnimplementedError();
   }
-  
+
   @override
   Future<WebSite?> requestCloudFeed(String url) {
     // TODO: implement requestCloudFeed

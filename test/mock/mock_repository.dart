@@ -1,7 +1,7 @@
 //TODO:mokitoではスタブを形成できないため手動でモッククラスを作る
 
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/activity.dart';
+import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
@@ -23,9 +23,9 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<PreSearchResult> searchWord(ApiSearchRequest request) async {
+  Future<SearchResult> searchWord(ApiSearchRequest request) async {
     final fakeRssFeeds = genFakeRssFeeds(10);
-    final fakeSearchResult = PreSearchResult(
+    final fakeSearchResult = SearchResult(
       apiResponse: ApiResponseType.accept,
       responseMessage: 'fake',
       resultType: SearchResultType.found,
@@ -41,13 +41,13 @@ class MockApiRepository extends BackendApiRepository {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
-  
+
   @override
   Future<bool> isCompatibleCloudFeed(String url) {
     // TODO: implement isCompatibleCloudFeed
     throw UnimplementedError();
   }
-  
+
   @override
   Future<WebSite?> requestCloudFeed(String url) {
     // TODO: implement requestCloudFeed

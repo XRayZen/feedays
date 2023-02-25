@@ -36,17 +36,18 @@ enum SearchType { addContent, powerSearch }
 
 enum SearchResultType { found, none, error }
 
-class PreSearchResult {
+class SearchResult {
   final ApiResponseType apiResponse;
   final String responseMessage;
   final SearchResultType resultType;
   Exception? exception;
-  //AddContentならサイトを返す
-  //PowerSearchなら記事を返す
-  final SearchType searchType;
+
+  ///AddContentならサイトを返す<br/>
+  ///PowerSearchなら記事を返す
+  SearchType searchType;
   final List<WebSite> websites;
-  final List<RssFeedItem> articles;
-  PreSearchResult({
+  List<RssFeedItem> articles;
+  SearchResult({
     required this.apiResponse,
     required this.responseMessage,
     required this.resultType,

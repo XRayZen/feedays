@@ -9,7 +9,6 @@ import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/ui/provider/saerch_vm.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -63,12 +62,12 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
 ) async {
   // このプロバイダーに引数をつけて実行して結果を
   //notifierに入れてからモードを切り替える方式を試す
-  late PreSearchResult result;
+  late SearchResult result;
   try {
     //TODO:ここでダイアログを出して進捗を出す
     result = await ref.watch(webUsecaseProvider).searchWord(request);
   } on Exception catch (e) {
-    result = PreSearchResult(
+    result = SearchResult(
       apiResponse: ApiResponseType.refuse,
       responseMessage: e.toString(),
       resultType: SearchResultType.error,
