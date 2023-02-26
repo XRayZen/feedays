@@ -1,19 +1,19 @@
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/feed_silver_view.dart';
+import 'package:feedays/ui/page/today/today_infinite_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final todayPageScaffoldKey = GlobalKey<ScaffoldState>();
 
-class TodaySilverPage extends ConsumerStatefulWidget {
-  const TodaySilverPage({super.key});
+class TodayPage extends ConsumerStatefulWidget {
+  const TodayPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _TodaySilverPageState();
 }
 
-class _TodaySilverPageState extends ConsumerState<TodaySilverPage> {
+class _TodaySilverPageState extends ConsumerState<TodayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +59,7 @@ class _TodaySilverPageState extends ConsumerState<TodaySilverPage> {
             children: [
               //PLAN:Todaypageはカテゴリごとにサイトの直近フィードを表示する
               // ignore: prefer_const_constructors
-              FeedSliverListView(),
+              TodayInfiniteList(),
               const Center(
                 //PLAN:トレンドはapiにリクエストして表示する
                 child: Text('Trend', style: TextStyle(fontSize: 32.0)),

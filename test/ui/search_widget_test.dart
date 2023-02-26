@@ -1,6 +1,6 @@
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
-import 'package:feedays/ui/page/add_content/web_sites.dart';
+import 'package:feedays/ui/page/add_content/tab_web_site.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

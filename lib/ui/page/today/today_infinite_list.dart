@@ -1,8 +1,7 @@
-import 'package:feedays/domain/entities/entity.dart';
+
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/feed_list_view.dart';
 import 'package:feedays/ui/widgets/indicator/empty_list_indicator.dart';
 import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
 import 'package:feedays/ui/widgets/indicator/no_more_item_indicator.dart';
@@ -10,15 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class FeedSliverListView extends ConsumerStatefulWidget {
-  const FeedSliverListView({super.key});
+//PLAN:この無限リストはまだUIが未完成
+class TodayInfiniteList extends ConsumerStatefulWidget {
+  const TodayInfiniteList({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _FeedSliverListViewState();
+      _TodayInfiniteListState();
 }
 
-class _FeedSliverListViewState extends ConsumerState<FeedSliverListView> {
+class _TodayInfiniteListState extends ConsumerState<TodayInfiniteList> {
   final _pagingController = PagingController<int, RssFeedItem>(
     // 2 firstPageKey パラメータを使って、ページ初期値を設定する必要がある
     //今回使う`API`の場合、ページキーは1から始まりますが、他のAPIの場合は0から始まるかもしれない

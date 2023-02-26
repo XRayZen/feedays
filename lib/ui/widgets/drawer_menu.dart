@@ -4,7 +4,7 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/subsc_sites_view.dart';
+import 'package:feedays/ui/widgets/drawer/subsc_site_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -111,7 +111,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     } else {
       //無視しないと即座に反映されない
       // ignore: prefer_const_constructors
-      return SiteFeedSLiverView();
+      return SubscriptionSiteList();
     }
   }
 
@@ -190,7 +190,8 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
             leading: const Icon(Icons.upcoming),
             title: const Text('Upgrade'),
             onTap: () {},
-            enabled: false, //PLAN:今はまだ有料化するほどの機能はない
+            enabled: false, 
+            //PLAN:今はまだ有料化するほどの機能はない
           ),
         ),
       ],

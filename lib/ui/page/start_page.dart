@@ -5,7 +5,7 @@ import 'package:feedays/ui/page/read_later.dart';
 import 'package:feedays/ui/page/today_sliver_page.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
-import 'package:feedays/ui/widgets/search_view/search_view.dart';
+import 'package:feedays/ui/page/search_paage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +17,7 @@ class StartPageView extends ConsumerStatefulWidget {
 
 const List<Widget> pageList = <Widget>[
   ReadlaterPage(),
-  TodaySilverPage(),
+  TodayPage(),
   AddContentPage(),
   PowerSearchPage(),
   SearchViewPage()
@@ -61,7 +61,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
       // ignore: prefer_const_constructors
       drawer: AppDrawerMenu(key: Key('DrawerMenu')),
       // ignore: prefer_const_constructors
-      body: ViewPage(),
+      body: BarView(),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (value) => _selectedDestination(value, context),
         animationDuration: const Duration(seconds: 3),
@@ -102,8 +102,8 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
   }
 }
 
-class ViewPage extends ConsumerWidget {
-  const ViewPage({super.key});
+class BarView extends ConsumerWidget {
+  const BarView({super.key});
   Widget howPage(
     PageType type,
   ) {

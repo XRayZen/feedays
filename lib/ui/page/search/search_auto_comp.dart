@@ -1,20 +1,20 @@
 import 'package:feedays/domain/entities/search.dart';
+import 'package:feedays/ui/page/search_paage.dart';
+import 'package:feedays/ui/page/search/search_recent_item.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
-import 'package:feedays/ui/widgets/search_view/search_recent_item.dart';
-import 'package:feedays/ui/widgets/search_view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'custom_text_field.dart';
 
-class SearchAutoCompText extends ConsumerStatefulWidget {
-  const SearchAutoCompText({super.key});
+class SearchAutoComp extends ConsumerStatefulWidget {
+  const SearchAutoComp({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SearchAutoCompState();
 }
 
-class _SearchAutoCompState extends ConsumerState<SearchAutoCompText> {
+class _SearchAutoCompState extends ConsumerState<SearchAutoComp> {
   @override
   Widget build(BuildContext context) {
     final recentList = ref.watch(recentSearchesProvider);

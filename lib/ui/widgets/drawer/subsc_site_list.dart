@@ -6,8 +6,8 @@ import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SiteFeedSLiverView extends ConsumerStatefulWidget {
-  const SiteFeedSLiverView({
+class SubscriptionSiteList extends ConsumerStatefulWidget {
+  const SubscriptionSiteList({
     super.key,
   });
   @override
@@ -15,7 +15,8 @@ class SiteFeedSLiverView extends ConsumerStatefulWidget {
       _ReorderableTreeListViewState();
 }
 
-class _ReorderableTreeListViewState extends ConsumerState<SiteFeedSLiverView> {
+class _ReorderableTreeListViewState
+    extends ConsumerState<SubscriptionSiteList> {
   @override
   Widget build(BuildContext context) {
     final res = ref.watch(subscribeWebSitesProvider);

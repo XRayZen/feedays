@@ -2,11 +2,11 @@
 //NOTE:プロバイダーが使えなくなり動的に描画できなくなるのでやめておく
 //コンストラクタで検索関数や結果を受け取るNotifierや結果アイテムビューWidgetを渡す
 
+import 'package:feedays/ui/page/search/custom_text_field.dart';
+import 'package:feedays/ui/page/search/result_view.dart';
+import 'package:feedays/ui/page/search/search_auto_comp.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/search_view/custom_text_field.dart';
-import 'package:feedays/ui/widgets/search_view/result_view.dart';
-import 'package:feedays/ui/widgets/search_view/search_auto_comp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,7 +50,7 @@ class _SearchViewState extends ConsumerState<SearchViewPage> {
             SliverAppBar(
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
               titleSpacing: 5,
-              title: const SearchAutoCompText(
+              title: const SearchAutoComp(
                 key: Key('SearchAutoCompText'),
               ),
               pinned: true,

@@ -1,4 +1,4 @@
-import 'package:feedays/ui/page/add_content/web_sites.dart';
+import 'package:feedays/ui/page/add_content/tab_web_site.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,10 +35,10 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
               const SliverToBoxAdapter(
                 child: TabBar(
                   tabs: [
-                    Tab(key: Key('TabWebSites'),text: 'WebSites'),
-                    Tab(key: Key('TabTwitter'),text: 'Twitter'),
-                    Tab(key: Key('TabReddit'),text: 'Reddit'),
-                    Tab(key: Key('TabNewsSites'),text: 'NewsSites'),
+                    Tab(key: Key('TabWebSites'), text: 'WebSites'),
+                    Tab(key: Key('TabTwitter'), text: 'Twitter'),
+                    Tab(key: Key('TabReddit'), text: 'Reddit'),
+                    Tab(key: Key('TabNewsSites'), text: 'NewsSites'),
                   ],
                 ),
               )
@@ -46,7 +46,7 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
           },
           body: const TabBarView(
             children: [
-              WebSites(),
+              TabWebSite(),
               Center(child: Text('Twitter')),
               Center(child: Text('Reddit')),
               Center(child: Text('NewsSites')),

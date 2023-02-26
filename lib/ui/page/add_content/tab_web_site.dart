@@ -1,11 +1,11 @@
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/search_view/search_view.dart';
+import 'package:feedays/ui/page/search_paage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WebSites extends ConsumerWidget {
-  const WebSites({super.key});
+class TabWebSite extends ConsumerWidget {
+  const TabWebSite({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

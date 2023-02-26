@@ -1,5 +1,5 @@
-import 'package:feedays/ui/widgets/search_view/result_list.dart';
-import 'package:feedays/ui/widgets/search_view/search_view.dart';
+import 'package:feedays/ui/page/search/result_list.dart';
+import 'package:feedays/ui/page/search_paage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';

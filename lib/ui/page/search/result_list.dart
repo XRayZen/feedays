@@ -1,7 +1,7 @@
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/widgets/search_view/list_item/rss_feed_item_ui.dart';
-import 'package:feedays/ui/widgets/search_view/list_item/site_list_item.dart';
+import 'package:feedays/ui/page/search/list_item/rss_feed_item_ui.dart';
+import 'package:feedays/ui/page/search/list_item/site_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

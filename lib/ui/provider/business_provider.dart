@@ -9,7 +9,7 @@ import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/ui/provider/saerch_vm.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/widgets/search_view/search_view.dart';
+import 'package:feedays/ui/page/search_paage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final backendApiRepoProvider = Provider<BackendApiRepository>((ref) {
