@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_bool_literals_in_conditional_expressions
 
-import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
+import 'package:feedays/mock/mock_util.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer/subsc_site_list.dart';
@@ -53,8 +53,8 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  ref.read(barPageTypeProvider.notifier).state =
-                      PageType.addContent;
+                  ref.read(barViewTypeProvider.notifier).state =
+                      TabBarViewType.addContent;
                   startPageScaffoldKey.currentState!.closeDrawer();
                 },
                 child: const Text('Add Content'),
@@ -148,9 +148,8 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           onTap: () {
             //PLAN:TodayPageに表示を切り替えてメニューを閉じる
             startPageScaffoldKey.currentState!.setState(() {
-              var fff = ref.watch(barPageTypeProvider.notifier).state;
-              fff = PageType.toDay;
-              ref.watch(barPageTypeProvider.notifier).state = fff;
+              ref.watch(barViewTypeProvider.notifier).state =
+                  TabBarViewType.toDay;
             });
             startPageScaffoldKey.currentState!.closeDrawer();
           },
@@ -159,27 +158,14 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
         ListTile(
           leading: const Icon(Icons.bookmark_border),
           title: const Text('Read Later'),
-          onTap: () {
-            setState(() {
-              //今はテスト用にリストを挿入している
-              final fakeFeeds = ref.watch(webUsecaseProvider);
-              var temp1 = WebSite.mock('1', 'site1', 'Anime');
-              final temp2 = WebSite.mock('2', 'site2', 'Anime');
-              final temp3 = WebSite.mock('3', 'site3', 'Manga');
-              final temp4 = WebSite.mock('4', 'site4', 'Manga');
-              final temp5 = WebSite.mock('5', 'site5', 'Anime');
-              fakeFeeds.userCfg.rssFeedSites
-                  .add([temp1, temp2, temp3, temp4, temp5]);
-              ref.watch(webUsecaseProvider).genFakeWebsite(temp1);
-              temp1 = ref
-                  .watch(webUsecaseProvider)
-                  .userCfg
-                  .rssFeedSites
-                  .folders[0]
-                  .children
-                  .first;
-              ref.watch(selectWebSiteProvider.notifier).selectSite(temp1);
-            });
+          onTap: () async {
+            final fakeFeeds = ref.watch(webUsecaseProvider);
+            final mockValidSites = await genValidSite();
+            //今はテスト用にリストを挿入している
+            fakeFeeds.userCfg.rssFeedSites.add(mockValidSites);
+            //BUG:サイトを選択してもビジネスロジック上のデータと同期していない
+            // セットステートでUIを再描画させる
+            setState(() {});
           },
         ),
         const Divider(thickness: 1, height: 0.05),
@@ -190,7 +176,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
             leading: const Icon(Icons.upcoming),
             title: const Text('Upgrade'),
             onTap: () {},
-            enabled: false, 
+            enabled: false,
             //PLAN:今はまだ有料化するほどの機能はない
           ),
         ),

@@ -4,6 +4,8 @@ import 'dart:typed_data';
 ///フィード・サイトリストの操作を集中して実装する
 class RssWebSites {
   List<WebSiteFolder> folders;
+  //サイトを選択してfeedが取得出来たらここに入れておく
+  List<RssFeedItem> nowSelectFeeds = List.empty(growable: true);
   RssWebSites({
     required this.folders,
   });
@@ -91,7 +93,9 @@ class RssWebSites {
   //サイトの上書きして置き換える
   void replaceWebSites(WebSite oldSite, WebSite newSite) {
     for (var i = 0; i < folders.length; i++) {
-      if (folders[i].children.any((element) => false)) {
+      if (folders[i]
+          .children
+          .any((element) => element.siteUrl == oldSite.siteUrl)) {
         folders[i]
             .children
             .removeWhere((element) => element.siteUrl == oldSite.siteUrl);

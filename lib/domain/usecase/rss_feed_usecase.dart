@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:webfeed/domain/rss_feed.dart';
-
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
+import 'package:webfeed/domain/rss_feed.dart';
 
 class RssFeedUsecase {
   final WebRepositoryInterface webRepo;
@@ -23,7 +21,19 @@ class RssFeedUsecase {
   ];
 
   ///RSSを更新する
-  Future<WebSite> refreshRss(WebSite site) async {
+  Future<WebSite?> refreshRss(WebSite site) async {
+    var sites = site;
+    if (site.rssUrl.isEmpty) {
+      final res = await parseRss(site.siteUrl);
+      if (res != null) {
+        site.rssUrl = res.rssUrl;
+        res.newCount = res.feeds.length;
+        sites = res;
+        return sites;
+      } else {
+        return null;
+      }
+    }
     final newFeedItems = await convertFeedLinkToRssItems(site.rssUrl);
     if (site.feeds.isEmpty) {
       site.feeds.addAll(newFeedItems);
@@ -40,8 +50,11 @@ class RssFeedUsecase {
             x.lastModified.millisecondsSinceEpoch <
             newItem.lastModified.millisecondsSinceEpoch,
       )) {
-        site.newCount++;
-        newItems.add(newItem);
+        //でもURLが同じなのは入れない
+        if (!site.feeds.any((x) => x.link == newItem.link)) {
+          site.newCount++;
+          newItems.add(newItem);
+        }
       }
     }
     //カウントしたら新しいのをインサートする
@@ -73,7 +86,7 @@ class RssFeedUsecase {
       if (url.endsWith('/')) {
         final lastIndex = url.length;
         path = url.replaceRange(
-          lastIndex,
+          lastIndex - 1,
           null,
           element,
         );

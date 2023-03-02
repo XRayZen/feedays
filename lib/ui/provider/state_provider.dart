@@ -1,4 +1,3 @@
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,12 +13,20 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-final barPageTypeProvider = StateProvider<PageType>((ref) => PageType.toDay);
+final barViewTypeProvider =
+    StateProvider<TabBarViewType>((ref) => TabBarViewType.toDay);
 
-enum PageType { readLater, toDay, addContent, powerSearch, searchView }
+enum TabBarViewType {
+  readLater,
+  toDay,
+  addContent,
+  powerSearch,
+  searchView,
+  siteDetail
+}
 
 class SelectedSiteNotifier extends StateNotifier<WebSite> {
-  SelectedSiteNotifier() : super(WebSite.mock("", "name", "category"));
+  SelectedSiteNotifier() : super(WebSite.mock('', 'name', 'category'));
   void selectSite(WebSite webSite) {
     state = webSite;
   }

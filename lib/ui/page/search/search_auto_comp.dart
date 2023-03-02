@@ -1,5 +1,5 @@
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/ui/page/search_paage.dart';
+import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/page/search/search_recent_item.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/material.dart';

@@ -1,12 +1,21 @@
-import 'package:feedays/domain/entities/web_sites.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:feedays/ui/page/detail/site_datail/site_feed_list.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SiteDetailPage extends ConsumerWidget {
-  const SiteDetailPage(this.site, {super.key});
-  final WebSite site;
+class SiteDetailPage extends ConsumerStatefulWidget {
+  const SiteDetailPage({super.key});
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _SiteDetailState();
+}
+
+class _SiteDetailState extends ConsumerState<SiteDetailPage> {
+  @override
+  Widget build(BuildContext context) {
+    final site = ref.watch(selectWebSiteProvider);
     // ignore: prefer_const_constructors
     return Scaffold(
       body: CustomScrollView(
@@ -37,7 +46,7 @@ class SiteDetailPage extends ConsumerWidget {
                 children: [
                   Text(site.name),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       //お気に入り登録
                     },
                     icon: const Icon(Icons.favorite),
@@ -47,12 +56,7 @@ class SiteDetailPage extends ConsumerWidget {
               centerTitle: true,
             ),
           ),
-          //リストはリフレッシュでラップしてFeeditemを参考
-          //今日配信されていたフィードはTodayセクションに
-          //昨日はYesterday
-          //それ以前は普通に日付
-          //区分けはカードの隙間にテキストを挟み込んで見る
-          
+          const SiteDetailFeedList(),
         ],
       ),
     );

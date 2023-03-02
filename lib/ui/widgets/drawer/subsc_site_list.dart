@@ -1,5 +1,6 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
+import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
@@ -201,7 +202,7 @@ class _ReorderableTreeListViewState
     if (models.isEmpty) {
       return [];
     }
-    return models.map((e) {
+    return models.map((site) {
       return DragAndDropItem(
         canDrag: _isEditMode(ref.watch(isFeedsEditModeProvider)),
         //ドラッグしてるときの様子
@@ -210,8 +211,18 @@ class _ReorderableTreeListViewState
         //feedlyと同様タップしたらドロワーメニューを閉じてサイトのfeedPageにページを切り替える
         child: ListTile(
           title: Text(
-            e.name,
+            site.name,
           ),
+          onTap: () async {
+            //タップしたらWebSiteを選択してサイト詳細ページにタブバービューを変更する
+            //ページ遷移ではない
+            startPageScaffoldKey.currentState!.setState(() {
+              ref.watch(barViewTypeProvider.notifier).state =
+                  TabBarViewType.siteDetail;
+            });
+            await selectSite(site, ref);
+            startPageScaffoldKey.currentState!.closeDrawer();
+          },
         ),
       );
     }).toList();

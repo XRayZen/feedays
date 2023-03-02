@@ -1,11 +1,12 @@
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
+import 'package:feedays/ui/page/detail/site_detail_page.dart';
 import 'package:feedays/ui/page/power_search_page.dart';
 import 'package:feedays/ui/page/read_later.dart';
+import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/page/today_sliver_page.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
-import 'package:feedays/ui/page/search_paage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +21,8 @@ const List<Widget> pageList = <Widget>[
   TodayPage(),
   AddContentPage(),
   PowerSearchPage(),
-  SearchViewPage()
+  SearchViewPage(),
+  SiteDetailPage()
 ];
 
 class _StartPageViewState extends ConsumerState<StartPageView> {
@@ -30,17 +32,17 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
     super.initState();
   }
 
-  PageType howPageIndex(int value) {
+  TabBarViewType howPageIndex(int value) {
     if (value == 1) {
-      return PageType.readLater;
+      return TabBarViewType.readLater;
     } else if (value == 2) {
-      return PageType.toDay;
+      return TabBarViewType.toDay;
     } else if (value == 3) {
-      return PageType.addContent;
+      return TabBarViewType.addContent;
     } else if (value == 4) {
-      return PageType.powerSearch;
+      return TabBarViewType.powerSearch;
     } else {
-      return PageType.toDay;
+      return TabBarViewType.toDay;
     }
   }
 
@@ -49,7 +51,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
       if (value == 0) {
         startPageScaffoldKey.currentState!.openDrawer();
       } else {
-        ref.watch(barPageTypeProvider.notifier).state = howPageIndex(value);
+        ref.watch(barViewTypeProvider.notifier).state = howPageIndex(value);
       }
     });
   }
@@ -105,25 +107,27 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 class BarView extends ConsumerWidget {
   const BarView({super.key});
   Widget howPage(
-    PageType type,
+    TabBarViewType type,
   ) {
     switch (type) {
-      case PageType.readLater:
+      case TabBarViewType.readLater:
         return pageList[0];
-      case PageType.toDay:
+      case TabBarViewType.toDay:
         return pageList[1];
-      case PageType.addContent:
+      case TabBarViewType.addContent:
         return pageList[2];
-      case PageType.powerSearch:
+      case TabBarViewType.powerSearch:
         return pageList[3];
-      case PageType.searchView:
+      case TabBarViewType.searchView:
         return pageList[4];
+      case TabBarViewType.siteDetail:
+        return pageList[5];
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageType = ref.watch(barPageTypeProvider);
+    final pageType = ref.watch(barViewTypeProvider);
     return howPage(pageType);
   }
 }

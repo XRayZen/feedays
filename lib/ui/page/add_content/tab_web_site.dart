@@ -1,6 +1,6 @@
+import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/page/search_paage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,13 +22,15 @@ class TabWebSite extends ConsumerWidget {
           onChanged: (value) {
             con.clear();
             //FIXME:feedlyでは遷移ではなくタブバービューを変えている
-            ref.watch(barPageTypeProvider.notifier).state = PageType.searchView;
+            ref.watch(barViewTypeProvider.notifier).state =
+                TabBarViewType.searchView;
           },
           onTap: () {
             ref.watch(searchResultViewMode.notifier).state =
                 SearchResultViewMode.none;
             ref.watch(searchResultProvider.notifier).clear();
-            ref.watch(barPageTypeProvider.notifier).state = PageType.searchView;
+            ref.watch(barViewTypeProvider.notifier).state =
+                TabBarViewType.searchView;
           },
           decoration: InputDecoration(
             border: const OutlineInputBorder(),

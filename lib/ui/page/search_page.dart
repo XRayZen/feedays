@@ -111,7 +111,8 @@ class SearchViewPageBackButton extends StatelessWidget {
               SearchResultViewMode.none;
           ref.watch(searchResultProvider.notifier).clear();
           ref.watch(isSearchTxtAutoFocus.notifier).state = true; //オートフォーカスも戻す
-          ref.watch(barPageTypeProvider.notifier).state = PageType.addContent;
+          ref.watch(barViewTypeProvider.notifier).state =
+              TabBarViewType.addContent;
         }
       },
       icon: const Icon(Icons.arrow_back),

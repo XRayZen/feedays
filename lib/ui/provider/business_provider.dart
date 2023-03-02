@@ -7,9 +7,11 @@ import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/domain/usecase/web_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
+import 'package:feedays/ui/page/detail/site_datail/site_feed_list.dart';
+import 'package:feedays/ui/page/search_page.dart';
 import 'package:feedays/ui/provider/saerch_vm.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
-import 'package:feedays/ui/page/search_paage.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final backendApiRepoProvider = Provider<BackendApiRepository>((ref) {
@@ -99,3 +101,35 @@ final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
   );
   return use;
 });
+
+final selectSiteRssFeedProvider = Provider<List<RssFeedItem>>((ref) {
+  final res = ref.watch(
+    webUsecaseProvider
+        .select((value) => value.userCfg.rssFeedSites.nowSelectFeeds),
+  );
+  return res;
+});
+
+Future<void> selectSite(WebSite site, WidgetRef ref) async {
+  try {
+    //サイト詳細ListViewTypeをローディングモードにする
+    ref.watch(selectWebSiteProvider.notifier).selectSite(site);
+    ref.watch(siteFeedListViewTypePro.notifier).state =
+        SiteFeedListViewType.loading;
+    //fetchFeedに選択したサイトを入れる
+    await fetchRssFeed(site, ref);
+    //今はselectSiteRssFeedProviderを監視しているが
+    //サイト詳細ListViewTypeをリストモードにする
+    ref.watch(siteFeedListViewTypePro.notifier).state =
+        SiteFeedListViewType.success;
+  } on Exception catch (_) {
+    //エラーを待ち受けて出たらエラーモードにする
+    ref.watch(siteFeedListViewTypePro.notifier).state =
+        SiteFeedListViewType.error;
+  }
+}
+
+Future<void> fetchRssFeed(WebSite site, WidgetRef ref) async {
+  //UIで読み込みを表すダイアログを表示
+  await ref.watch(webUsecaseProvider).fetchRssFeed(site);
+}

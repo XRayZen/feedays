@@ -1,6 +1,4 @@
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RssFeedsNotifier extends StateNotifier<List<RssFeedItem>> {
@@ -20,6 +18,11 @@ class RssFeedsNotifier extends StateNotifier<List<RssFeedItem>> {
     state = n;
     // `notifyListeners` などのメソッドを呼ぶ必要はありません。
     // `state =` により必要なときに UI側 に通知が届き、ウィジェットが更新されます。
+  }
+
+  void replace(List<RssFeedItem> sites) {
+    state.clear();
+    state = sites;
   }
 
   void removeOfLink(String link) {

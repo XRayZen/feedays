@@ -74,7 +74,7 @@ class WebUsecase {
             .first;
         //置き換える
         final newSite = await rssFeedUsecase.refreshRss(oldSite);
-        userCfg.rssFeedSites.replaceWebSites(oldSite, newSite);
+        userCfg.rssFeedSites.replaceWebSites(oldSite, newSite!);
         return SearchResult(
           apiResponse: ApiResponseType.accept,
           responseMessage: '',
@@ -137,5 +137,14 @@ class WebUsecase {
   void registerRssSite(WebSite site) {
     userCfg.rssFeedSites.add([site]);
     //PLAN:後々永続化処理
+  }
+
+  Future<void> fetchRssFeed(WebSite site) async {
+    userCfg.rssFeedSites.nowSelectFeeds.clear();
+    final newSite = await rssFeedUsecase.refreshRss(site);
+    if (newSite != null) {
+      userCfg.rssFeedSites.replaceWebSites(site, newSite);
+      userCfg.rssFeedSites.nowSelectFeeds.addAll(newSite.feeds);
+    }
   }
 }

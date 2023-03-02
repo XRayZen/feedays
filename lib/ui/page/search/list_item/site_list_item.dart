@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
+import 'package:feedays/ui/page/detail/site_detail_page.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,11 +11,20 @@ class SiteListItem extends ConsumerWidget {
   final WebSite site;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //TODO:RSSサイト検索結果リストのアイテムUIを実装する
+    //RSSサイト検索結果リストのアイテムUIを実装する
     //feedlyを似せる
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         //フィードを取得してサイト詳細ページに遷移
+        //ビジネスロジック経由でフィードを取得
+        await selectSite(site, ref);
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            // ignore: prefer_const_constructors
+            builder: (_) => SiteDetailPage(),
+          ),
+        );
       },
       child: Center(
         child: SizedBox(

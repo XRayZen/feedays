@@ -1,4 +1,4 @@
-import 'package:feedays/domain/entities/entity.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/feed_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +26,17 @@ class RssFeedItemUI extends StatelessWidget {
           children: [
             //先頭横にイメージを四角で表示
             SizedBox.square(
-              child: Image.network(
-                width: 70,
-                height: 65,
-                articles[index].image.link,
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                width: 150,
+                height: 100,
+                imageUrl: articles[index].image.link,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              //  Image.memory(
-              //   width: 70,
-              //   height: 65,
-              //   articles[index].image.image.buffer.asUint8List(),
-              // ),
             ),
             Expanded(
               child: Column(
@@ -49,10 +50,7 @@ class RssFeedItemUI extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  //FIXME:feedlyでは現時点の経過時間を表示している
                   Text(articles[index].lastModified.toLocal().toString()),
-                  //最後にディスクリプション
-                  // HtmlWidget(articles[index].description),
                 ],
               ),
             )
