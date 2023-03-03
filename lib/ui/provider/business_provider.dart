@@ -100,18 +100,6 @@ final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
   return use;
 });
 
-final selectSiteFeedPro =
-    Provider.autoDispose.family<List<RssFeedItem>, WebSite>((ref, site) {
-  final res = ref.watch(
-    webUsecaseProvider.select(
-      (value) => value.userCfg.rssFeedSites
-          .where((p) => p.siteUrl == site.siteUrl)
-          .first
-          .feeds,
-    ),
-  );
-  return res.toList();
-});
 
 final selectSitePro =
     FutureProvider.autoDispose.family<WebSite, WebSite>((ref, site) async {

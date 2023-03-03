@@ -30,12 +30,11 @@ class _SiteDetailPageState extends ConsumerState<SiteDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final site = ref.watch(selectWebSiteProvider);
     if (widget.site != null) {
-      // ignore: prefer_const_constructors
+      //サイト検索から
       return _SiteDetailWidget(site: widget.site);
     } else {
-      // ignore: prefer_const_constructors
+      //ドロワーメニューから
       return _SiteDetailWidget();
     }
   }
@@ -68,7 +67,7 @@ class _SiteDetailWidget extends ConsumerWidget {
                       //購読処理
                       //feedlyではスライドしてフォルダを選択するがここはダイアログで選択する
                     },
-                    child: Text(
+                    child: const Text(
                       'FOLLOW',
                       style: TextStyle(color: Colors.green),
                     ),
@@ -113,8 +112,7 @@ class _SiteDetailWidget extends ConsumerWidget {
             )
           ];
         },
-        body: // ignore: prefer_const_constructors
-            SiteDetailFeedList(site: site!),
+        body: SiteDetailFeedList(site: site!),
       ),
     );
   }
