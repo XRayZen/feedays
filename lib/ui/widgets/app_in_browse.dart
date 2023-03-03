@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, depend_on_referenced_packages
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:async';
 
 import 'package:feedays/ui/provider/ui_provider.dart';
@@ -8,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-//#enddocregion platform_imports
 
 class AppInWebBrowse extends ConsumerStatefulWidget {
-  final Uri url;
   const AppInWebBrowse({
     super.key,
     required this.url,
   });
+  final Uri url;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AppInWebBrowseState();
 }
@@ -27,7 +23,7 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
   late final WebViewController controller;
 
   bool _isLoading = false; // ページ読み込み状態
-  double _downloadProgress = 0.0; // ページ読み込みの進捗値
+  double _downloadProgress = 0; // ページ読み込みの進捗値
   int _progress = 0;
   String _url = '';
 
@@ -52,20 +48,20 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
               final controller = await _controller.future;
               await controller.reload();
             },
-            icon: Icon(Icons.replay_outlined),
+            icon: const Icon(Icons.replay_outlined),
           ),
           IconButton(
             onPressed: () {
               //シェアポップアップを呼び出す
             },
-            icon: Icon(Icons.share_sharp),
+            icon: const Icon(Icons.share_sharp),
           ),
           IconButton(
             onPressed: () async {
               //外部ブラウザで開く
               await launchWebUrl(widget.url);
             },
-            icon: Icon(Icons.open_in_browser),
+            icon: const Icon(Icons.open_in_browser),
           ),
         ],
       ),
@@ -86,7 +82,7 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
                     )
                   ],
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
           Expanded(
             child: WebView(
               initialUrl: _url,
