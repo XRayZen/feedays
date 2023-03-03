@@ -50,7 +50,11 @@ dependencies:
   # flutter_widget_from_html: any
   flutter_html: any
   cached_network_image: ^3.2.3
-  # このアプリでは何故か使えない 他のアプリでは使える
+  url_launcher: ^6.1.10
+  universal_platform: ^1.0.0+1
+  webview_flutter: ^2.8.0
+  webview_flutter_android: ^2.10.4
+  
 
 
 dev_dependencies:

@@ -1,24 +1,25 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, inference_failure_on_instance_creation
-import 'package:feedays/domain/entities/entity.dart';
+// ignore_for_file:  inference_failure_on_instance_creation
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/detail/html_view.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class FeedDetailPage extends ConsumerWidget {
-  final List<RssFeedItem> articles;
-  final int index;
   const FeedDetailPage({
     super.key,
     required this.index,
     required this.articles,
   });
+  final List<RssFeedItem> articles;
+  final int index;
 
   //スワイプするととなりのフィード詳細に遷移
 
@@ -26,7 +27,7 @@ class FeedDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final article = articles[index];
     return Scaffold(
-      //TODO:スクロールするためにスクロールビューを入れる
+      //スクロールするためにスクロールビューを入れる
       //左右のスワイプを検知する
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -95,7 +96,7 @@ class FeedDetailPage extends ConsumerWidget {
                   //記事オブジェクト
                   //フィード詳細は中央に配置
                   SliverToBoxAdapter(
-                    child: FeedDetailBody(article: article),
+                    child: FeedDetailBody(article: article, page: this),
                   ),
                   //画面全体として縦長に3つのGestureDetectorを置き画面左右のタップ操作を検知
                   // leftRightTapDetect(context)
@@ -248,9 +249,11 @@ class FeedDetailBody extends StatelessWidget {
   const FeedDetailBody({
     super.key,
     required this.article,
+    required this.page,
   });
 
   final RssFeedItem article;
+  final FeedDetailPage page;
 
   @override
   Widget build(BuildContext context) {
@@ -299,8 +302,21 @@ class FeedDetailBody extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(9),
                   child: ElevatedButton(
-                    onPressed: () {
-                      //内部ブラウザでサイトを開く
+                    //TODO:内部ブラウザでサイトを開く
+                    onPressed: () async {
+                      //WebViewはモバイルしか対応していない
+                      if (UniversalPlatform.isAndroid &&
+                          UniversalPlatform.isAndroid) {
+                        await launchWebUrl(
+                          Uri.parse(article.link),
+                          context: context,
+                          widget: this,
+                        );
+                      } else {
+                        await launchWebUrl(
+                          Uri.parse(article.link),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       animationDuration: const Duration(seconds: 1),

@@ -2,53 +2,43 @@
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/site_datail/site_feed_list.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SiteDetailPage extends ConsumerStatefulWidget {
-  final WebSite? site;
-  const SiteDetailPage({
-    super.key,
-    this.site,
-  });
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SiteDetailPageState();
-}
-
-class _SiteDetailPageState extends ConsumerState<SiteDetailPage> {
-  @override
-  void initState() {
-    UiProvider.instanceO.setRebuildSiteDetailPage(onReBuild);
-    super.initState();
-  }
-
-  void onReBuild() {
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.site != null) {
-      //サイト検索から
-      return _SiteDetailWidget(site: widget.site);
-    } else {
-      //ドロワーメニューから
-      return _SiteDetailWidget();
-    }
-  }
-}
-
-class _SiteDetailWidget extends ConsumerWidget {
+class SiteDetailPage extends ConsumerWidget {
   WebSite? site;
-  _SiteDetailWidget({
+  SiteDetailPage({
+    super.key,
     this.site,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    site ??= ref.watch(selectWebSiteProvider);
+    if (site != null) {
+      //サイト検索から
+      return SiteDetailWidget(site: site);
+    } else {
+      //ドロワーメニューから
+      return SiteDetailWidget();
+    }
+  }
+}
+
+class SiteDetailWidget extends ConsumerWidget {
+  WebSite? site;
+  SiteDetailWidget({
+    super.key,
+    this.site,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //ここで画面が切り替わらない原因になっていたため修正した
+    final selectSite = ref.watch(selectWebSiteProvider);
+    if (site?.siteUrl != selectSite.siteUrl) {
+      site = selectSite;
+    }
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -79,10 +69,9 @@ class _SiteDetailWidget extends ConsumerWidget {
                   //スペーサーを指定して隙間を開けておく
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Expanded(child: Container()),
                     Expanded(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
                             tooltip: 'Add Favorite',
@@ -91,20 +80,15 @@ class _SiteDetailWidget extends ConsumerWidget {
                             },
                             icon: const Icon(Icons.favorite),
                           ),
-                          Flexible(
-                            child: Text(
-                              site!.name,
-                              style: TextStyle(
-                                fontSize: getResponsiveValue(context),
-                              ),
+                          Text(
+                            site!.name,
+                            style: TextStyle(
+                              fontSize: getResponsiveValue(context),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Container(),
-                    )
                   ],
                 ),
                 centerTitle: true,

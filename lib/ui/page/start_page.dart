@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/add_content_page.dart';
 import 'package:feedays/ui/page/detail/site_detail_page.dart';
@@ -16,7 +18,7 @@ class StartPageView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _StartPageViewState();
 }
 
-const List<Widget> pageList = <Widget>[
+final List<Widget> pageList = <Widget>[
   ReadlaterPage(),
   TodayPage(),
   AddContentPage(),

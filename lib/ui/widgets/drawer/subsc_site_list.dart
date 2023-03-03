@@ -221,7 +221,8 @@ class _ReorderableTreeListViewState
           onTap: () async {
             //タップしたらWebSiteを選択してサイト詳細ページにタブバービューを変更する
             //ページ遷移ではない
-            ref.watch(selectWebSiteProvider.notifier).state = site;
+            // ref.watch(selectWebSiteProvider.notifier).state = site;
+            ref.watch(selectWebSiteProvider.notifier).selectSite(site);
             startPageScaffoldKey.currentState!.setState(() {
               ref.watch(barViewTypeProvider.notifier).state =
                   TabBarViewType.siteDetail;
