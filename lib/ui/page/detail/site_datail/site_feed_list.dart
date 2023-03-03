@@ -1,50 +1,60 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/search/list_item/rss_feed_item_ui.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/ui_provider.dart';
+import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
 import 'package:feedays/ui/widgets/indicator/no_more_item_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SiteDetailFeedList extends ConsumerStatefulWidget {
-  const SiteDetailFeedList({super.key});
-
+class SiteDetailFeedList extends ConsumerWidget {
+  final WebSite site;
+  const SiteDetailFeedList({
+    super.key,
+    required this.site,
+  });
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _SiteDetailFeedListState();
-}
-
-enum SiteFeedListViewType { loading, success, notFound, error }
-
-final siteFeedListViewTypePro = StateProvider<SiteFeedListViewType>((ref) {
-  return SiteFeedListViewType.notFound;
-});
-
-class _SiteDetailFeedListState extends ConsumerState<SiteDetailFeedList> {
-  @override
-  Widget build(BuildContext context) {
-    final viewType = ref.watch(siteFeedListViewTypePro);
-    switch (viewType) {
-      case SiteFeedListViewType.loading:
-        return const SliverToBoxAdapter(child: CircularProgressIndicator());
-      case SiteFeedListViewType.success:
-        final res = ref.watch(selectSiteRssFeedProvider);
-        return _buildList(res);
-      case SiteFeedListViewType.notFound:
-        return const SliverToBoxAdapter(child: NoMoreItemIndicator());
-      case SiteFeedListViewType.error:
-        return const SliverToBoxAdapter(child: NoMoreItemIndicator());
-    }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selSite = ref.watch(selectSitePro(site));
+    return selSite.when(
+      data: (response) {
+        return _buildList(response.feeds, ref);
+      },
+      error: (error, stackTrace) {
+        return ErrorIndicator(
+          error: error,
+          //再描画するだけでフィード取得処理が走るから問題ないか
+          onTryAgain: UiProvider.instanceO.beginRebuildSiteDetailPage,
+        );
+      },
+      loading: () {
+        //PLAN:読み込み画面もこだわるべきか
+        return const CircularProgressIndicator();
+      },
+    );
   }
 
-  Widget _buildList(List<RssFeedItem> feeds) {
+  Widget _buildList(List<RssFeedItem> feeds, WidgetRef ref) {
     final modelList = convertModel(feeds);
     //リストはリフレッシュでラップしてFeeditem
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return _buildListItem(modelList, index, feeds);
-        },
-        childCount: modelList.length,
+    return RefreshIndicator(
+      onRefresh: () async {
+        await ref.watch(webUsecaseProvider).fetchRssFeed(site);
+        //再描画するだけでフィード取得処理が走るから問題ないか
+        UiProvider.instanceO.beginRebuildSiteDetailPage();
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return _buildListItem(modelList, index, feeds);
+              },
+              childCount: modelList.length,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -89,7 +99,6 @@ class _SiteDetailFeedListState extends ConsumerState<SiteDetailFeedList> {
       );
       //今日
       if (simpleItemTime.day == todayTime.day) {
-        //BUG:一回しか入らないはずが毎回入れられてる
         if (!list.any((x) => x.text == 'Today')) {
           list.add(SiteDetailPageModel(isSection: true, text: 'Today'));
         }

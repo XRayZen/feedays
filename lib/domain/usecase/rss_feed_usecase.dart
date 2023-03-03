@@ -26,8 +26,8 @@ class RssFeedUsecase {
     if (site.rssUrl.isEmpty) {
       final res = await parseRss(site.siteUrl);
       if (res != null) {
-        site.rssUrl = res.rssUrl;
         res.newCount = res.feeds.length;
+        // ignore: join_return_with_assignment
         sites = res;
         return sites;
       } else {

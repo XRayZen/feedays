@@ -4,8 +4,6 @@ import 'dart:typed_data';
 ///フィード・サイトリストの操作を集中して実装する
 class RssWebSites {
   List<WebSiteFolder> folders;
-  //サイトを選択してfeedが取得出来たらここに入れておく
-  List<RssFeedItem> nowSelectFeeds = List.empty(growable: true);
   RssWebSites({
     required this.folders,
   });

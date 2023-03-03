@@ -1,63 +1,120 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/site_datail/site_feed_list.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/provider/ui_provider.dart';
+import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SiteDetailPage extends ConsumerStatefulWidget {
-  const SiteDetailPage({super.key});
-
+  final WebSite? site;
+  const SiteDetailPage({
+    super.key,
+    this.site,
+  });
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SiteDetailState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SiteDetailPageState();
 }
 
-class _SiteDetailState extends ConsumerState<SiteDetailPage> {
+class _SiteDetailPageState extends ConsumerState<SiteDetailPage> {
+  @override
+  void initState() {
+    UiProvider.instanceO.setRebuildSiteDetailPage(onReBuild);
+    super.initState();
+  }
+
+  void onReBuild() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final site = ref.watch(selectWebSiteProvider);
-    // ignore: prefer_const_constructors
+    if (widget.site != null) {
+      // ignore: prefer_const_constructors
+      return _SiteDetailWidget(site: widget.site);
+    } else {
+      // ignore: prefer_const_constructors
+      return _SiteDetailWidget();
+    }
+  }
+}
+
+class _SiteDetailWidget extends ConsumerWidget {
+  WebSite? site;
+  _SiteDetailWidget({
+    this.site,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    site ??= ref.watch(selectWebSiteProvider);
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
           //バックボタン(leading)はハートボタンでお気に入り登録
           //バーはフレキシブルで最後にFOLLOWテキストボタン
           //スクロールした後のタイトルはサイトの名前
-          SliverAppBar(
-            backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
-            pinned: true,
-            expandedHeight: 100,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  //購読処理
-                  //feedlyではスライドしてフォルダを選択するがここはダイアログで選択する
-                },
-                child: const ColoredBox(
-                  color: Colors.green,
-                  child: Text('FOLLOW'),
-                ),
-              )
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              title: Row(
-                //スペーサーを指定して隙間を開けておく
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(site.name),
-                  IconButton(
-                    onPressed: () async {
-                      //お気に入り登録
+          return [
+            SliverAppBar(
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+              pinned: true,
+              expandedHeight: 100,
+              actions: [
+                Flexible(
+                  child: TextButton(
+                    onPressed: () {
+                      //購読処理
+                      //feedlyではスライドしてフォルダを選択するがここはダイアログで選択する
                     },
-                    icon: const Icon(Icons.favorite),
-                  )
-                ],
+                    child: Text(
+                      'FOLLOW',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
+                )
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                title: Row(
+                  //スペーサーを指定して隙間を開けておく
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(child: Container()),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            tooltip: 'Add Favorite',
+                            onPressed: () async {
+                              //お気に入り登録
+                            },
+                            icon: const Icon(Icons.favorite),
+                          ),
+                          Flexible(
+                            child: Text(
+                              site!.name,
+                              style: TextStyle(
+                                fontSize: getResponsiveValue(context),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                    )
+                  ],
+                ),
+                centerTitle: true,
               ),
-              centerTitle: true,
-            ),
-          ),
-          const SiteDetailFeedList(),
-        ],
+            )
+          ];
+        },
+        body: // ignore: prefer_const_constructors
+            SiteDetailFeedList(site: site!),
       ),
     );
   }

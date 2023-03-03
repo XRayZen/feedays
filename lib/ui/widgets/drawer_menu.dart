@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_bool_literals_in_conditional_expressions
 
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/mock/mock_util.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
@@ -146,7 +147,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           leading: const Icon(Icons.menu_book),
           title: const Text('Today'),
           onTap: () {
-            //PLAN:TodayPageに表示を切り替えてメニューを閉じる
+            //TodayPageに表示を切り替えてメニューを閉じる
             startPageScaffoldKey.currentState!.setState(() {
               ref.watch(barViewTypeProvider.notifier).state =
                   TabBarViewType.toDay;
@@ -159,11 +160,10 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           leading: const Icon(Icons.bookmark_border),
           title: const Text('Read Later'),
           onTap: () async {
-            final fakeFeeds = ref.watch(webUsecaseProvider);
+            final webUsecase = ref.watch(webUsecaseProvider);
             final mockValidSites = await genValidSite();
             //今はテスト用にリストを挿入している
-            fakeFeeds.userCfg.rssFeedSites.add(mockValidSites);
-            //BUG:サイトを選択してもビジネスロジック上のデータと同期していない
+            webUsecase.userCfg.rssFeedSites.add(mockValidSites);
             // セットステートでUIを再描画させる
             setState(() {});
           },

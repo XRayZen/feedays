@@ -15,14 +15,17 @@ class SiteListItem extends ConsumerWidget {
     //feedlyを似せる
     return GestureDetector(
       onTap: () async {
-        //フィードを取得してサイト詳細ページに遷移
-        //ビジネスロジック経由でフィードを取得
-        await selectSite(site, ref);
+        // ref.watch(selectWebSiteProvider.notifier).selectSite(site);
+        ref.watch(selectWebSiteProvider.notifier).state = site;
+        // ref.watch(siteFeedListViewTypePro.notifier).state =
+        //     SiteFeedListViewType.loading;
         await Navigator.push(
           context,
           MaterialPageRoute(
             // ignore: prefer_const_constructors
-            builder: (_) => SiteDetailPage(),
+            builder: (_) => SiteDetailPage(
+              site: site,
+            ),
           ),
         );
       },

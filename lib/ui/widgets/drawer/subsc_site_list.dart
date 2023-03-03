@@ -166,7 +166,8 @@ class _ReorderableTreeListViewState
         DragAndDropListExpansion(
           //この項目がドラッグ可能かどうか。並べ替えが可能な場合は true を設定します。固定でなければならない場合はfalseに設定します。
           canDrag: _isEditMode(ref.watch(isFeedsEditModeProvider)),
-          // initiallyExpanded: true,
+          //PLAN:開封状態をプロバイダー経由で保持する
+          initiallyExpanded: true,
           disableTopAndBottomBorders: false, //拡大時に上下に表示されるボーダーを無効化する。
           listKey: ObjectKey(node),
           title: Text(node.name),
@@ -175,6 +176,7 @@ class _ReorderableTreeListViewState
           //書き換えてもトグルスイッチの時にアニメコントローラーに指示しないと動かない
           // trailing: ExpansionTileCustomAnimeWidget(),
           onExpansionChanged: (bool value) {
+            //PLAN:開封状態をプロバイダーに伝える
             //コントローラーをステートプロバイダーにしてここで指示する
             //disposeでエラーが出る
             //NOTE:コントローラーの廃棄タイミングをこのウィジェットにする
@@ -191,14 +193,17 @@ class _ReorderableTreeListViewState
             //   }
             // });
           },
-          children: _buildTreeChildNode(node.children),
+          children: _buildTreeChildNode(node.children, ref),
         ),
       );
     }
     return widgets;
   }
 
-  List<DragAndDropItem> _buildTreeChildNode(List<WebSite> models) {
+  List<DragAndDropItem> _buildTreeChildNode(
+    List<WebSite> models,
+    WidgetRef ref,
+  ) {
     if (models.isEmpty) {
       return [];
     }
@@ -216,12 +221,13 @@ class _ReorderableTreeListViewState
           onTap: () async {
             //タップしたらWebSiteを選択してサイト詳細ページにタブバービューを変更する
             //ページ遷移ではない
+            ref.watch(selectWebSiteProvider.notifier).state = site;
             startPageScaffoldKey.currentState!.setState(() {
               ref.watch(barViewTypeProvider.notifier).state =
                   TabBarViewType.siteDetail;
             });
-            await selectSite(site, ref);
             startPageScaffoldKey.currentState!.closeDrawer();
+            setState(() {});
           },
         ),
       );

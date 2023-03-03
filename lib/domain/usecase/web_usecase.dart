@@ -139,12 +139,13 @@ class WebUsecase {
     //PLAN:後々永続化処理
   }
 
-  Future<void> fetchRssFeed(WebSite site) async {
-    userCfg.rssFeedSites.nowSelectFeeds.clear();
+  Future<WebSite> fetchRssFeed(WebSite site) async {
     final newSite = await rssFeedUsecase.refreshRss(site);
     if (newSite != null) {
       userCfg.rssFeedSites.replaceWebSites(site, newSite);
-      userCfg.rssFeedSites.nowSelectFeeds.addAll(newSite.feeds);
+      //PLAN:フィードはこの後に永続化処理を検討
+      return newSite;
     }
+    throw Exception('Not found WebSite');
   }
 }
