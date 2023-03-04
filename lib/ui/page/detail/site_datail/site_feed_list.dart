@@ -25,7 +25,12 @@ class SiteDetailFeedList extends ConsumerWidget {
         return ErrorIndicator(
           error: error,
           //再描画するだけでフィード取得処理が走るから問題ないか
-          onTryAgain: UiProvider.instanceO.beginRebuildSiteDetailPage,
+          // onTryAgain: UiProvider.instanceO.beginRebuildSiteDetailPage,
+          onTryAgain: () {
+            //今はリトライ処理はサイト選択プロバイダーで入れたほうが良いか
+            //しかし、それより、サイト選択プロバイダー監視の前に一つRetryProviderを設置して
+            //変化したら再描画させてリトライ処理を実現させる
+          },
         );
       },
       loading: () {

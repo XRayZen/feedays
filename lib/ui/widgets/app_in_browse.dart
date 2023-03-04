@@ -11,7 +11,7 @@ class AppInWebBrowse extends ConsumerStatefulWidget {
     super.key,
     required this.url,
   });
-  final Uri url;
+  final String url;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AppInWebBrowseState();
 }

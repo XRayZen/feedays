@@ -306,15 +306,15 @@ class FeedDetailBody extends StatelessWidget {
                     onPressed: () async {
                       //WebViewはモバイルしか対応していない
                       if (UniversalPlatform.isAndroid &&
-                          UniversalPlatform.isAndroid) {
+                          UniversalPlatform.isIOS) {
                         await launchWebUrl(
-                          Uri.parse(article.link),
+                          article.link,
                           context: context,
                           widget: this,
                         );
                       } else {
                         await launchWebUrl(
-                          Uri.parse(article.link),
+                          article.link,
                         );
                       }
                     },

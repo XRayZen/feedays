@@ -10,7 +10,7 @@ void main() {
     () async {
       final webRepo = WebRepoImpl();
       final usecase = RssFeedUsecase(webRepo: webRepo);
-      const uri = 'https://iphone-mania.jp';
+      const uri = 'http://jin115.com/';
       final res = await usecase.parseRss(uri);
       expect(res, isNotNull);
       expect(res!.feeds.length, isNonZero);

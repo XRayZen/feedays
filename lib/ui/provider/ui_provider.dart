@@ -23,7 +23,7 @@ class UiProvider {
 }
 
 Future<void> launchWebUrl(
-  Uri url, {
+  String url, {
   BuildContext? context,
   Widget? widget,
 }) async {
@@ -38,7 +38,7 @@ Future<void> launchWebUrl(
   } else {
     if (!await launchUrl(
       mode: LaunchMode.externalApplication,
-      url,
+      Uri.parse(url),
     )) {
       throw Exception('Could not launch $url');
     }
