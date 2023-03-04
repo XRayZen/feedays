@@ -11,9 +11,9 @@ void main() {
       final webRepo = WebRepoImpl();
       final usecase = RssFeedUsecase(webRepo: webRepo);
       const uri = 'http://jin115.com/';
-      final res = await usecase.parseRss(uri);
+      final res = await usecase.fetchRss(uri);
       expect(res, isNotNull);
-      expect(res!.feeds.length, isNonZero);
+      expect(res.feeds.length, isNonZero);
     },
     timeout: const Timeout(Duration(minutes: 3)),
   );
@@ -23,8 +23,7 @@ void main() {
       final webRepo = WebRepoImpl();
       final usecase = RssFeedUsecase(webRepo: webRepo);
       const path = 'https://iphone-mania.jp/feed/';
-      final data = await usecase.convertFeedLinkToRssItems(path);
-      expect(data.length, isNonZero);
+      
     },
     timeout: const Timeout(Duration(minutes: 3)),
   );

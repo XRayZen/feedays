@@ -6,7 +6,6 @@ import 'package:html/dom.dart';
 
 String parseImageThumbnail(Document doc) {
   // ヘッダー内のtitleタグの中身を取得
-  // final title = doc.head!.getElementsByTagName('title')[0].innerHtml;
   // ignore: unused_local_variable
   String _description;
   var imageLink = '';

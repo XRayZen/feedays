@@ -85,8 +85,8 @@ class WebUsecase {
         );
       } else {
         //なかったらRSS登録処理
-        final resParseRssSite = await rssFeedUsecase.parseRss(request.word);
-        if (resParseRssSite is WebSite) {
+        try {
+          final resParseRssSite = await rssFeedUsecase.fetchRss(request.word);
           //リザルトはサイトを返す
           //登録するかはUIで判断できるようにする
           return SearchResult(
@@ -97,11 +97,12 @@ class WebUsecase {
             websites: [resParseRssSite],
             articles: [],
           );
-        } else {
+        // ignore: avoid_catches_without_on_clauses
+        } catch (e) {
           //非RSSならクラウドフィード対応か問い合わせる
           //クラウドフィードとはアプリ内からではなくapi経由でフィードを取得する方法
           //クライアントは許容された範囲内でapiにリクエストしてフィードを取得できる
-          // TODO: implement requestCloudFeed
+          //TODO: implement requestCloudFeed
           throw UnimplementedError();
           //非対応ならUIでRefuseを通知する
         }

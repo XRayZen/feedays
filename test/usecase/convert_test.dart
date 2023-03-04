@@ -16,7 +16,7 @@ void main() {
       final webRepo = WebRepoImpl();
       final rssUsecase = RssFeedUsecase(webRepo: webRepo);
       const path = 'http://blog.esuteru.com/index.rdf';
-      final res = await rssUsecase.convertFeedLinkToRssItems(path);
+      final res = await rssUsecase.fetchRss(path);
       expect(res, isNotEmpty);
     },
     timeout: const Timeout(Duration(minutes: 3)),

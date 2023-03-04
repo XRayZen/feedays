@@ -30,13 +30,13 @@ class MockApiRepository extends BackendApiRepository {
     var rsscase = RssFeedUsecase(webRepo: webRepo);
     final word = request.word;
     final path = 'https://iphone-mania.jp/';
-    final resParseRssSite = await rsscase.parseRss(path);
+    final resParseRssSite = await rsscase.fetchRss(path);
     final fakeSearchResult = SearchResult(
       apiResponse: ApiResponseType.accept,
       responseMessage: 'fake :{$word}',
       resultType: SearchResultType.found,
       searchType: request.searchType,
-      websites: [resParseRssSite!],
+      websites: [resParseRssSite],
       articles: [],
     );
     return fakeSearchResult;

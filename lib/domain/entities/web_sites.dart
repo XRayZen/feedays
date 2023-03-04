@@ -231,5 +231,5 @@ class RssFeedImage {
     required this.image,
   });
   final String link;
-  final ByteData image;
+  final ByteData? image;
 }

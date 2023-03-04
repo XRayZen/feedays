@@ -22,19 +22,15 @@ class RssFeedUsecase {
 
   ///RSSを更新する
   Future<WebSite?> refreshRss(WebSite site) async {
-    var sites = site;
+    //新規サイトを取得
     if (site.rssUrl.isEmpty) {
-      final res = await parseRss(site.siteUrl);
-      if (res != null) {
-        res.newCount = res.feeds.length;
-        // ignore: join_return_with_assignment
-        sites = res;
-        return sites;
-      } else {
-        return null;
-      }
+      final res = await fetchRss(site.siteUrl);
+      res.newCount = res.feeds.length;
+      return res;
     }
-    final newFeedItems = await convertFeedLinkToRssItems(site.rssUrl);
+    //既存サイトを更新する
+    final newFeedItems =
+        await fetchRss(site.siteUrl).then((value) => value.feeds);
     if (site.feeds.isEmpty) {
       site.feeds.addAll(newFeedItems);
       site.newCount = newFeedItems.length;
@@ -62,23 +58,6 @@ class RssFeedUsecase {
     return site;
   }
 
-  ///WebSiteのRSSリンクを解析してRSSFeedで返す<br/>
-  ///無効ならnull
-  Future<WebSite?> parseRss(String url) async {
-    //下記URLでデータを取得できたら購読できる
-    final rssPath = await anyRssPath(url);
-    if (rssPath is String) {
-      // ignore: prefer_final_locals
-      var site = await webRepo.fetchSiteOgpMeta(url);
-      site
-        ..feeds = await convertFeedLinkToRssItems(rssPath)
-        ..rssUrl = rssPath;
-      return site;
-    } else {
-      return null;
-    }
-  }
-
   ///有効なRSSリンクを返す
   Future<String?> anyRssPath(String url) async {
     for (final element in addPaths) {
@@ -101,36 +80,53 @@ class RssFeedUsecase {
     return null;
   }
 
-  Future<List<RssFeedItem>> convertFeedLinkToRssItems(String url) async {
-    final data = await webRepo.fetchHttpByteData(url);
+  Future<WebSite> fetchRss(String siteUrl) async {
+    final rssPath = await anyRssPath(siteUrl);
+    if (rssPath == null) {
+      throw Exception('Not Found Rss URL: $siteUrl');
+    }
+    //サイト自体のイメージを取得する必要がある
+    final meta = await webRepo.fetchSiteOgpMeta(siteUrl);
+    final data = await webRepo.fetchHttpByteData(rssPath);
     final xml = utf8.decode(data.buffer.asUint8List());
     final rss = RssFeed.parse(xml);
-    final items = <RssFeedItem>[];
-    for (var i = 0; i < rss.items!.length; i++) {
-      final item = rss.items![i];
-      //サムネ画像を取得するためにリンクhtmlを読み込んでjpg画像リンクをパースして
-      //それのリンクを入れてUI時にダウンロードして表示する
-      final ogpLink = await webRepo.getOGPImageUrl(item.link!);
-      String imageLink;
-      if (item.content != null) {
-        imageLink = item.content!.images.first;
-      } else {
-        imageLink = ogpLink ?? '';
+    final items = List<RssFeedItem>.empty(growable: true);
+    if (rss.items != null && rss.items!.isNotEmpty) {
+      var index = 0;
+      for (final item in rss.items!) {
+        var imageLink = '';
+        if (item.content!.images.isNotEmpty) {
+          imageLink = item.content!.images.first;
+        } else {
+          //ここはHtmlを取得してパースしているから重い
+          imageLink = await webRepo.getOGPImageUrl(item.link!) ?? '';
+        }
+        items.add(
+          RssFeedItem(
+            index: index,
+            title: item.title ?? '',
+            description: item.description ?? '',
+            link: item.link ?? '',
+            image: RssFeedImage(link: imageLink, image:null),
+            site: rss.title ?? '',
+            category: rss.dc?.subject ?? '',
+            lastModified:
+                item.pubDate ?? item.dc?.date ?? DateTime.utc(2000, 1, 1, 1, 1),
+          ),
+        );
+        index++;
       }
-      items.add(
-        RssFeedItem(
-          index: i,
-          title: item.title ?? '',
-          description: item.description ?? '',
-          link: item.link ?? '',
-          image: RssFeedImage(link: imageLink, image: ByteData(0)),
-          site: rss.title ?? '',
-          category: rss.dc?.subject ?? '',
-          lastModified:
-              item.pubDate ?? item.dc?.date ?? DateTime.utc(2000, 1, 1, 1, 1),
-        ),
-      );
     }
-    return items;
+    return WebSite(
+      key: rss.link!,
+      name: rss.title!,
+      siteUrl: rss.link!,
+      iconLink: meta.iconLink,
+      rssUrl: rssPath,
+      category: '',
+      tags: [],
+      feeds: items,
+      description: rss.description ?? '',
+    );
   }
 }
