@@ -16,38 +16,59 @@ class SiteDetailFeedList extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selSite = ref.watch(selectSitePro(site));
-    return selSite.when(
-      data: (response) {
-        return _buildList(response.feeds, ref);
-      },
-      error: (error, stackTrace) {
-        return ErrorIndicator(
-          error: error,
-          //再描画するだけでフィード取得処理が走るから問題ないか
-          // onTryAgain: UiProvider.instanceO.beginRebuildSiteDetailPage,
-          onTryAgain: () {
-            //今はリトライ処理はサイト選択プロバイダーで入れたほうが良いか
-            //しかし、それより、サイト選択プロバイダー監視の前に一つRetryProviderを設置して
-            //変化したら再描画させてリトライ処理を実現させる
-          },
-        );
-      },
-      loading: () {
-        //PLAN:読み込み画面もこだわるべきか
-        return const CircularProgressIndicator();
-      },
-    );
+    //リトライ処理で処理が終わったらここから再描画させる
+    final retry = ref.watch(reTryRssFeedProvider);
+    if (retry.key != '' && retry.siteUrl == site.siteUrl) {
+      //リトライ処理での結果を反映
+      return _buildList(context, retry.feeds, ref);
+    } else {
+      final selSite = ref.watch(selectSitePro(site));
+      return selSite.when(
+        data: (response) {
+          return _buildList(context, response.feeds, ref);
+        },
+        error: (error, stackTrace) {
+          //エラーで既存があるのなら表示する
+          final res = ref
+              .watch(webUsecaseProvider)
+              .userCfg
+              .rssFeedSites
+              .searchSiteFeedList(site.siteUrl);
+          if (res != null) {
+            return _buildList(context, res, ref);
+          }
+          return ErrorIndicator(
+            error: error,
+            //再描画するだけでフィード取得処理が走るから問題ないか
+            // onTryAgain: UiProvider.instanceO.beginRebuildSiteDetailPage,
+            onTryAgain: () async {
+              //今はリトライ処理はサイト選択プロバイダーで入れたほうが良いか
+              //しかし、それより、サイト選択プロバイダー監視の前に一つRetryProviderを設置して
+              //変化したら再描画させてリトライ処理を実現させる
+              await ref
+                  .watch(reTryRssFeedProvider.notifier)
+                  .retry(context, site);
+            },
+          );
+        },
+        loading: () {
+          //PLAN:読み込み画面もこだわるべきか
+          return const CircularProgressIndicator();
+        },
+      );
+    }
   }
 
-  Widget _buildList(List<RssFeedItem> feeds, WidgetRef ref) {
+  Widget _buildList(
+    BuildContext context,
+    List<RssFeedItem> feeds,
+    WidgetRef ref,
+  ) {
     final modelList = convertModel(feeds);
-    //リストはリフレッシュでラップしてFeeditem
     return RefreshIndicator(
       onRefresh: () async {
-        await ref.watch(webUsecaseProvider).fetchRssFeed(site);
-        //再描画するだけでフィード取得処理が走るから問題ないか
-        UiProvider.instanceO.beginRebuildSiteDetailPage();
+        //リトライNotifierでリトライ処理して出来たらstateに入れてリストWidgetを更新
+        await ref.watch(reTryRssFeedProvider.notifier).retry(context, site);
       },
       child: CustomScrollView(
         slivers: [
@@ -77,7 +98,7 @@ class SiteDetailFeedList extends ConsumerWidget {
     if (list[index].text is String) {
       //区分けはカードの隙間にテキストを挟み込んで見る
       return Card(
-        margin: EdgeInsets.all(30),
+        margin: const EdgeInsets.all(30),
         child: Text(list[index].text!),
       );
     } else {

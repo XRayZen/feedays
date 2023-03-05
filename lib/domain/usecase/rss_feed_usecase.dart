@@ -95,7 +95,7 @@ class RssFeedUsecase {
       var index = 0;
       for (final item in rss.items!) {
         var imageLink = '';
-        if (item.content!.images.isNotEmpty) {
+        if (item.content!=null&&item.content!.images.isNotEmpty) {
           imageLink = item.content!.images.first;
         } else {
           //ここはHtmlを取得してパースしているから重い

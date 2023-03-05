@@ -172,51 +172,6 @@ class FeedDetailPage extends ConsumerWidget {
     );
   }
 
-  //画面配置に成功した例
-  GestureDetector rowStan(BuildContext context) {
-    return GestureDetector(
-      child: Row(
-        children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                // color: Colors.yellow,
-                margin: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.1,
-                ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Tap right edge'),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                child: const Center(child: Text('Tap center')),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                // color: Colors.yellow,
-                margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1,
-                ),
-                child: const Center(child: Text('Tap left edge')),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void nextPageNavigate(BuildContext context, {bool backOrNext = true}) {
     if (backOrNext) {
       //前の記事に遷移
@@ -269,6 +224,7 @@ class FeedDetailBody extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
+                // fontFamily: ,
               ),
             ),
             //その下に小さくサイト名/by {Domain}/記事日時
@@ -302,10 +258,10 @@ class FeedDetailBody extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(9),
                   child: ElevatedButton(
-                    //TODO:内部ブラウザでサイトを開く
+                    //内部ブラウザでサイトを開く
                     onPressed: () async {
                       //WebViewはモバイルしか対応していない
-                      if (UniversalPlatform.isAndroid &&
+                      if (UniversalPlatform.isAndroid ||
                           UniversalPlatform.isIOS) {
                         await launchWebUrl(
                           article.link,

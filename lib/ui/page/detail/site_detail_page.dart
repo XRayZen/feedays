@@ -2,6 +2,7 @@
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/site_datail/site_feed_list.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,6 +40,10 @@ class SiteDetailWidget extends ConsumerWidget {
     if (site?.siteUrl != selectSite.siteUrl) {
       site = selectSite;
     }
+    return _buildBody();
+  }
+
+  Scaffold _buildBody() {
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {

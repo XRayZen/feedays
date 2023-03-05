@@ -94,17 +94,26 @@ class RssWebSites {
       if (folders[i]
           .children
           .any((element) => element.siteUrl == oldSite.siteUrl)) {
-        folders[i]
-            .children
-            .removeWhere((element) => element.siteUrl == oldSite.siteUrl);
-        folders[i].children.add(newSite);
+        //置き換えずfeed他を更新するだけ
+        final siteIndex =
+            folders[i].children.indexWhere((e) => e.siteUrl == newSite.siteUrl);
+        oldSite
+          ..feeds = newSite.feeds
+          ..name = newSite.name;
+        folders[i].children[siteIndex] = oldSite;
+        folders[i].children.sort((a, b) => a.index.compareTo(b.index));
       }
     }
   }
 
   void add(List<WebSite> sites) {
+    var index = 1; //初期状態と区別するためにインデックスは１から
     for (final site in sites) {
-      _addSite(site, folderName: site.category);
+      if (site.index == 0) {
+        site.index = index;
+        _addSite(site, folderName: site.category);
+        index++;
+      }
     }
   }
 
@@ -141,6 +150,16 @@ class RssWebSites {
           folders.indexWhere((element) => element.name == site.category);
       folders[index].children.remove(site);
     }
+  }
+
+  List<RssFeedItem>? searchSiteFeedList(String siteUrl) {
+    if (anySiteOfURL(siteUrl)) {
+      final res = where((p) => p.siteUrl == siteUrl).first.feeds;
+      if (res.isNotEmpty) {
+        return res;
+      }
+    }
+    return null;
   }
 }
 
@@ -185,7 +204,7 @@ class WebSite {
   }
   int index;
   final String key;
-  final String name;
+  String name;
   final String siteUrl;
   String rssUrl;
   final ByteData? icon;
@@ -196,7 +215,7 @@ class WebSite {
   List<String> tags;
   List<RssFeedItem> feeds;
   bool fav;
-  final String description;
+  String description;
   bool isCloudFeed;
 }
 
