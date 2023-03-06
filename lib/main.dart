@@ -45,12 +45,13 @@ class MyApp extends StatelessWidget {
         // これがアプリケーションのテーマです。
         //PLAN:設定で切り替えられるようにする
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        // primarySwatch: Colors.amber,
+        primarySwatch: Colors.amber,
         brightness: Brightness.dark,
-        colorScheme: const ColorScheme.dark(
-          primary: Colors.amber,
-          secondary: Colors.white54,
-        ),
+        // colorScheme: const ColorScheme.dark(
+        //   primary: Colors.amber,
+        //   // secondary: Colors.white54,
+        // ),
+        fontFamily: 'Noto Sans JP',
         useMaterial3: true,
       ),
       // ignore: prefer_const_constructors
