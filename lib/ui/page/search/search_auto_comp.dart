@@ -1,5 +1,5 @@
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/page/search/search_recent_item.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +20,7 @@ class _SearchAutoCompState extends ConsumerState<SearchAutoComp> {
     final recentList = ref.watch(recentSearchesProvider);
     return Autocomplete<String>(
       key: const Key('AutoCompField'),
+      initialValue: TextEditingValue(text: ref.watch(searchTxtFieldProvider)),
       onSelected: (selectItem) {
         ref.watch(onTextFieldTapProvider.notifier).state = false;
         onSearch(

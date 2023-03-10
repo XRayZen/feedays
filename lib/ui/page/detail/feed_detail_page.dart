@@ -3,7 +3,7 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/detail/html_view.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
-import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';

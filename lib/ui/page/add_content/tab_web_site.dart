@@ -1,6 +1,7 @@
-import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/exploreWeb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,7 +22,7 @@ class TabWebSite extends ConsumerWidget {
           controller: con,
           onChanged: (value) {
             con.clear();
-            //FIXME:feedlyでは遷移ではなくタブバービューを変えている
+            //feedlyでは遷移ではなくタブバービューを変えている
             ref.watch(barViewTypeProvider.notifier).state =
                 TabBarViewType.searchView;
           },
@@ -49,6 +50,7 @@ class TabWebSite extends ConsumerWidget {
         ),
         //PLAN:カテゴリごとにおすすめが配置されている
         //NOTE:おすすめはクラウド上にリクエストして表示する必要があるがVer1では実装しない
+        ExploreWeb(con: con),
       ],
     );
   }

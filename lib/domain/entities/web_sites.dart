@@ -117,12 +117,12 @@ class RssWebSites {
     }
   }
 
-  void _addSite(WebSite site, {String? folderName}) {
+  void _addSite(WebSite site, {String folderName = ''}) {
     if (anySiteOfURL(site.siteUrl)) {
       return;
     }
     //フォルダ未指定ならUnCategorized
-    if (folderName == null) {
+    if (folderName == '') {
       if (folders.any((element) => element.name != 'UnCategorized') ||
           folders.isEmpty) {
         folders.add(WebSiteFolder(name: 'UnCategorized', children: [site]));
@@ -178,6 +178,7 @@ class WebSite {
     required this.key,
     required this.name,
     required this.siteUrl,
+    required this.siteName,
     this.rssUrl = '',
     this.icon,
     required this.iconLink,
@@ -195,6 +196,7 @@ class WebSite {
       key: key,
       name: name,
       siteUrl: key,
+      siteName: key,
       category: category,
       tags: List.empty(growable: true),
       feeds: List.empty(growable: true),
@@ -206,6 +208,7 @@ class WebSite {
   final String key;
   String name;
   final String siteUrl;
+  String siteName;
   String rssUrl;
   final ByteData? icon;
   final String iconLink;

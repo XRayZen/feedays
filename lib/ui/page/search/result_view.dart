@@ -1,5 +1,5 @@
 import 'package:feedays/ui/page/search/result_list.dart';
-import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -57,7 +57,6 @@ class ShadowWidget extends ConsumerWidget {
         duration: const Duration(milliseconds: 500),
         // アニメーションのカーブをイーズインアウトに指定
         curve: Curves.easeInOut,
-        // 青いコンテナを子ウィジェットとして指定
         child: Container(
           // width: 200,
           // height: 100,

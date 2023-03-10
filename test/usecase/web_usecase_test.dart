@@ -2,7 +2,6 @@ import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/domain/usecase/web_usecase.dart';
-import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +13,7 @@ void main() {
     final rssFeedUse = RssFeedUsecase(webRepo: webRepo);
     var webUse = WebUsecase(
       webRepo: webRepo,
-      backendApiRepo: apiRepo,
+      apiRepo: apiRepo,
       rssFeedUsecase: rssFeedUse,
       noticeError: (message) async {},
       onAddSite: (site) async {},

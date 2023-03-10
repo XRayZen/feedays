@@ -32,7 +32,7 @@ class ApiSearchRequest {
 
 enum SearchQueryType { url, word }
 
-enum SearchType { addContent, powerSearch }
+enum SearchType { addContent,exploreWeb, powerSearch }
 
 enum SearchResultType { found, none, error }
 

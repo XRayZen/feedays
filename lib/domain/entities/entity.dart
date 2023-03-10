@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/activity.dart';
+import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 
 import './app_config.dart';
@@ -14,6 +15,7 @@ class UserConfig {
   UserIdentInfo identInfo;
   UserAccountType accountType;
   List<String> searchHistory;
+  List<ExploreCategory> categories;
   UserConfig({
     required this.userName,
     required this.userID,
@@ -23,6 +25,7 @@ class UserConfig {
     required this.identInfo,
     required this.accountType,
     required this.searchHistory,
+    required this.categories,
   });
 
   factory UserConfig.defaultUserConfig() {
@@ -46,6 +49,7 @@ class UserConfig {
       ),
       accountType: UserAccountType.guest,
       searchHistory: [],
+      categories: [],
     );
   }
   void editRecentSearches(String text, {bool isAddOrRemove = true}) {

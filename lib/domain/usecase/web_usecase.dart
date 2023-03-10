@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
@@ -13,14 +14,14 @@ typedef ErrorMessageCallback = Future<void> Function(String message);
 
 class WebUsecase {
   final WebRepositoryInterface webRepo;
-  final BackendApiRepository backendApiRepo;
+  final BackendApiRepository apiRepo;
   final RssFeedUsecase rssFeedUsecase;
   Future<void> Function(String message) noticeError;
   Future<void> Function(WebSite site) onAddSite;
   UserConfig userCfg;
   WebUsecase({
     required this.webRepo,
-    required this.backendApiRepo,
+    required this.apiRepo,
     required this.rssFeedUsecase,
     required this.noticeError,
     required this.onAddSite,
@@ -97,7 +98,7 @@ class WebUsecase {
             websites: [resParseRssSite],
             articles: [],
           );
-        // ignore: avoid_catches_without_on_clauses
+          // ignore: avoid_catches_without_on_clauses
         } catch (e) {
           //非RSSならクラウドフィード対応か問い合わせる
           //クラウドフィードとはアプリ内からではなくapi経由でフィードを取得する方法
@@ -110,7 +111,7 @@ class WebUsecase {
     } else {
       //検索程度ならワードでも制限をかけないが将来的な可能性を考慮すると
       //クラウドリクエスト中間クラスで制限設定を参照しながらリクエスト可否を判定したい
-      final res = await backendApiRepo.searchWord(
+      final res = await apiRepo.searchWord(
         ApiSearchRequest(
           searchType: request.searchType,
           queryType: SearchQueryType.word,
@@ -148,5 +149,15 @@ class WebUsecase {
       return newSite;
     }
     throw Exception('Not found WebSite');
+  }
+
+  Future<List<ExploreCategory>> readCategories() async {
+    if (userCfg.categories.isEmpty) {
+      final cate = await apiRepo.getExploreCategories(userCfg.identInfo);
+      if (cate.isNotEmpty) {
+        return cate;
+      }
+    }
+    throw Exception('Not found category');
   }
 }

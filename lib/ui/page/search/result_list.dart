@@ -34,6 +34,10 @@ class _ResultSliverState extends ConsumerState<SearchResultList> {
           index: index,
           articles: res.articles,
         );
+      case SearchType.exploreWeb:
+        return SiteListItem(
+          site: res.websites[index],
+        );
     }
   }
 

@@ -5,7 +5,7 @@ import 'package:feedays/ui/page/add_content_page.dart';
 import 'package:feedays/ui/page/detail/site_detail_page.dart';
 import 'package:feedays/ui/page/power_search_page.dart';
 import 'package:feedays/ui/page/read_later.dart';
-import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/page/today_sliver_page.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';

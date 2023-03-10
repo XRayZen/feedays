@@ -1,4 +1,5 @@
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
@@ -7,7 +8,7 @@ import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/domain/usecase/web_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
-import 'package:feedays/ui/page/search_page.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/saerch_vm.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +40,7 @@ final webUsecaseProvider = Provider<WebUsecase>((ref) {
   }
   final webUsecase = WebUsecase(
     webRepo: webRepo,
-    backendApiRepo: apiRepo,
+    apiRepo: apiRepo,
     userCfg: userCOnfig,
     noticeError: noticeError,
     onAddSite: onAddSite,
@@ -92,6 +93,10 @@ final recentSearchesProvider = Provider<List<String>>((ref) {
       .watch(webUsecaseProvider.select((value) => value.userCfg.searchHistory));
   return use;
 });
+///サーチテキストフィールドに入れておく文章
+final searchTxtFieldProvider = StateProvider<String>((ref) {
+  return '';
+});
 
 final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
   final use = ref.watch(
@@ -100,9 +105,14 @@ final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
   return use;
 });
 
-
 final selectSitePro =
     FutureProvider.autoDispose.family<WebSite, WebSite>((ref, site) async {
-  final response= await ref.watch(webUsecaseProvider).fetchRssFeed(site);
+  final response = await ref.watch(webUsecaseProvider).fetchRssFeed(site);
   return response;
+});
+
+final readCategoriesProvider =
+    FutureProvider<List<ExploreCategory>>((ref) async {
+  final use = await ref.watch(webUsecaseProvider).readCategories();
+  return use;
 });

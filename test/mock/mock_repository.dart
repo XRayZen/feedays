@@ -2,6 +2,7 @@
 
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
@@ -51,6 +52,12 @@ class MockApiRepository extends BackendApiRepository {
   @override
   Future<WebSite?> requestCloudFeed(String url) {
     // TODO: implement requestCloudFeed
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ExploreCategory>> getExploreCategories(UserIdentInfo identInfo) {
+    // TODO: implement getExploreCategories
     throw UnimplementedError();
   }
 }

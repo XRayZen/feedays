@@ -48,7 +48,7 @@ dependencies:
   http: any
   html: any
   ogp_data_extract: any
-  metadata_fetch: any
+  metadata_fetch: ^0.4.1
   # flutter_widget_from_html: any
   flutter_html: any
   cached_network_image: ^3.2.3
