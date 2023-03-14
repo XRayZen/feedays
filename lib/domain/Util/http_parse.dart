@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
+import 'package:feedays/domain/Util/rss_util.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:html/dom.dart';
 import 'package:webfeed/domain/rss_feed.dart';
@@ -30,7 +31,10 @@ String parseImageThumbnail(Document doc) {
 enum RSSorAtom { rss, atom }
 
 String extractRSSLinkFromWebsite(
-    String siteName, Document doc, RSSorAtom rssType) {
+  String siteName,
+  Document doc,
+  RSSorAtom rssType,
+) {
   final links = doc.head!.getElementsByTagName('link');
   if (links.any((e) => e.attributes.containsKey('title'))) {
     final titles = links
@@ -94,7 +98,7 @@ WebSite parseDocumentToWebSite(
   Document doc,
 ) {
   final maps = <String, String>{};
-  //BUG:２バイト文字が文字化けしてしまう
+  //BUG:２バイト文字が文字化けしてしまう-> utf8で変換してみるが無駄か
   final metas = doc.head!.getElementsByTagName('meta');
   for (final meta in metas) {
     if (meta.attributes['property'] == 'og:site_name') {
@@ -114,6 +118,7 @@ WebSite parseDocumentToWebSite(
     }
   }
   final tag = maps['SiteUrl'];
+  //BUG:ここでバグが出ている
   return WebSite(
     key: maps['SiteUrl'] ?? siteUrl,
     name: maps['Title'] ?? '',
@@ -128,7 +133,10 @@ WebSite parseDocumentToWebSite(
 }
 
 Future<WebSite> parseRssToWebSiteMeta(
-    String url, WebSite meta, RssFeed feed) async {
+  String url,
+  WebSite meta,
+  RssFeed feed,
+) async {
   return WebSite(
     key: feed.link ?? '',
     name: meta.siteName,
@@ -137,7 +145,7 @@ Future<WebSite> parseRssToWebSiteMeta(
     iconLink: meta.iconLink,
     category: meta.category,
     tags: feed.itunes?.keywords ?? [],
-    feeds: [],
+    feeds: rssFeedConvert(feed),
     description: feed.description ?? '',
   );
 }

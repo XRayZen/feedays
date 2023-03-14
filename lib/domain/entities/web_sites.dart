@@ -238,7 +238,7 @@ class RssFeedItem {
   final String title;
   final String description;
   final String link;
-  final RssFeedImage image;
+  RssFeedImage image;
   final String site;
   final DateTime lastModified;
   bool isReedLate;

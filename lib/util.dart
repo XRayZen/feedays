@@ -1,3 +1,5 @@
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -63,5 +65,12 @@ List<String>? parseUrls(String word) {
     return null;
   } else {
     return urls;
+  }
+}
+
+
+void showDownloadProgress(received, total) {
+  if (total != -1) {
+    print((received / total * 100).toStringAsFixed(0) + '%');
   }
 }

@@ -265,6 +265,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.4"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      sha256: "2644a9e0965a7aa3deb09cb8ce4081db4450c178f472818c8cd34216a3070d7b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.2"
   drag_and_drop_lists:
     dependency: "direct main"
     description:

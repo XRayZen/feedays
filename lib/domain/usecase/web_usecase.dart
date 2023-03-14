@@ -66,6 +66,7 @@ class WebUsecase {
     userCfg.editRecentSearches(request.word);
     //ワードがURLかどうか判定する
     if (parseUrls(request.word) is List<String>) {
+      // URLなら
       //存在するか調べて返す
       final meta = await webRepo.fetchSiteOgpMeta(request.word);
       if (userCfg.rssFeedSites.anySiteOfURL(meta.siteUrl)) {
@@ -73,6 +74,18 @@ class WebUsecase {
         final oldSite = userCfg.rssFeedSites
             .where((site) => site.siteUrl == meta.siteUrl)
             .first;
+        //FIXME:もし、RSSがあるのならリプレースして返す
+        if (meta.feeds.isNotEmpty) {
+          userCfg.rssFeedSites.replaceWebSites(oldSite, meta);
+          return SearchResult(
+            apiResponse: ApiResponseType.accept,
+            responseMessage: '',
+            resultType: SearchResultType.found,
+            searchType: SearchType.addContent,
+            websites: [meta],
+            articles: [],
+          );
+        } 
         //置き換える
         final newSite = await rssFeedUsecase.refreshRss(oldSite);
         userCfg.rssFeedSites.replaceWebSites(oldSite, newSite!);

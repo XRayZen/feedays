@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:feedays/domain/Util/http_parse.dart';
+import 'package:feedays/domain/Util/rss_util.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:html/parser.dart' show parse;
@@ -69,7 +71,7 @@ class RssFeedUsecase {
   Future<RssFeed?> getRssFeed(String url) async {
     if (await webRepo.anyPath(url)) {
       try {
-        final data = await webRepo.fetchHttpByteData(url);
+        final data = await webRepo.fetchHttpByte(url);
         final rss = RssFeed.parse(utf8.decode(data.buffer.asUint8List()));
         if (rss.items != null) {
           return rss;
@@ -82,11 +84,11 @@ class RssFeedUsecase {
     //もしUTF8変換エラーならRawにして先にRSSFeedを取得してサイトメタを構成する
     var data = '';
     try {
-      data = await webRepo.fetchHttpString(url, false);
+      data = await webRepo.fetchHttpString(url, isUtf8: true);
     } on Exception catch (_) {
       //4Gamerなどの一部２バイト文字サイトはutf8変換出来ないからRSSからMetaを生成するしかない
       //flutterのhttp系パッケージは２バイト文字サイトにはほとんど使い物にならないゴミとなる
-      data = await webRepo.fetchHttpString(url, true);
+      data = await webRepo.fetchHttpString(url);
       final docBaseSiteMeta = parseDocumentToWebSite(url, parse(data));
       final rssUrl = extractRSSLinkFromWebsite(
         docBaseSiteMeta.siteName,
@@ -95,35 +97,34 @@ class RssFeedUsecase {
       );
       //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
       if (await webRepo.anyPath(url + rssUrl)) {
-        final rssData = await webRepo.fetchHttpByteData(url + rssUrl);
+        final rssData = await webRepo.fetchHttpByte(url + rssUrl);
         final rss = RssFeed.parse(utf8.decode(rssData.buffer.asUint8List()));
         if (rss.items != null) {
           return rss;
         }
       } else if (await webRepo.anyPath(rssUrl)) {
-        final rssData = await webRepo.fetchHttpByteData(rssUrl);
+        final rssData = await webRepo.fetchHttpByte(rssUrl);
         final rss = RssFeed.parse(utf8.decode(rssData.buffer.asUint8List()));
         if (rss.items != null) {
           return rss;
         }
       }
     }
-    final meta = await webRepo.fetchSiteOgpMeta(url);
-    if (meta.feeds.isNotEmpty) {
-      return meta;
-    }
     final docBaseSiteMeta = parseDocumentToWebSite(url, parse(data));
     final rssUrl = extractRSSLinkFromWebsite(
-        docBaseSiteMeta.siteName, parse(data), RSSorAtom.rss);
+      docBaseSiteMeta.siteName,
+      parse(data),
+      RSSorAtom.rss,
+    );
     //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
     if (!rssUrl.contains('://')) {
-      final rssData = await webRepo.fetchHttpByteData(url + rssUrl);
+      final rssData = await webRepo.fetchHttpByte(url + rssUrl);
       final rss = RssFeed.parse(utf8.decode(rssData.buffer.asUint8List()));
       if (rss.items != null) {
         return rss;
       }
     }
-    final rssData = await webRepo.fetchHttpByteData(rssUrl);
+    final rssData = await webRepo.fetchHttpByte(rssUrl);
     final rss = RssFeed.parse(utf8.decode(rssData.buffer.asUint8List()));
     if (rss.items != null) {
       return rss;
@@ -158,38 +159,39 @@ class RssFeedUsecase {
     return null;
   }
 
-  Future<WebSite> fetchRss(String siteUrl) async {
+  Future<WebSite> fetchRss(
+    String siteUrl, {
+    void Function(int count, int all)? progressCallBack,
+  }) async {
     final meta = await webRepo.fetchSiteOgpMeta(siteUrl);
+    if (meta.feeds.isNotEmpty) {
+      // 取得済みなら変換して返す
+      final items = meta.feeds;
+      for (var i = 0; i < items.length; i++) {
+        items[i].image = RssFeedImage(
+          //ここはHtmlを取得してパースしているから重い
+          link: await webRepo.getOGPImageUrl(items[i].link) ?? '',
+          image: ByteData(0),
+        );
+        if (progressCallBack !=null) {
+          progressCallBack(i, items.length);
+        }
+      }
+      meta.feeds = items;
+      return meta;
+    }
     final rssFeed = await getRssFeed(siteUrl);
     if (rssFeed == null) {
       throw Exception('Not Found Rss URL: $siteUrl');
     }
-    final items = List<RssFeedItem>.empty(growable: true);
-    if (rssFeed.items != null && rssFeed.items!.isNotEmpty) {
-      var index = 0;
-      for (final item in rssFeed.items!) {
-        var imageLink = '';
-        if (item.content != null && item.content!.images.isNotEmpty) {
-          imageLink = item.content!.images.first;
-        } else {
-          //ここはHtmlを取得してパースしているから重い
-          imageLink = await webRepo.getOGPImageUrl(item.link!) ?? '';
-        }
-        items.add(
-          RssFeedItem(
-            index: index,
-            title: item.title ?? '',
-            description: item.description ?? '',
-            link: item.link ?? '',
-            image: RssFeedImage(link: imageLink, image: null),
-            site: rssFeed.title ?? '',
-            category: rssFeed.dc?.subject ?? '',
-            lastModified:
-                item.pubDate ?? item.dc?.date ?? DateTime.utc(2000, 1, 1, 1, 1),
-          ),
-        );
-        index++;
-      }
+    //TODO:RSSFeedを変換部分はUtilに写す
+    final items = rssFeedConvert(rssFeed);
+    for (var i = 0; i < items.length; i++) {
+      items[i].image = RssFeedImage(
+        //ここはHtmlを取得してパースしているから重い
+        link: await webRepo.getOGPImageUrl(items[i].link) ?? '',
+        image: ByteData(0),
+      );
     }
     return WebSite(
       key: rssFeed.link!,
