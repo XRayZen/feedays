@@ -1,13 +1,13 @@
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RssFeedsNotifier extends StateNotifier<List<RssFeedItem>> {
+class RssFeedsNotifier extends StateNotifier<List<FeedItem>> {
   RssFeedsNotifier() : super([]);
-  void add(RssFeedItem feed) {
+  void add(FeedItem feed) {
     state = [...state, feed];
   }
 
-  void addList(List<RssFeedItem> sites) {
+  void addList(List<FeedItem> sites) {
     // ステート自体もイミュータブルなため、`state.add(item)`
     // のような操作はできません。
     // 代わりに、既存と新規を含む新しいリストを作成します。
@@ -20,7 +20,7 @@ class RssFeedsNotifier extends StateNotifier<List<RssFeedItem>> {
     // `state =` により必要なときに UI側 に通知が届き、ウィジェットが更新されます。
   }
 
-  void replace(List<RssFeedItem> sites) {
+  void replace(List<FeedItem> sites) {
     state.clear();
     state = sites;
   }
@@ -35,6 +35,6 @@ class RssFeedsNotifier extends StateNotifier<List<RssFeedItem>> {
 }
 
 final rssFeedsProvider =
-    StateNotifierProvider<RssFeedsNotifier, List<RssFeedItem>>((ref) {
+    StateNotifierProvider<RssFeedsNotifier, List<FeedItem>>((ref) {
   return RssFeedsNotifier();
 });

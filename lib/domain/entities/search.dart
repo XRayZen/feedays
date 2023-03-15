@@ -32,7 +32,7 @@ class ApiSearchRequest {
 
 enum SearchQueryType { url, word }
 
-enum SearchType { addContent,exploreWeb, powerSearch }
+enum SearchType { addContent, exploreWeb, powerSearch }
 
 enum SearchResultType { found, none, error }
 
@@ -46,7 +46,7 @@ class SearchResult {
   ///PowerSearchなら記事を返す
   SearchType searchType;
   final List<WebSite> websites;
-  List<RssFeedItem> articles;
+  List<FeedItem> articles;
   SearchResult({
     required this.apiResponse,
     required this.responseMessage,

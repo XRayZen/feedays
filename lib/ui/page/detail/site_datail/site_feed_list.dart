@@ -61,7 +61,7 @@ class SiteDetailFeedList extends ConsumerWidget {
 
   Widget _buildList(
     BuildContext context,
-    List<RssFeedItem> feeds,
+    List<FeedItem> feeds,
     WidgetRef ref,
   ) {
     final modelList = convertModel(feeds);
@@ -88,7 +88,7 @@ class SiteDetailFeedList extends ConsumerWidget {
   StatelessWidget _buildListItem(
     List<SiteDetailPageModel> list,
     int index,
-    List<RssFeedItem> feeds,
+    List<FeedItem> feeds,
   ) {
     //もしインデックスが範囲外ならno more Item
     if (list.length <= index) {
@@ -110,7 +110,7 @@ class SiteDetailFeedList extends ConsumerWidget {
   }
 
   ///リストに表示するためのモデルを生成する
-  List<SiteDetailPageModel> convertModel(List<RssFeedItem> items) {
+  List<SiteDetailPageModel> convertModel(List<FeedItem> items) {
     //Todayなどにフィードを分けるために一旦モデルに変換してから表示する
     final list = List<SiteDetailPageModel>.empty(growable: true);
     //時間が今日ならToday 昨日ならYesterday それ以降は日付
@@ -180,6 +180,6 @@ class SiteDetailPageModel {
   });
   final bool isSection;
   final String? text;
-  final RssFeedItem? item;
+  final FeedItem? item;
   final int? index;
 }

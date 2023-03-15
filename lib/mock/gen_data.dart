@@ -1,12 +1,11 @@
-
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter/services.dart';
 
-Future<List<RssFeedItem>> genFakeRssFeeds(int num, {int start = 0}) async {
-  final fakeFeeds = <RssFeedItem>[];
+Future<List<FeedItem>> genFakeRssFeeds(int num, {int start = 0}) async {
+  final fakeFeeds = <FeedItem>[];
   for (var i = 0; i < num; i++) {
     fakeFeeds.add(
-      RssFeedItem(
+      FeedItem(
         index: start,
         title: 'Fake Site:$start fake:{$i} ',
         description: 'Description:$start',

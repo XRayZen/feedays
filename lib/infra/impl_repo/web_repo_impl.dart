@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_catches_without_on_clauses
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -38,8 +40,6 @@ class WebRepoImpl extends WebRepositoryInterface {
     //明示的にUTF-8に変換を行うことで文字化けに対応
     try {
       final data = await fetchHttpByte(url);
-      // final toUtf8 = const Utf8Decoder().convert(data);
-      // final webSiteDoc = parse(await fetchHttpString(url, isUtf8: true));
       final toUtf8 = utf8.decode(data);
       final webSiteDoc = parse(toUtf8);
       return parseDocumentToWebSite(
@@ -58,7 +58,6 @@ class WebRepoImpl extends WebRepositoryInterface {
         rawDoc,
       );
       //次にRSSを取得してWebMetaを補完する
-      // 以降のフローはRSS取得不要
       final rssLink = extractRSSLinkFromWebsite(
         docMeta.siteName,
         rawDoc,
@@ -72,6 +71,7 @@ class WebRepoImpl extends WebRepositoryInterface {
         docMeta,
         rssFeed,
       );
+      // 以降のフローはRSS取得不要
       return rssWebMeta;
     }
   }
@@ -80,7 +80,6 @@ class WebRepoImpl extends WebRepositoryInterface {
   Future<Uint8List> fetchHttpByte(String url) async {
     final target = Uri.parse(url);
     // https://github.com/cfug/dio/blob/main/example/lib/download.dart
-    // final response = await http.get(target);
     final response = await Dio().getUri<Uint8List>(
       target,
       options: Options(
@@ -102,24 +101,49 @@ class WebRepoImpl extends WebRepositoryInterface {
       throw Exception('ERROR: ${response.statusCode}');
     }
     if (isUtf8) {
-      return utf8.decode(response.bodyBytes.buffer.asUint8List());
+      try {
+        return utf8.decode(response.bodyBytes.buffer.asUint8List());
+      } on Exception catch (_) {
+        return response.body;
+      }
     } else {
-      return response.body;
+      try {
+        return response.body;
+      } catch (e) {
+        return utf8.decode(
+          response.bodyBytes.buffer.asUint8List(),
+          allowMalformed: true,
+        );
+      }
     }
   }
 
   @override
   Future<String?> getOGPImageUrl(String url) async {
-    final data = await OgpDataExtract.execute(url);
-    final meta = await MetadataFetch.extract(url);
-    if (data == null || meta == null) {
-      return parseImageThumbnail(
-        parse(
-          await fetchHttpString(url),
-        ),
-      );
-    } else {
-      return data.image ?? meta.image;
+    try {
+      final data = await OgpDataExtract.execute(url);
+      final meta = await MetadataFetch.extract(url);
+      if (data == null || meta == null) {
+        try {
+          return parseImageThumbnail(
+            parse(
+              await fetchHttpString(url, isUtf8: true),
+            ),
+          );
+        } on Exception catch (_) {
+          final doc = await fetchHttpString(url);
+          return parseImageThumbnail(parse(doc));
+        }
+      } else {
+        return data.image ?? meta.image;
+      }
+    } catch (_) {
+      try {
+        final doc = await fetchHttpString(url);
+        return parseImageThumbnail(parse(doc));
+      } catch (_) {
+        return null;
+      }
     }
   }
 }

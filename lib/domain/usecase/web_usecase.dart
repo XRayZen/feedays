@@ -36,7 +36,7 @@ class WebUsecase {
     userCfg.searchHistory.add('http://blog.esuteru.com/');
   }
 
-  Future<List<RssFeedItem>?> fetchFeedDetail(
+  Future<List<FeedItem>?> fetchFeedDetail(
     WebSite site,
     int pageNum, {
     int pageSize = 10,
@@ -46,7 +46,7 @@ class WebUsecase {
       //TODO:レポジトリのモックを作る
     } else {
       final res = userCfg.rssFeedSites.pickupRssFeeds(site, pageNum, pageSize);
-      if (res is List<RssFeedItem>) {
+      if (res is List<FeedItem>) {
         //NOTE:詳細と言ってもxml取得時点で十分な情報を得ている
         //要求されたのが非RSSならバックエンドに要求しなければならない
         //アプリ自体にも非RSS取得機能をいくつか(ex:ロイターなどのニュースサイトスクレイピング)搭載する
@@ -85,7 +85,7 @@ class WebUsecase {
             websites: [meta],
             articles: [],
           );
-        } 
+        }
         //置き換える
         final newSite = await rssFeedUsecase.refreshRss(oldSite);
         userCfg.rssFeedSites.replaceWebSites(oldSite, newSite!);

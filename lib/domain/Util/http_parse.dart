@@ -2,6 +2,8 @@
 
 import 'package:feedays/domain/Util/rss_util.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
+import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
+import 'package:flutter/foundation.dart';
 import 'package:html/dom.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
@@ -72,7 +74,12 @@ String extractRSSLinkFromWebsite(
               maps.containsKey('RSS2.0') ||
               maps.containsKey('RSS1.0')) {
             return maps.entries
-                .where((element) => element.key == 'RSS')
+                .where(
+                  (element) =>
+                      element.key == 'RSS' ||
+                      element.key == 'RSS2.0' ||
+                      element.key == 'RSS1.0',
+                )
                 .first
                 .value;
           }
@@ -118,10 +125,9 @@ WebSite parseDocumentToWebSite(
     }
   }
   final tag = maps['SiteUrl'];
-  //BUG:ここでバグが出ている
   return WebSite(
     key: maps['SiteUrl'] ?? siteUrl,
-    name: maps['Title'] ?? '',
+    name: maps['SiteName'] ?? '',
     siteUrl: maps['SiteUrl'] ?? siteUrl,
     siteName: maps['SiteName'] ?? '',
     iconLink: maps['Image'] ?? '',
@@ -139,13 +145,33 @@ Future<WebSite> parseRssToWebSiteMeta(
 ) async {
   return WebSite(
     key: feed.link ?? '',
-    name: meta.siteName,
+    name: feed.title?? meta.name,
     siteUrl: feed.link ?? url,
-    siteName: meta.siteName,
+    siteName: feed.title?? meta.siteName,
     iconLink: meta.iconLink,
     category: meta.category,
     tags: feed.itunes?.keywords ?? [],
     feeds: rssFeedConvert(feed),
     description: feed.description ?? '',
   );
+}
+
+Future<List<FeedItem>> parseImageLink(
+  WebRepositoryInterface webRepo,
+  List<FeedItem> items, {
+  void Function(int count, int all, String msg)? progressCallBack,
+}) async {
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].image.link=='') {
+      items[i].image = RssFeedImage(
+        //ここはHtmlを取得してパースしているから重い
+        link: await webRepo.getOGPImageUrl(items[i].link) ?? '',
+        image: ByteData(0),
+      );
+    }
+    if (progressCallBack != null) {
+      progressCallBack(i, items.length, items[i].link);
+    }
+  }
+  return items;
 }

@@ -18,7 +18,7 @@ class FeedDetailPage extends ConsumerWidget {
     required this.index,
     required this.articles,
   });
-  final List<RssFeedItem> articles;
+  final List<FeedItem> articles;
   final int index;
 
   //スワイプするととなりのフィード詳細に遷移
@@ -207,7 +207,7 @@ class FeedDetailBody extends StatelessWidget {
     required this.page,
   });
 
-  final RssFeedItem article;
+  final FeedItem article;
   final FeedDetailPage page;
 
   @override

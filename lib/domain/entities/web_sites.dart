@@ -40,9 +40,9 @@ class RssWebSites {
   }
 
   ///リストから指定された上限と下限の件数を抜き出す
-  List<RssFeedItem>? pickupRssFeeds(WebSite site, int pageNum, int pageMax) {
+  List<FeedItem>? pickupRssFeeds(WebSite site, int pageNum, int pageMax) {
     if (anySiteOfURL(site.siteUrl)) {
-      final list = <RssFeedItem>[];
+      final list = <FeedItem>[];
       for (final element
           in where((element) => element.name == site.name).first.feeds) {
         if (element.index > pageNum) {
@@ -152,7 +152,7 @@ class RssWebSites {
     }
   }
 
-  List<RssFeedItem>? searchSiteFeedList(String siteUrl) {
+  List<FeedItem>? searchSiteFeedList(String siteUrl) {
     if (anySiteOfURL(siteUrl)) {
       final res = where((p) => p.siteUrl == siteUrl).first.feeds;
       if (res.isNotEmpty) {
@@ -184,7 +184,7 @@ class WebSite {
     required this.iconLink,
     this.newCount = 0,
     this.readLateCount = 0,
-    required this.category,
+    this.category='',
     required this.tags,
     required this.feeds,
     this.fav = false,
@@ -216,14 +216,14 @@ class WebSite {
   int readLateCount;
   String category;
   List<String> tags;
-  List<RssFeedItem> feeds;
+  List<FeedItem> feeds;
   bool fav;
   String description;
   bool isCloudFeed;
 }
 
-class RssFeedItem {
-  RssFeedItem({
+class FeedItem {
+  FeedItem({
     required this.index,
     required this.title,
     required this.description,
@@ -254,4 +254,19 @@ class RssFeedImage {
   });
   final String link;
   final ByteData? image;
+}
+
+class FeedObject {
+  List<FeedItem> items;
+  String title;
+  String link;
+  String description;
+  String category;
+  FeedObject({
+    required this.items,
+    required this.title,
+    required this.link,
+    required this.description,
+    required this.category,
+  });
 }

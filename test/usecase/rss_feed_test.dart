@@ -73,8 +73,9 @@ void main() {
       rssFeed,
     );
     print(RssWebMeta.description);
+    expect(RssWebMeta.key, 'https://www.4gamer.net/');
     // expect(
     //   RssWebMeta.description,
-    // );
+    // );https://www.4gamer.net/
   });
 }

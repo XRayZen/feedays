@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class RssFeedItemUI extends StatelessWidget {
   const RssFeedItemUI({super.key, required this.articles, required this.index});
-  final List<RssFeedItem> articles;
+  final List<FeedItem> articles;
   final int index;
 
   @override

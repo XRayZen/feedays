@@ -2,11 +2,11 @@ import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter/foundation.dart';
 
-List<RssFeedItem> genFakeRssFeeds(int num) {
-  final feeds = List<RssFeedItem>.empty(growable: true);
+List<FeedItem> genFakeRssFeeds(int num) {
+  final feeds = List<FeedItem>.empty(growable: true);
   for (var i = 0; i < num; i++) {
     feeds.add(
-      RssFeedItem(
+      FeedItem(
         index: i,
         title: 'fake:{$i}',
         description: 'fake description',
