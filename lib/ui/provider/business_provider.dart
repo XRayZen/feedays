@@ -93,6 +93,7 @@ final recentSearchesProvider = Provider<List<String>>((ref) {
       .watch(webUsecaseProvider.select((value) => value.userCfg.searchHistory));
   return use;
 });
+
 ///サーチテキストフィールドに入れておく文章
 final searchTxtFieldProvider = StateProvider<String>((ref) {
   return '';
@@ -116,3 +117,20 @@ final readCategoriesProvider =
   final use = await ref.watch(webUsecaseProvider).readCategories();
   return use;
 });
+
+final readRssFolderProvider = Provider<List<WebSiteFolder>>((ref) {
+  final res = ref
+      .watch(webUsecaseProvider.select((v) => v.userCfg.rssFeedSites.folders));
+  return res;
+});
+
+bool anySiteOfRssFolders(String folderName, String siteUrl, WidgetRef ref) {
+  final list = ref.watch(readRssFolderProvider);
+  if (list.any((e) => e.name == folderName)) {
+    final hoge = list.where((element) => element.name == folderName).first;
+    if (hoge.children.any((element) => element.siteUrl == siteUrl)) {
+      return true;
+    }
+  }
+  return false;
+}

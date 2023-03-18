@@ -67,6 +67,8 @@ String extractRSSLinkFromWebsite(
     if (maps.containsKey(siteName)) {
       return maps.entries.first.value;
     }
+    //TODO:リファクタリング候補 : RSSかAtomを判定する
+
     switch (rssType) {
       case RSSorAtom.rss:
         {

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+// Import for iOS features.
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class AppInWebBrowse extends ConsumerStatefulWidget {
   const AppInWebBrowse({
@@ -34,6 +36,8 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
 
     if (UniversalPlatform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
+    } else if (UniversalPlatform.isIOS) {
+      WebView.platform = CupertinoWebView();
     }
   }
 
@@ -69,16 +73,13 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
         children: [
           _isLoading
               ? Stack(
+                  alignment: Alignment.topCenter,
                   children: [
                     LinearProgressIndicator(
                       value: _downloadProgress,
                     ),
-                    Center(
-                      child: Flexible(
-                        child: Text(
-                          'Web site is loading... (Progress : $_progress%)',
-                        ),
-                      ),
+                    Text(
+                      'Web site is loading... (Progress : $_progress%)',
                     )
                   ],
                 )

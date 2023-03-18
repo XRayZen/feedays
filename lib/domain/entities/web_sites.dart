@@ -108,12 +108,13 @@ class RssWebSites {
 
   void add(List<WebSite> sites) {
     var index = 1; //初期状態と区別するためにインデックスは１から
+    //PLAN:インデックスを付ける意味があるのか
     for (final site in sites) {
-      if (site.index == 0) {
-        site.index = index;
-        _addSite(site, folderName: site.category);
-        index++;
-      }
+      site.index = index;
+      _addSite(site, folderName: site.category);
+      index++;
+      // if (site.index == 0) {
+      // }
     }
   }
 
@@ -184,7 +185,7 @@ class WebSite {
     required this.iconLink,
     this.newCount = 0,
     this.readLateCount = 0,
-    this.category='',
+    this.category = '',
     required this.tags,
     required this.feeds,
     this.fav = false,

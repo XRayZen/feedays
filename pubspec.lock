@@ -340,13 +340,69 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_html:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_html
-      sha256: ccb810fcabfce3a7ffaca46e458323915ac7e7fc59082c7357ff848972c02230
+      sha256: "342c7908f0a67bcec62b6e0f7cf23e23bafe7f64693665dd35be98d5e783bdfd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "3.0.0-alpha.6"
+  flutter_html_all:
+    dependency: "direct main"
+    description:
+      name: flutter_html_all
+      sha256: d44d534df3689bbd6b1c8b5ccdc96dd3c294f92f3720cb41b4a0f8602d2e2b05
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.6"
+  flutter_html_audio:
+    dependency: transitive
+    description:
+      name: flutter_html_audio
+      sha256: c6abcf11316d81bd6f7dcb91e871e875be53d2373552f1fb1810c7ddbc7afd77
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.4"
+  flutter_html_iframe:
+    dependency: transitive
+    description:
+      name: flutter_html_iframe
+      sha256: "6a731015741a1129dca5d19bc4ff564a26e99111d8fe6a8f6f05ff142243d34f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.4"
+  flutter_html_math:
+    dependency: transitive
+    description:
+      name: flutter_html_math
+      sha256: b5ad41d5980effcf9841b855fd34080583feff4a8e45a379c8a2f00836ba3184
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.4"
+  flutter_html_svg:
+    dependency: transitive
+    description:
+      name: flutter_html_svg
+      sha256: "49f1bdbe2bfcfb684fe21295397cc82a281ab6293e9e9205a04eab5035b8612d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.4"
+  flutter_html_table:
+    dependency: transitive
+    description:
+      name: flutter_html_table
+      sha256: b01c4867466740e8c177459f241e66ad67d4e7f6a081649ba1f035e925bbefa5
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.4"
+  flutter_html_video:
+    dependency: transitive
+    description:
+      name: flutter_html_video
+      sha256: fc1542dbaa48fd5b38f9f6d0f8d9cec5fd251744b699277841cf9c9ea2e02976
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0-alpha.5"
   flutter_layout_grid:
     dependency: transitive
     description:
@@ -372,10 +428,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_math_fork
-      sha256: a34205227e1a1d040a56e74a5e2e56e9397ea930540a9373bd0b3e2e4f122017
+      sha256: fa511bdcb91fc35eac155ec5790883886dd9de6572fea549f1ad4660ef6804e9
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.3+1"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -388,10 +444,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_svg
-      sha256: cbf529d563dd910a249041bde2a0dfc3cf62280fcc459b85f3d614b2ab73abb3
+      sha256: c9bb2757b8a0bbf8e45f4069a90d2b9dbafc80b1a5e28d43e29088be533e6df4
       url: "https://pub.dev"
     source: hosted
-    version: "0.23.0+1"
+    version: "1.0.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -616,10 +672,10 @@ packages:
     dependency: transitive
     description:
       name: numerus
-      sha256: "0087ef729d63b96cb347a9c44b9c592f21cecb3605b415bbd18710aef80ce5cb"
+      sha256: "436759d84f233b40107d0cc31cfa92d24e0960afeb2e506be70926d4cddffd9e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "2.0.0"
   octo_image:
     dependency: transitive
     description:
@@ -664,18 +720,18 @@ packages:
     dependency: transitive
     description:
       name: path_drawing
-      sha256: "3bdd251dae9ffaef944450b73f168610db7e968e7b20daf0c3907f8b4aafc8a2"
+      sha256: bbb1934c0cbb03091af082a6389ca2080345291ef07a5fa6d6e078ba8682f977
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1+1"
+    version: "1.0.1"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
-      sha256: ee5c47c1058ad66b4a41746ec3996af9593d0858872807bcd64ac118f0700337
+      sha256: e3e67b1629e6f7e8100b367d3db6ba6af4b1f0bb80f64db18ef1fbabd2fa9ccf
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "1.0.1"
   path_provider:
     dependency: transitive
     description:

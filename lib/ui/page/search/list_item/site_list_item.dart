@@ -3,6 +3,7 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/site_detail_page.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/dialog/subsc_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -80,10 +81,9 @@ class SiteListItem extends ConsumerWidget {
                     //追加アイコン・ボタン
                     IconButton(
                       onPressed: () {
-                        //サイト登録処理
-                        //feedlyならSelect Folderが横からスライドしてきて入れるフォルダを選択できる
-                        //それ以外をタップしたらスライドしてもとに戻る
-                        ref.watch(webUsecaseProvider).registerRssSite(site);
+                        showSubscriptionDialog(context, site,ref);
+                        // CustomDialog(context).showCustomDialog();
+
                       },
                       icon: const Icon(Icons.add),
                     )

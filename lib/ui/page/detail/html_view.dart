@@ -8,6 +8,7 @@ class HtmlWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Html(
+      shrinkWrap: true,
       data: data,
       style: {
         'body': Style(
@@ -16,7 +17,7 @@ class HtmlWidget extends StatelessWidget {
               context,
               defaultValue: 15,
               mobileValue: 18,
-              tabletValue: 14,
+              tabletValue: 24,
             ),
           ),
         )

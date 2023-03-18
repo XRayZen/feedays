@@ -9,7 +9,6 @@ import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class FeedDetailPage extends ConsumerWidget {
@@ -91,16 +90,8 @@ class FeedDetailPage extends ConsumerWidget {
           },
           body: CustomScrollView(
             slivers: [
-              SliverStack(
-                children: [
-                  //記事オブジェクト
-                  //フィード詳細は中央に配置
-                  SliverToBoxAdapter(
-                    child: FeedDetailBody(article: article, page: this),
-                  ),
-                  //画面全体として縦長に3つのGestureDetectorを置き画面左右のタップ操作を検知
-                  // leftRightTapDetect(context)
-                ],
+              SliverToBoxAdapter(
+                child: FeedDetailBody(article: article, page: this),  
               ),
             ],
           ),

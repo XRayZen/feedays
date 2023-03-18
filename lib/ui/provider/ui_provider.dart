@@ -69,3 +69,6 @@ Future<void> launchWebUrl(
   }
 }
 
+final addedSiteProvider = StateProvider<int>((ref) {
+  return 0;
+});

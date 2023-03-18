@@ -154,6 +154,10 @@ class WebUsecase {
     //PLAN:後々永続化処理
   }
 
+  void removeRssSite(WebSite site) {
+    userCfg.rssFeedSites.deleteSite(site);
+  }
+
   Future<WebSite> fetchRssFeed(WebSite site) async {
     final newSite = await rssFeedUsecase.refreshRss(site);
     if (newSite != null) {
