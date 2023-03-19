@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, inference_failure_on_function_invocation
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
@@ -18,19 +18,23 @@ class SubscriptionSiteDialog extends ConsumerWidget {
     // アラートダイアログでフォルダーを読み込んで動的に生成して選ぶか新たに追加することができる
     // シンプルダイアログは静的なコンテンツの表示に適している
     final list = ref.watch(readRssFolderProvider);
+    // ignore: unused_local_variable
+    final count = ref.watch(addedSiteProvider);
+    final scrollCtrl = ScrollController();
     return Column(
       children: [
         //フォルダー・カテゴリーを追加
         TextButton(
           onPressed: () {
             //さらに入力を促すダイアログを表示してカテゴリー名を入れてフォルダに追加する
+            inputCategoryNameDialog(context, ref);
           },
           child: const Text('Add Categories'),
         ),
-        const Divider(),
+        const Divider(thickness: 10),
         //フォルダーをリストで表示
-        //BUG:表示されないエラーは https://qiita.com/NishiKeiqiita/items/15035fa16e3eb6bfd9aa で解決
-        //ダイアログには静的なサイズが必要
+        //表示されないエラーは https://qiita.com/NishiKeiqiita/items/15035fa16e3eb6bfd9aa で解決
+        //ダイアログにはサイズ指定が必要
         SizedBox(
           width: 400,
           height: 200,
@@ -38,31 +42,24 @@ class SubscriptionSiteDialog extends ConsumerWidget {
           //https://www.kamo-it.org/blog/flutter-scrollbar/
           child: Scrollbar(
             thumbVisibility: true,
+            controller: scrollCtrl,
             child: ListView.separated(
+              controller: scrollCtrl,
               shrinkWrap: true,
               itemCount: list.length,
               separatorBuilder: (context, index) {
-                return const Divider();
+                return const Divider(
+                  thickness: 1,
+                );
               },
               itemBuilder: (context, index) {
                 return ListTile(
+                  onLongPress: () {
+                    //削除するか尋ねるダイアログ
+                    deleteCategoryDialog(context, list, index, ref);
+                  },
                   onTap: () {
-                    //タップしたら登録・削除処理
-                    //フォルダにサイトが無かったら登録してあったら削除する
-                    //サイト登録処理
-                    //feedlyならSelect Folderが横からスライドしてきて入れるフォルダを選択できる
-                    //それ以外をタップしたらスライドしてもとに戻る
-                    if (anySiteOfRssFolders(
-                      list[index].name,
-                      site.siteUrl,
-                      ref,
-                    )) {
-                      ref.watch(webUsecaseProvider).removeRssSite(site);
-                    } else {
-                      final editSite = site..category = list[index].name;
-                      ref.watch(webUsecaseProvider).registerRssSite(editSite);
-                    }
-                    ref.watch(addedSiteProvider.notifier).state += 1;
+                    siteAddOrDelete(list, index, ref);
                   },
                   title: Text(list[index].name),
                   //そのフォルダにサイトが存在していたら表示する
@@ -75,9 +72,122 @@ class SubscriptionSiteDialog extends ConsumerWidget {
             ),
           ),
         ),
-        const Divider()
+        const Divider(
+          thickness: 10,
+        )
       ],
     );
+  }
+
+  void deleteCategoryDialog(
+    BuildContext context,
+    List<WebSiteFolder> list,
+    int index,
+    WidgetRef ref,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final deleteName = list[index].name;
+        return AlertDialog(
+          title: Text('Category:( $deleteName ) to be delete?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                //指定したフォルダー・カテゴリーを削除する
+                ref
+                    .watch(webUsecaseProvider)
+                    .userCfg
+                    .rssFeedSites
+                    .deleteFolder(deleteName);
+                ref.watch(addedSiteProvider.notifier).state += 1;
+                Navigator.pop(context, true);
+              },
+              child: const Text('OK'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void inputCategoryNameDialog(BuildContext context, WidgetRef ref) {
+    //さらに入力を促すダイアログを表示してカテゴリー名を入れてフォルダに追加する
+    var text = '';
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Input Category Name'),
+          content: TextField(
+            onChanged: (value) {
+              //プロバイダーに保存
+              text = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                //フォルダー・カテゴリー名でカテゴリーを追加
+                if (text != '') {
+                  ref
+                      .watch(webUsecaseProvider)
+                      .userCfg
+                      .rssFeedSites
+                      .addFolder(text);
+                  //ステートレスだとSetStateが使えないからプロバイダーを使って更新
+                  ref.watch(addedSiteProvider.notifier).state += 1;
+                }
+                Navigator.pop(context, true);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void siteAddOrDelete(List<WebSiteFolder> list, int index, WidgetRef ref) {
+    //タップしたら登録・削除処理
+    //フォルダにサイトが無かったら登録してあったら削除する
+    //サイト登録処理
+    //feedlyならSelect Folderが横からスライドしてきて入れるフォルダを選択できる
+    //それ以外をタップしたらスライドしてもとに戻る
+    if (anySiteOfRssFolders(
+      list[index].name,
+      site.siteUrl,
+      ref,
+    )) {
+      ref.watch(webUsecaseProvider).removeRssSite(list[index].name, site);
+    } else {
+      //ここでサイトを変更すると大元のサイトも変更されてしまうからコピーしてから変更する
+      final newEditSite = WebSite(
+        key: site.key,
+        name: site.name,
+        siteUrl: site.siteUrl,
+        siteName: site.siteName,
+        iconLink: site.iconLink,
+        tags: site.tags,
+        feeds: site.feeds,
+        description: site.description,
+      )
+        ..index = site.index
+        ..category = list[index].name
+        ..rssUrl = site.rssUrl
+        ..newCount = site.newCount
+        ..readLateCount = site.readLateCount
+        ..fav = site.fav
+        ..isCloudFeed = site.isCloudFeed;
+      ref.watch(webUsecaseProvider).registerRssSite(newEditSite);
+    }
+    ref.watch(addedSiteProvider.notifier).state += 1;
   }
 }
 
@@ -97,6 +207,7 @@ class AddedSite extends ConsumerWidget {
     final count = ref.watch(addedSiteProvider);
     return Visibility(
       visible: anySiteOfRssFolders(list[folderIndex].name, site.siteUrl, ref),
+      //ダイアログにはサイズ指定が必要
       child: SizedBox(
         height: 50,
         width: 90,
@@ -117,7 +228,7 @@ class AddedSite extends ConsumerWidget {
   }
 }
 
-Future showSubscriptionDialog(
+Future<void> showSubscriptionDialog(
   BuildContext context,
   WebSite site,
   WidgetRef ref,
@@ -129,25 +240,16 @@ Future showSubscriptionDialog(
         // 背景色を半透明に変更。
         backgroundColor: Theme.of(context).primaryColor.withOpacity(0.64),
         title: const Text('Add Subscription Site'),
-        //BUG:表示されないエラーは https://qiita.com/NishiKeiqiita/items/15035fa16e3eb6bfd9aa で解決
+        //NOTE:表示されないエラーは https://qiita.com/NishiKeiqiita/items/15035fa16e3eb6bfd9aa で解決
         content:
             SingleChildScrollView(child: SubscriptionSiteDialog(site: site)),
-        //OK Cancel Button
         actions: [
           //OK
           TextButton(
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: const Text('はい'),
-          ),
-          //Cancel
-          TextButton(
-            onPressed: () => {
-              //  (5) ダイアログを閉じる
-              Navigator.pop(context, false)
-            },
-            child: const Text('いいえ'),
+            child: const Text('Close'),
           ),
         ],
       );

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:typed_data';
 
-///フィード・サイトリストの操作を集中して実装する
+///フィード・サイトリストへの操作を集中して実装する
 class RssWebSites {
   List<WebSiteFolder> folders;
   RssWebSites({
@@ -107,21 +107,12 @@ class RssWebSites {
   }
 
   void add(List<WebSite> sites) {
-    var index = 1; //初期状態と区別するためにインデックスは１から
-    //PLAN:インデックスを付ける意味があるのか
     for (final site in sites) {
-      site.index = index;
       _addSite(site, folderName: site.category);
-      index++;
-      // if (site.index == 0) {
-      // }
     }
   }
 
   void _addSite(WebSite site, {String folderName = ''}) {
-    if (anySiteOfURL(site.siteUrl)) {
-      return;
-    }
     //フォルダ未指定ならUnCategorized
     if (folderName == '') {
       if (folders.any((element) => element.name != 'UnCategorized') ||
@@ -136,20 +127,27 @@ class RssWebSites {
     //指定なら入れる 新規フォルダなら追加
     else {
       if (folders.any((element) => element.name == folderName)) {
-        final index =
+        final folderIndex =
             folders.indexWhere((element) => element.name == folderName);
-        folders[index].children.add(site);
+        folders[folderIndex].children.add(site);
+        // ここでインデックスを付ける
+        final siteIndex = folders[folderIndex]
+            .children
+            .indexWhere((element) => element.siteUrl == site.siteUrl);
+        folders[folderIndex].children[siteIndex].index = siteIndex;
       } else {
         folders.add(WebSiteFolder(name: folderName, children: [site]));
       }
     }
   }
 
-  void deleteSite(WebSite site) {
+  void deleteSite(String deleteCategory, WebSite site) {
     if (anySiteOfURL(site.siteUrl)) {
       final index =
-          folders.indexWhere((element) => element.name == site.category);
-      folders[index].children.remove(site);
+          folders.indexWhere((element) => element.name == deleteCategory);
+      folders[index]
+          .children
+          .removeWhere((element) => element.siteUrl == site.siteUrl);
     }
   }
 
@@ -161,6 +159,14 @@ class RssWebSites {
       }
     }
     return null;
+  }
+
+  void addFolder(String folderName) {
+    folders.add(WebSiteFolder(name: folderName, children: []));
+  }
+
+  void deleteFolder(String folderName) {
+    folders.removeWhere((element) => element.name == folderName);
   }
 }
 
