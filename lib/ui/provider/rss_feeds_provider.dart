@@ -38,3 +38,7 @@ final rssFeedsProvider =
     StateNotifierProvider<RssFeedsNotifier, List<FeedItem>>((ref) {
   return RssFeedsNotifier();
 });
+
+final favSitesProvider = Provider<List<WebSite>>((ref) {
+  return List.empty(growable: true);
+});
