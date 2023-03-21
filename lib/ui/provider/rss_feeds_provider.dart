@@ -39,6 +39,7 @@ final rssFeedsProvider =
   return RssFeedsNotifier();
 });
 
+//PLAN: お気に入りサイトリストはビジネスロジックにいずれ入れておく
 final favSitesProvider = Provider<List<WebSite>>((ref) {
   return List.empty(growable: true);
 });

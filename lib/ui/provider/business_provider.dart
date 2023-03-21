@@ -127,8 +127,8 @@ final readRssFolderProvider = Provider<List<WebSiteFolder>>((ref) {
 bool anySiteOfRssFolders(String folderName, String siteUrl, WidgetRef ref) {
   final list = ref.watch(readRssFolderProvider);
   if (list.any((e) => e.name == folderName)) {
-    final hoge = list.where((element) => element.name == folderName).first;
-    if (hoge.children.any((element) => element.siteUrl == siteUrl)) {
+    final folder = list.where((element) => element.name == folderName).first;
+    if (folder.children.any((element) => element.siteUrl == siteUrl)) {
       return true;
     }
   }
