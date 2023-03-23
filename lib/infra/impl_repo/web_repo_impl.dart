@@ -1,13 +1,12 @@
 // ignore_for_file: avoid_catches_without_on_clauses
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:feedays/domain/Util/http_parse.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
+import 'package:feedays/infra/datasources/http_parse.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 import 'package:metadata_fetch/metadata_fetch.dart';
@@ -16,9 +15,54 @@ import 'package:webfeed/webfeed.dart';
 
 class WebRepoImpl extends WebRepositoryInterface {
   @override
-  Future<WebSite> getFeeds(WebSite site) {
-    // TODO: implement getFeeds
-    throw UnimplementedError();
+  Future<WebSite> getFeeds(
+    String url, {
+    void Function(int count, int all, String msg)? progressCallBack,
+  }) async {
+    //インフラ層ではRepo->サイトURLでメタ・RSSを取得変換して例外有りで返す
+    final meta = await fetchSiteOgpMeta(url);
+    // 取得済みなら変換して返す
+    if (meta.feeds.isNotEmpty) {
+      meta.feeds = await parseImageLink(
+        this,
+        meta.feeds,
+        progressCallBack: progressCallBack,
+      );
+      return meta;
+    }
+    final rssFeed = await getRssFeed(this, url);
+    if (rssFeed == null) {
+      throw Exception('Not Found Rss URL: $url');
+    }
+    return WebSite(
+      key: rssFeed.link,
+      name: rssFeed.title,
+      siteUrl: meta.siteUrl,
+      siteName: meta.siteName,
+      iconLink: meta.iconLink,
+      rssUrl: rssFeed.link,
+      tags: [],
+      feeds: await parseImageLink(
+        this,
+        rssFeed.items,
+        progressCallBack: progressCallBack,
+      ),
+      description: rssFeed.description,
+    );
+  }
+  
+  @override
+  Future<WebSite> refreshRss(
+    WebSite site, {
+    void Function(int count, int all, String msg)? progressCallBack,
+  }) async {
+    //RSS取得変換して既存を比較して新しいのをカウントインサートして例外有りで返す
+    final res = await refreshRssConvert(this, site);
+    if (res == null) {
+      throw Exception('ERROR Refresh Rss');
+    } else {
+      return res;
+    }
   }
 
   @override
@@ -33,10 +77,11 @@ class WebRepoImpl extends WebRepositoryInterface {
     }
   }
 
+
   @override
   Future<WebSite> fetchSiteOgpMeta(String url) async {
     //これらの関数はポンコツすぎてほとんど使い物にならないから
-    //TODO:utilにサイトメタを分析する関数を手動で実装する
+    //utilにサイトメタを分析する関数を手動で実装する
     //明示的にUTF-8に変換を行うことで文字化けに対応
     try {
       final data = await fetchHttpByte(url);
@@ -46,7 +91,7 @@ class WebRepoImpl extends WebRepositoryInterface {
         url,
         webSiteDoc,
       );
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       //utf8に変換出来ないサイトなら
       //documentベースのメタを取得して次にRSSを取得してメタを再構成する
       //RSSを取得しているからRss_UtilでRssFeedからFeedListを生成して処理が無駄になるのを防ぐ
@@ -146,4 +191,6 @@ class WebRepoImpl extends WebRepositoryInterface {
       }
     }
   }
+
+
 }

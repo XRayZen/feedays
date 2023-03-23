@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:feedays/domain/Util/http_parse.dart';
+import 'package:feedays/infra/datasources/http_parse.dart';
 import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +15,7 @@ void main() {
       final webRepo = WebRepoImpl();
       final usecase = RssFeedUsecase(webRepo: webRepo);
       const uri = 'http://jin115.com/';
-      final res = await usecase.fetchRss(uri);
+      final res = await webRepo.getFeeds(uri);
       expect(res, isNotNull);
       expect(res.feeds.length, isNonZero);
     },

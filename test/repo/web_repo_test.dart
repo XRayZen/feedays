@@ -9,4 +9,15 @@ void main() {
     final data = await webrepo.getOGPImageUrl(path);
     expect(data, isNotNull);
   });
+  test(
+    'Repo->getRssFeedInWebSite',
+    () async {
+      //TODO:新しくリファクタリング
+      //TODO:インフラ層ではRepo->サイトURLでメタ・RSSを取得変換して例外有りで返す
+      const path = 'http://jin115.com/archives/52365485.html';
+      final webrepo = WebRepoImpl();
+      final response = await webrepo.getFeeds(path);
+    },
+    timeout: const Timeout(Duration(minutes: 5)),
+  );
 }

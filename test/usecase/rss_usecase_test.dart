@@ -13,7 +13,7 @@ void main() {
       final usecase = RssFeedUsecase(webRepo: webRepo);
       final list = genExploreList();
       for (final element in list) {
-        final res = await usecase.fetchRss(
+        final res = await webRepo.getFeeds(
           element.siteUrl,
           progressCallBack: showDownloadProgress,
         );
@@ -23,4 +23,5 @@ void main() {
     },
     timeout: const Timeout(Duration(minutes: 10)),
   );
+  
 }

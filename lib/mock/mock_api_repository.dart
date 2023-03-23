@@ -10,6 +10,7 @@ import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_util.dart';
 
+
 class MockApiRepository extends BackendApiRepository {
   // int ff = 0;//これの変数を次第で動作を変える予定
   @override
@@ -35,7 +36,7 @@ class MockApiRepository extends BackendApiRepository {
     switch (request.searchType) {
       case SearchType.addContent:
         const path = 'https://iphone-mania.jp/';
-        final rssParseRssSite = await rssCase.fetchRss(path);
+        final rssParseRssSite = await webRepo.getFeeds(path);
         final fakeSearchResult = SearchResult(
           apiResponse: ApiResponseType.accept,
           responseMessage: 'fake :{$word}',

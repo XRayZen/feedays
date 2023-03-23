@@ -66,10 +66,9 @@ class WebUsecase {
     userCfg.editRecentSearches(request.word);
     //ワードがURLかどうか判定する
     if (parseUrls(request.word) is List<String>) {
-      // URLなら
-      //存在するか調べて返す
-      final meta = await webRepo.fetchSiteOgpMeta(request.word);
-      if (userCfg.rssFeedSites.anySiteOfURL(meta.siteUrl)) {
+      //URLなら既存のデータベースに存在するか調べて返す
+      if (userCfg.rssFeedSites.anySiteOfURL(request.word)) {
+        final meta = await webRepo.fetchSiteOgpMeta(request.word);
         //あったらRSSを更新する
         final oldSite = userCfg.rssFeedSites
             .where((site) => site.siteUrl == meta.siteUrl)
@@ -86,9 +85,9 @@ class WebUsecase {
             articles: [],
           );
         }
-        //置き換える
-        final newSite = await rssFeedUsecase.refreshRss(oldSite);
-        userCfg.rssFeedSites.replaceWebSites(oldSite, newSite!);
+        //無かったら更新して置き換える
+        final newSite = await webRepo.refreshRss(meta);
+        userCfg.rssFeedSites.replaceWebSites(oldSite, newSite);
         return SearchResult(
           apiResponse: ApiResponseType.accept,
           responseMessage: '',
@@ -100,7 +99,7 @@ class WebUsecase {
       } else {
         //なかったらRSS登録処理
         try {
-          final resParseRssSite = await rssFeedUsecase.fetchRss(request.word);
+          final resParseRssSite = await webRepo.getFeeds(request.word);
           //リザルトはサイトを返す
           //登録するかはUIで判断できるようにする
           return SearchResult(
@@ -154,18 +153,15 @@ class WebUsecase {
     //PLAN:後々永続化処理
   }
 
-  void removeRssSite(String deleteCategory,WebSite site) {
-    userCfg.rssFeedSites.deleteSite(deleteCategory,site);
+  void removeRssSite(String deleteCategory, WebSite site) {
+    userCfg.rssFeedSites.deleteSite(deleteCategory, site);
   }
 
   Future<WebSite> fetchRssFeed(WebSite site) async {
-    final newSite = await rssFeedUsecase.refreshRss(site);
-    if (newSite != null) {
+    final newSite = await webRepo.getFeeds(site.siteUrl);
       userCfg.rssFeedSites.replaceWebSites(site, newSite);
       //PLAN:フィードはこの後に永続化処理を検討
       return newSite;
-    }
-    throw Exception('Not found WebSite');
   }
 
   Future<List<ExploreCategory>> readCategories() async {
