@@ -8,6 +8,11 @@ import 'package:feedays/infra/model/model_explore.dart';
 import 'package:feedays/infra/model/model_user_cfg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+Future<void> initLocalDataHandler() async {
+  await Hive.initFlutter();
+  registerAdapter();
+}
+
 void registerAdapter() {
   //使うクラスのアダプターを全て登録しとく必要がある
   //model_user_cfg

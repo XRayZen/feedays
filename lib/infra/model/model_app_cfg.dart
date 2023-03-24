@@ -13,6 +13,10 @@ class ModelAppConfig extends HiveObject {
       apiRequestConfig: ModelApiRequestLimitConfig.from(cfg.apiRequestConfig),
     );
   }
+  AppConfig to() {
+    return AppConfig(apiRequestConfig: apiRequestConfig.to());
+  }
+
   @HiveField(0)
   final ModelApiRequestLimitConfig apiRequestConfig;
 }
@@ -33,6 +37,14 @@ class ModelApiRequestLimitConfig extends HiveObject {
       sendActivityMinute: cfg.sendActivityMinute,
     );
   }
+  ApiRequestLimitConfig to() {
+    return ApiRequestLimitConfig(
+      trendRequestLimit: trendRequestLimit,
+      noneRssFeedRequestLimit: noneRssFeedRequestLimit,
+      sendActivityMinute: sendActivityMinute,
+    );
+  }
+
   @HiveField(0)
   final int trendRequestLimit;
   @HiveField(1)

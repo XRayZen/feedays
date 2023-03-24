@@ -40,11 +40,26 @@ class ModelUserConfig extends HiveObject {
       categories: e.categories.map(ModelExploreCategory.from).toList(),
     );
   }
+  UserConfig to() {
+    return UserConfig(
+      userName: userName,
+      userID: userID,
+      isGuest: isGuest,
+      rssFeedSites: RssWebSites(
+        folders: rssFeedSiteFolders.map((e) => e.to()).toList(),
+      ),
+      config: config.to(),
+      identInfo: identInfo.to(),
+      accountType: convertModelUserAccountType(accountType),
+      searchHistory: searchHistory,
+      categories: categories.map((e) => e.to()).toList(),
+    );
+  }
 
   @HiveField(0)
   String userName;
   @HiveField(1)
-  String userID; //ユーザーidは初回起動時でサーバーから割り振っれるユニークなid
+  String userID;
   @HiveField(2)
   bool isGuest;
   @HiveField(3)
@@ -74,6 +89,19 @@ ModelUserAccountType convertUserAccountType(UserAccountType ty) {
   }
 }
 
+UserAccountType convertModelUserAccountType(ModelUserAccountType ty) {
+  switch (ty) {
+    case ModelUserAccountType.guest:
+      return UserAccountType.guest;
+    case ModelUserAccountType.free:
+      return UserAccountType.free;
+    case ModelUserAccountType.pro:
+      return UserAccountType.pro;
+    case ModelUserAccountType.ultimate:
+      return UserAccountType.ultimate;
+  }
+}
+
 @HiveType(typeId: 7)
 enum ModelUserAccountType {
   @HiveField(0)
@@ -96,6 +124,12 @@ class ModelWebSiteFolder extends HiveObject {
     return ModelWebSiteFolder(
       name: e.name,
       children: e.children.map(ModelWebSite.from).toList(),
+    );
+  }
+  WebSiteFolder to() {
+    return WebSiteFolder(
+      name: name,
+      children: children.map((e) => e.to()).toList(),
     );
   }
 
@@ -145,6 +179,27 @@ class ModelWebSite extends HiveObject {
       isCloudFeed: e.isCloudFeed,
     );
   }
+  WebSite to() {
+    return WebSite(
+      name: name,
+      index: index,
+      key: keyWebSite,
+      siteUrl: siteUrl,
+      siteName: siteName,
+      rssUrl: rssUrl,
+      icon: icon,
+      iconLink: iconLink,
+      newCount: newCount,
+      readLateCount: readLateCount,
+      category: category,
+      tags: tags,
+      feeds: feeds.map((e) => e.to()).toList(),
+      fav: fav,
+      description: description,
+      isCloudFeed: isCloudFeed,
+    );
+  }
+
   @HiveField(0)
   int index;
   @HiveField(1)
@@ -205,6 +260,20 @@ class ModelFeedItem extends HiveObject {
       site: e.site,
     );
   }
+  FeedItem to() {
+    return FeedItem(
+      index: index,
+      title: title,
+      description: description,
+      link: link,
+      category: category,
+      image: image.to(),
+      site: site,
+      lastModified: lastModified,
+      isReedLate: isReedLate,
+    );
+  }
+
   @HiveField(0)
   final int index;
   @HiveField(1)
@@ -233,6 +302,9 @@ class ModelRssFeedImage extends HiveObject {
   });
   factory ModelRssFeedImage.from(RssFeedImage i) {
     return ModelRssFeedImage(link: i.link, image: i.image);
+  }
+  RssFeedImage to() {
+    return RssFeedImage(link: link, image: image);
   }
 
   @HiveField(0)

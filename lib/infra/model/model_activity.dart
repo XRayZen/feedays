@@ -69,6 +69,15 @@ class ModelUserIdentInfo extends HiveObject {
       accessPlatform: convertUserAccessPlatform(i.accessPlatform),
     );
   }
+  UserIdentInfo to() {
+    return UserIdentInfo(
+      ip: ip,
+      macAddress: macAddress,
+      token: token,
+      accessPlatform: convertModelUserAccessPlatform(accessPlatform),
+    );
+  }
+
   @HiveField(0)
   final String ip;
   @HiveField(1)
@@ -84,7 +93,7 @@ class ModelUserIdentInfo extends HiveObject {
 }
 
 ModelUserAccessPlatform convertUserAccessPlatform(UserAccessPlatform i) {
-  switch(i){
+  switch (i) {
     case UserAccessPlatform.pc:
       return ModelUserAccessPlatform.pc;
     case UserAccessPlatform.web:
@@ -96,13 +105,27 @@ ModelUserAccessPlatform convertUserAccessPlatform(UserAccessPlatform i) {
   }
 }
 
+UserAccessPlatform convertModelUserAccessPlatform(ModelUserAccessPlatform i) {
+  switch (i) {
+    case ModelUserAccessPlatform.pc:
+      return UserAccessPlatform.pc;
+    case ModelUserAccessPlatform.web:
+      return UserAccessPlatform.web;
+    case ModelUserAccessPlatform.mobile:
+      return UserAccessPlatform.mobile;
+    case ModelUserAccessPlatform.tablet:
+      return UserAccessPlatform.tablet;
+  }
+}
+
 @HiveType(typeId: 23)
-enum ModelUserAccessPlatform { 
+enum ModelUserAccessPlatform {
   @HiveField(0)
-  pc, 
+  pc,
   @HiveField(1)
-  web, 
+  web,
   @HiveField(2)
-  mobile, 
+  mobile,
   @HiveField(3)
-  tablet }
+  tablet
+}

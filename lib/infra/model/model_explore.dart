@@ -12,6 +12,13 @@ class ModelExploreCategory extends HiveObject {
   factory ModelExploreCategory.from(ExploreCategory cat) {
     return ModelExploreCategory(name: cat.name, iconLink: cat.iconLink);
   }
+  ExploreCategory to() {
+    return ExploreCategory(
+      iconLink: iconLink,
+      name: name,
+    );
+  }
+
   @HiveField(0)
   final String name;
   @HiveField(1)

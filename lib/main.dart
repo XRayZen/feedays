@@ -1,3 +1,4 @@
+import 'package:feedays/infra/model/hive_ctrl.dart';
 import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import 'ui/page/start_page.dart';
 
-void main({bool isProviderOverRide = true}) {
+void main({bool isProviderOverRide = true}) async {
+  await initLocalDataHandler();
   if (isProviderOverRide) {
     runApp(
       //統合テスト用にプロバイダー上書きを切り替える

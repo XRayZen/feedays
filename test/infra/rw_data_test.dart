@@ -14,7 +14,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() {
   //ファイルIOを伴うテストはPathProviderをモックしないと実行できない
   //https://zenn.dev/laiso/articles/cfff69685553753ee378
-  //しかしそうなるとCICDでこのテストは使えるのか疑問
+  //しかしそうなるとCI/CDでこのテストは使えるのか疑問
 
   setUpAll(() async {
     final directory = await Directory.systemTemp.createTemp();
@@ -26,7 +26,7 @@ void main() {
       return null;
     });
   });
-  testWidgets('rw test', (WidgetTester tester) async {
+  testWidgets('Hive Rw Test', (WidgetTester tester) async {
     await tester.runAsync(
       () async {
         //変換するデータを用意する
