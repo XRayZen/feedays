@@ -14,7 +14,6 @@ void main() {
     'convert to RssFeed',
     () async {
       final webRepo = WebRepoImpl();
-      final rssUsecase = RssFeedUsecase(webRepo: webRepo);
       const path = 'http://blog.esuteru.com/index.rdf';
       final res = await webRepo.getFeeds(path);
       expect(res, isNotEmpty);

@@ -30,7 +30,6 @@ class MockApiRepository extends BackendApiRepository {
     //TODO:#を含んだワードが来たらカテゴリごとの検索として該当カテゴリのサイトリストを返す
     //サイトは5つの実際のサイトを参考に偽データを生成
     final webRepo = WebRepoImpl();
-    final rssCase = RssFeedUsecase(webRepo: webRepo);
     final list = genExploreList();
     final word = request.word;
     switch (request.searchType) {

@@ -10,7 +10,6 @@ void main() {
     () async {
       //4GamerのサイトをメタとRSSFeedを含んだ完全なWebSiteを取得する
       final webRepo = WebRepoImpl();
-      final usecase = RssFeedUsecase(webRepo: webRepo);
       final list = genExploreList();
       for (final element in list) {
         final res = await webRepo.getFeeds(

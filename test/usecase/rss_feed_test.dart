@@ -13,7 +13,6 @@ void main() {
     'feed parse test',
     () async {
       final webRepo = WebRepoImpl();
-      final usecase = RssFeedUsecase(webRepo: webRepo);
       const uri = 'http://jin115.com/';
       final res = await webRepo.getFeeds(uri);
       expect(res, isNotNull);
@@ -25,7 +24,6 @@ void main() {
     'RssFeed Parse',
     () async {
       final webRepo = WebRepoImpl();
-      final usecase = RssFeedUsecase(webRepo: webRepo);
       const path = 'https://iphone-mania.jp/feed/';
     },
     timeout: const Timeout(Duration(minutes: 3)),
