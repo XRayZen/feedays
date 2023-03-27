@@ -16,8 +16,10 @@ class SiteRssFeedList extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //FIXME:フィード読み込みフローをルール違反・複雑化しているからリファクタリングする
     //リトライ処理で処理が終わったらここから再描画させる
     final retry = ref.watch(reTryRssFeedProvider);
+    //リトライプロバイダーのステートが初期状態ならリトライ処理されていない
     if (retry.key != '' && retry.siteUrl == site.siteUrl) {
       //リトライ処理での結果を反映
       return _buildList(context, retry.feeds, ref);
@@ -41,7 +43,6 @@ class SiteRssFeedList extends ConsumerWidget {
           return ErrorIndicator(
             error: error,
             //再描画するだけでフィード取得処理が走るから問題ないか
-            // onTryAgain: UiProvider.instanceO.beginRebuildSiteDetailPage,
             onTryAgain: () async {
               //今はリトライ処理はサイト選択プロバイダーで入れたほうが良いか
               //しかし、それより、サイト選択プロバイダー監視の前に一つRetryProviderを設置して
@@ -65,7 +66,7 @@ class SiteRssFeedList extends ConsumerWidget {
     List<FeedItem> feeds,
     WidgetRef ref,
   ) {
-    final modelList = convertModel(feeds);
+    final modelList = convertViewModel(feeds);
     return RefreshIndicator(
       onRefresh: () async {
         //リトライNotifierでリトライ処理して出来たらstateに入れてリストWidgetを更新
@@ -87,7 +88,7 @@ class SiteRssFeedList extends ConsumerWidget {
   }
 
   StatelessWidget _buildListItem(
-    List<SiteDetailPageModel> list,
+    List<RssListViewModel> list,
     int index,
     List<FeedItem> feeds,
   ) {
@@ -110,10 +111,10 @@ class SiteRssFeedList extends ConsumerWidget {
     }
   }
 
-  ///リストに表示するためのモデルを生成する
-  List<SiteDetailPageModel> convertModel(List<FeedItem> items) {
+  ///リストに表示するためのビューモデルを生成する
+  List<RssListViewModel> convertViewModel(List<FeedItem> items) {
     //Todayなどにフィードを分けるために一旦モデルに変換してから表示する
-    final list = List<SiteDetailPageModel>.empty(growable: true);
+    final list = List<RssListViewModel>.empty(growable: true);
     //時間が今日ならToday 昨日ならYesterday それ以降は日付
     for (final item in items) {
       final itemTime = item.lastModified;
@@ -127,10 +128,10 @@ class SiteRssFeedList extends ConsumerWidget {
       //今日
       if (simpleItemTime.day == todayTime.day) {
         if (!list.any((x) => x.text == 'Today')) {
-          list.add(SiteDetailPageModel(isSection: true, text: 'Today'));
+          list.add(RssListViewModel(isSection: true, text: 'Today'));
         }
         list.add(
-          SiteDetailPageModel(isSection: false, item: item, index: item.index),
+          RssListViewModel(isSection: false, item: item, index: item.index),
         );
       }
       //昨日はYesterday
@@ -138,10 +139,10 @@ class SiteRssFeedList extends ConsumerWidget {
           todayTime.add(const Duration(days: -1)).day) {
         {
           if (!list.any((x) => x.text == 'Yesterday')) {
-            list.add(SiteDetailPageModel(isSection: true, text: 'Yesterday'));
+            list.add(RssListViewModel(isSection: true, text: 'Yesterday'));
           }
           list.add(
-            SiteDetailPageModel(
+            RssListViewModel(
               isSection: false,
               item: item,
               index: item.index,
@@ -153,14 +154,14 @@ class SiteRssFeedList extends ConsumerWidget {
       else {
         if (!list.any((x) => x.text == simpleItemTime.toIso8601String())) {
           list.add(
-            SiteDetailPageModel(
+            RssListViewModel(
               isSection: true,
               text: simpleItemTime.toIso8601String(),
             ),
           );
         }
         list.add(
-          SiteDetailPageModel(
+          RssListViewModel(
             isSection: false,
             item: item,
             index: item.index,
@@ -172,8 +173,8 @@ class SiteRssFeedList extends ConsumerWidget {
   }
 }
 
-class SiteDetailPageModel {
-  SiteDetailPageModel({
+class RssListViewModel {
+  RssListViewModel({
     required this.isSection,
     this.text,
     this.item,

@@ -8,6 +8,7 @@ import './app_config.dart';
 ///これはユーザーごとの設定としてサーバーでデータベースに登録され各プラットフォームで同期できる
 class UserConfig {
   String userName;
+  String password;
   String userID; //ユーザーidは初回起動時でサーバーから割り振っれるユニークなid
   bool isGuest;
   RssWebSites rssFeedSites;
@@ -18,6 +19,7 @@ class UserConfig {
   List<ExploreCategory> categories;
   UserConfig({
     required this.userName,
+    required this.password,
     required this.userID,
     required this.isGuest,
     required this.rssFeedSites,
@@ -31,6 +33,7 @@ class UserConfig {
   factory UserConfig.defaultUserConfig() {
     return UserConfig(
       userName: 'userName',
+      password: '',
       userID: 'userID',
       isGuest: true,
       rssFeedSites: RssWebSites(folders: []),
@@ -40,6 +43,7 @@ class UserConfig {
           noneRssFeedRequestLimit: 10,
           sendActivityMinute: 10,
         ),
+        rssFeedConfig: RssFeedConfig(),
       ),
       identInfo: UserIdentInfo(
         ip: '0',

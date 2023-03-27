@@ -48,6 +48,7 @@ class WebRepoImpl extends WebRepositoryInterface {
         progressCallBack: progressCallBack,
       ),
       description: rssFeed.description,
+      lastModified: DateTime.now().toLocal(),
     );
   }
   

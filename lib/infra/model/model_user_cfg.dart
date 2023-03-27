@@ -13,6 +13,7 @@ part 'model_user_cfg.g.dart';
 class ModelUserConfig extends HiveObject {
   ModelUserConfig({
     required this.userName,
+    required this.password,
     required this.userID,
     required this.isGuest,
     required this.rssFeedSiteFolders,
@@ -29,6 +30,7 @@ class ModelUserConfig extends HiveObject {
     }
     return ModelUserConfig(
       userName: e.userName,
+      password: e.password,
       userID: e.userID,
       isGuest: e.isGuest,
       rssFeedSiteFolders: obj,
@@ -42,6 +44,7 @@ class ModelUserConfig extends HiveObject {
   UserConfig to() {
     return UserConfig(
       userName: userName,
+      password: password,
       userID: userID,
       isGuest: isGuest,
       rssFeedSites: RssWebSites(
@@ -73,6 +76,8 @@ class ModelUserConfig extends HiveObject {
   List<String> searchHistory;
   @HiveField(8)
   List<ModelExploreCategory> categories;
+  @HiveField(9)
+  String password;
 }
 
 ModelUserAccountType convertUserAccountType(UserAccountType ty) {
@@ -156,6 +161,7 @@ class ModelWebSite extends HiveObject {
     this.fav = false,
     required this.description,
     this.isCloudFeed = false,
+    this.lastModified=0,
   });
   factory ModelWebSite.from(WebSite e) {
     return ModelWebSite(
@@ -174,6 +180,7 @@ class ModelWebSite extends HiveObject {
       fav: e.fav,
       description: e.description,
       isCloudFeed: e.isCloudFeed,
+      lastModified: e.lastModified.millisecondsSinceEpoch,
     );
   }
   WebSite to() {
@@ -193,6 +200,7 @@ class ModelWebSite extends HiveObject {
       fav: fav,
       description: description,
       isCloudFeed: isCloudFeed,
+      lastModified:DateTime.fromMillisecondsSinceEpoch(lastModified) ,
     );
   }
 
@@ -226,6 +234,8 @@ class ModelWebSite extends HiveObject {
   String description;
   @HiveField(15)
   bool isCloudFeed;
+  @HiveField(16)
+  int lastModified;
 }
 
 @HiveType(typeId: 3)

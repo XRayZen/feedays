@@ -137,6 +137,7 @@ WebSite parseDocumentToWebSite(
     tags: tag != null ? [tag] : [],
     feeds: [],
     description: maps['description'] ?? '',
+    lastModified: DateTime.now().toLocal(),
   );
 }
 
@@ -155,6 +156,7 @@ Future<WebSite> parseRssToWebSiteMeta(
     tags: feed.itunes?.keywords ?? [],
     feeds: rssFeedConvert(feed),
     description: feed.description ?? '',
+    lastModified: meta.lastModified,
   );
 }
 
@@ -246,10 +248,10 @@ Future<FeedObject?> getRssFeed(
 
 Future<WebSite> fetchRss(
   WebRepositoryInterface webRepo,
-  String siteUrl, {
+  WebSite site, {
   void Function(int count, int all, String msg)? progressCallBack,
 }) async {
-  final meta = await webRepo.fetchSiteOgpMeta(siteUrl);
+  final meta = await webRepo.fetchSiteOgpMeta(site.siteUrl);
   // 取得済みなら変換して返す
   if (meta.feeds.isNotEmpty) {
     meta.feeds = await parseImageLink(
@@ -259,9 +261,9 @@ Future<WebSite> fetchRss(
     );
     return meta;
   }
-  final rssFeed = await getRssFeed(webRepo, siteUrl);
+  final rssFeed = await getRssFeed(webRepo,site.siteUrl);
   if (rssFeed == null) {
-    throw Exception('Not Found Rss URL: $siteUrl');
+    throw Exception('Not Found Rss URL: $site.siteUrl');
   }
   return WebSite(
     key: rssFeed.link,
@@ -277,6 +279,7 @@ Future<WebSite> fetchRss(
       progressCallBack: progressCallBack,
     ),
     description: rssFeed.description,
+    lastModified: DateTime.now().toLocal(),
   );
 }
 
@@ -285,13 +288,13 @@ Future<WebSite?> refreshRssConvert(
     WebRepositoryInterface webRepo, WebSite site) async {
   //新規サイトを取得
   if (site.rssUrl.isEmpty) {
-    final res = await fetchRss(webRepo, site.siteUrl);
+    final res = await fetchRss(webRepo, site);
     res.newCount = res.feeds.length;
     return res;
   }
   //既存サイトを更新する
   final newFeedItems =
-      await fetchRss(webRepo, site.siteUrl).then((value) => value.feeds);
+      await fetchRss(webRepo, site).then((value) => value.feeds);
   if (site.feeds.isEmpty) {
     site.feeds.addAll(newFeedItems);
     site.newCount = newFeedItems.length;

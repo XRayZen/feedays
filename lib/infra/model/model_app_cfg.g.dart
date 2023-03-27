@@ -17,16 +17,19 @@ class ModelAppConfigAdapter extends TypeAdapter<ModelAppConfig> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ModelAppConfig(
-      apiRequestConfig: fields[0] as ModelApiRequestLimitConfig,
+      modelApiRequestConfig: fields[0] as ModelApiRequestLimitConfig,
+      modelRssFeedConfig: fields[1] as ModelRssFeedConfig,
     );
   }
 
   @override
   void write(BinaryWriter writer, ModelAppConfig obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.apiRequestConfig);
+      ..write(obj.modelApiRequestConfig)
+      ..writeByte(1)
+      ..write(obj.modelRssFeedConfig);
   }
 
   @override
@@ -77,6 +80,40 @@ class ModelApiRequestLimitConfigAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ModelApiRequestLimitConfigAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ModelRssFeedConfigAdapter extends TypeAdapter<ModelRssFeedConfig> {
+  @override
+  final int typeId = 8;
+
+  @override
+  ModelRssFeedConfig read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ModelRssFeedConfig(
+      limitLastFetchTime: fields[0] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ModelRssFeedConfig obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.limitLastFetchTime);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ModelRssFeedConfigAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

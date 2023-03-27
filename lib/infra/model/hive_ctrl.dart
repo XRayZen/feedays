@@ -27,6 +27,7 @@ void registerAdapter() {
   //model_app_cfg
   Hive.registerAdapter(ModelAppConfigAdapter());
   Hive.registerAdapter(ModelApiRequestLimitConfigAdapter());
+  Hive.registerAdapter(ModelRssFeedConfigAdapter());
   //model_activity
   Hive.registerAdapter(ModelUserReadActivityAdapter());
   Hive.registerAdapter(ModelUserSubscribeActivityAdapter());

@@ -18,6 +18,7 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
     };
     return ModelUserConfig(
       userName: fields[0] as String,
+      password: fields[9] as String,
       userID: fields[1] as String,
       isGuest: fields[2] as bool,
       rssFeedSiteFolders: (fields[3] as List).cast<ModelWebSiteFolder>(),
@@ -32,7 +33,7 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
   @override
   void write(BinaryWriter writer, ModelUserConfig obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.userName)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
       ..writeByte(7)
       ..write(obj.searchHistory)
       ..writeByte(8)
-      ..write(obj.categories);
+      ..write(obj.categories)
+      ..writeByte(9)
+      ..write(obj.password);
   }
 
   @override
@@ -127,13 +130,14 @@ class ModelWebSiteAdapter extends TypeAdapter<ModelWebSite> {
       fav: fields[13] as bool,
       description: fields[14] as String,
       isCloudFeed: fields[15] as bool,
+      lastModified: fields[16] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, ModelWebSite obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)
@@ -163,7 +167,9 @@ class ModelWebSiteAdapter extends TypeAdapter<ModelWebSite> {
       ..writeByte(14)
       ..write(obj.description)
       ..writeByte(15)
-      ..write(obj.isCloudFeed);
+      ..write(obj.isCloudFeed)
+      ..writeByte(16)
+      ..write(obj.lastModified);
   }
 
   @override

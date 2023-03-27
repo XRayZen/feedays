@@ -1,7 +1,6 @@
 //UIのコントローラーなどUIロジックを集める
 
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/widgets/app_in_browse.dart';
 import 'package:feedays/ui/widgets/snack_bar.dart';
@@ -9,23 +8,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-///UIの再描画メソッドを集めるクラス
-class UiProvider {
-  // インスタンスを1つしか生成しないようにするため
-  // シングルトン化する
-  UiProvider._();
-  static final instanceO = UiProvider._();
-
-  late Function rebuildSiteDeatailPage;
-  void setRebuildSiteDetailPage(Function func) {
-    rebuildSiteDeatailPage = func;
-  }
-
-  void beginRebuildSiteDetailPage() {
-    rebuildSiteDeatailPage();
-  }
-}
 
 class ReTryRssFeedNotifier extends Notifier<WebSite> {
   @override
@@ -35,7 +17,9 @@ class ReTryRssFeedNotifier extends Notifier<WebSite> {
     try {
       state = WebSite.mock('', '', '');
       final response = await ref.watch(rssUsecaseProvider).refreshRssFeed(site);
-      showSnack(context, 2000, 'Success! Refresh Rss');
+      if (context.mounted) {
+        showSnack(context, 2000, 'Success! Refresh Rss');
+      }
       state = response;
     } on Exception catch (e) {
       //エラーが出てリトライ処理が失敗したらスナックバーで表示する

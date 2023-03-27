@@ -29,19 +29,20 @@ List<FeedItem> rssFeedConvert(RssFeed rssFeed) {
       if (item.content != null && item.content!.images.isNotEmpty) {
         imageLink = item.content!.images.first;
       }
-      items.add(
-        FeedItem(
-          index: index,
-          title: item.title ?? '',
-          description: item.description ?? '',
-          link: item.link ?? '',
-          image: RssFeedImage(link: imageLink, image: null),
-          site: rssFeed.title ?? '',
-          category: rssFeed.dc?.subject ?? '',
-          lastModified:
-              item.pubDate ?? item.dc?.date ?? DateTime.utc(2000, 1, 1, 1, 1),
-        ),
+      final feedItem = FeedItem(
+        index: index,
+        title: item.title ?? '',
+        description: item.description ?? '',
+        link: item.link ?? '',
+        image: RssFeedImage(link: imageLink, image: null),
+        site: rssFeed.title ?? '',
+        category: rssFeed.dc?.subject ?? '',
+        lastModified:
+            item.pubDate ?? item.dc?.date ?? DateTime.utc(2000, 1, 1, 1, 1),
       );
+      //記事の日時をローカルに書き換える
+      feedItem.lastModified = feedItem.lastModified.toLocal();
+      items.add(feedItem);
       index++;
     }
   }
@@ -68,29 +69,34 @@ List<FeedItem> atomFeedConvert(AtomFeed atomFeed) {
                   .href ??
               '';
           imageLink = item.links!
-                  .where((element) => element.type == 'image/png'||element.type=='image/jpeg')
+                  .where(
+                    (element) =>
+                        element.type == 'image/png' ||
+                        element.type == 'image/jpeg',
+                  )
                   .first
                   .href ??
               '';
-        // ignore: avoid_catches_without_on_clauses
+          // ignore: avoid_catches_without_on_clauses
         } catch (_) {}
       }
       var cate = '';
       if (item.categories != null && item.categories!.isNotEmpty) {
         cate = item.categories!.first.label ?? '';
       }
-      items.add(
-        FeedItem(
-          index: index,
-          title: item.title ?? '',
-          description: item.summary ?? '',
-          link: link,
-          image: RssFeedImage(link: imageLink, image: null),
-          site: atomFeed.title ?? '',
-          category: cate,
-          lastModified: item.updated ?? DateTime.utc(2000, 1, 1, 1, 1),
-        ),
+      final feedItem = FeedItem(
+        index: index,
+        title: item.title ?? '',
+        description: item.summary ?? '',
+        link: link,
+        image: RssFeedImage(link: imageLink, image: null),
+        site: atomFeed.title ?? '',
+        category: cate,
+        lastModified: item.updated ?? DateTime.utc(2000, 1, 1, 1, 1),
       );
+      //記事の日時をローカルに書き換える
+      feedItem.lastModified = feedItem.lastModified.toLocal();
+      items.add(feedItem);
       index++;
     }
   }
@@ -113,6 +119,6 @@ FeedObject convertAtomToFeedObj(AtomFeed atomFeed, String url) {
     title: atomFeed.title ?? '',
     link: url,
     description: atomFeed.subtitle ?? '',
-    category:'',
+    category: '',
   );
 }

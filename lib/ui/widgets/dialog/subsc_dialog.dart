@@ -176,6 +176,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
         tags: site.tags,
         feeds: site.feeds,
         description: site.description,
+        lastModified: site.lastModified,
       )
         ..index = site.index
         ..category = list[index].name

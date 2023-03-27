@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class AppConfig {
   final ApiRequestLimitConfig apiRequestConfig;
+  final RssFeedConfig rssFeedConfig;
   AppConfig({
     required this.apiRequestConfig,
+    required this.rssFeedConfig,
   });
 }
 
@@ -16,5 +18,13 @@ class ApiRequestLimitConfig {
     required this.trendRequestLimit,
     required this.noneRssFeedRequestLimit,
     required this.sendActivityMinute,
+  });
+}
+
+class RssFeedConfig {
+  ///最終更新日時からどれくらい経ったら更新するか
+  int limitLastFetchTime;
+  RssFeedConfig({
+    this.limitLastFetchTime=60,
   });
 }

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 import 'package:feedays/domain/entities/app_config.dart';
 import 'package:hive/hive.dart';
 
@@ -6,19 +7,27 @@ part 'model_app_cfg.g.dart';
 @HiveType(typeId: 5)
 class ModelAppConfig extends HiveObject {
   ModelAppConfig({
-    required this.apiRequestConfig,
+    required this.modelApiRequestConfig,
+    required this.modelRssFeedConfig,
   });
   factory ModelAppConfig.from(AppConfig cfg) {
     return ModelAppConfig(
-      apiRequestConfig: ModelApiRequestLimitConfig.from(cfg.apiRequestConfig),
+      modelApiRequestConfig:
+          ModelApiRequestLimitConfig.from(cfg.apiRequestConfig),
+      modelRssFeedConfig: ModelRssFeedConfig.from(cfg.rssFeedConfig),
     );
   }
   AppConfig to() {
-    return AppConfig(apiRequestConfig: apiRequestConfig.to());
+    return AppConfig(
+      apiRequestConfig: modelApiRequestConfig.to(),
+      rssFeedConfig: modelRssFeedConfig.to(),
+    );
   }
 
   @HiveField(0)
-  final ModelApiRequestLimitConfig apiRequestConfig;
+  final ModelApiRequestLimitConfig modelApiRequestConfig;
+  @HiveField(1)
+  final ModelRssFeedConfig modelRssFeedConfig;
 }
 
 ///サーバーから送られるリクエスト間隔制限設定<br/>
@@ -51,4 +60,19 @@ class ModelApiRequestLimitConfig extends HiveObject {
   final int noneRssFeedRequestLimit;
   @HiveField(2)
   final int sendActivityMinute;
+}
+
+@HiveType(typeId: 8)
+class ModelRssFeedConfig extends HiveObject {
+  ModelRssFeedConfig({
+    required this.limitLastFetchTime,
+  });
+  factory ModelRssFeedConfig.from(RssFeedConfig cfg) {
+    return ModelRssFeedConfig(limitLastFetchTime: cfg.limitLastFetchTime);
+  }
+  @HiveField(0)
+  int limitLastFetchTime;
+  RssFeedConfig to() {
+    return RssFeedConfig(limitLastFetchTime: limitLastFetchTime);
+  }
 }

@@ -197,6 +197,7 @@ class WebSite {
     this.fav = false,
     required this.description,
     this.isCloudFeed = false,
+    required this.lastModified,
   });
   factory WebSite.mock(String key, String name, String category) {
     return WebSite(
@@ -209,8 +210,29 @@ class WebSite {
       feeds: List.empty(growable: true),
       iconLink: '',
       description: 'fake mock',
+      lastModified: DateTime.now().toLocal(),
     );
   }
+  //TODO:要テスト
+  ///更新期限が現在日時を下回ったら更新する
+  bool isRssFeedRefreshTime(
+    int limitTime,
+  ) {
+    //更新期限
+    final refreshExpireTime = lastModified
+        .add(Duration(minutes: limitTime))
+        .toLocal()
+        .millisecondsSinceEpoch;
+    //現在日時
+    final nowTime = DateTime.now().toLocal().millisecondsSinceEpoch;
+    //更新期限が現在日時を下回ったら更新する
+    if (refreshExpireTime < nowTime) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   int index;
   final String key;
   String name;
@@ -226,6 +248,8 @@ class WebSite {
   bool fav;
   String description;
   bool isCloudFeed;
+  ///最終更新日時
+  DateTime lastModified;
 }
 
 class FeedItem {
@@ -246,10 +270,9 @@ class FeedItem {
   final String link;
   RssFeedImage image;
   final String site;
-  final DateTime lastModified;
+  DateTime lastModified;
   bool isReedLate;
-
-  ///必要ないかも
+  ///カテゴリーは取得の際につけられる
   final String category;
 }
 

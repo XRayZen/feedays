@@ -44,8 +44,9 @@ class LocalRepoImpl extends LocalRepositoryInterface {
 
   @override
   Future<void> clear() async {
-    final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
-    await box.clear();
-    await box.flush();
+    await Hive.deleteBoxFromDisk('UserCfgBox');
+    // final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
+    // await box.clear();
+    // await box.flush();
   }
 }

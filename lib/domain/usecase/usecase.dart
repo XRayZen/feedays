@@ -31,7 +31,6 @@ class Usecase {
   Future<void> init() async {
     //起動時にデータを読み込む
     await localRepo.init();
-    // await localRepo.clear();
     final data = await localRepo.read();
     if (data != null) {
       userCfg = data;

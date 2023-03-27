@@ -82,6 +82,17 @@ class SiteDetailWidget extends ConsumerWidget {
                                 fontSize: getResponsiveValue(context),
                               ),
                             ),
+                            const Padding(padding: EdgeInsets.all(10)),
+                            IconButton(
+                              onPressed: () {
+                                //RSSを更新する
+                                ref
+                                    .watch(reTryRssFeedProvider.notifier)
+                                    .retry(context, site!);
+                              },
+                              icon: const Icon(Icons.refresh),
+                            ),
+                            const Padding(padding: EdgeInsets.all(5)),
                             Expanded(child: Container()),
                             Align(
                               alignment: Alignment.centerLeft,

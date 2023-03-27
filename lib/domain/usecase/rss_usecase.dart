@@ -137,6 +137,9 @@ class RssUsecase {
     }
   }
 
+  ///データからサイトURLをキーに検索して存在したら返す
+  ///
+  ///無かったらフィードを更新する
   Future<WebSite> readRssFeed(WebSite site) async {
     if (userCfg.rssFeedSites.anySiteOfURL(site.siteUrl)) {
       final sites =
@@ -145,7 +148,14 @@ class RssUsecase {
         if (element.feeds.isEmpty) {
           return refreshRssFeed(element);
         } else {
-          return element;
+          //サイトの最終更新日時が設定期限よりも古かったら更新して返す
+          if (element.isRssFeedRefreshTime(
+            userCfg.config.rssFeedConfig.limitLastFetchTime,
+          )) {
+            return refreshRssFeed(element);
+          } else {
+            return element;
+          }
         }
       }
     }
@@ -191,19 +201,29 @@ class RssUsecase {
   }
 
   Future<List<ExploreCategory>> readCategories() async {
+    //ここもカテゴリーを保存しておらず例外処理も十分にしていない
     if (userCfg.categories.isEmpty) {
       final cate = await apiRepo.getExploreCategories(userCfg.identInfo);
       if (cate.isNotEmpty) {
+        userCfg.categories = cate;
+        //ここでカテゴリが入ったデータを保存する
         return cate;
+      } else {
+        await noticeError('Not found category');
+        return [];
       }
+    } else {
+      //NOTE:カテゴリ情報はバックエンドが管理するためApiから取るべき
+      //PLAN:あとでコンフィグにカテゴリの有効期限を設定する項目をつき加える
+      return userCfg.categories;
     }
-    throw Exception('Not found category');
   }
 
   Future<void> saveData() async {
     try {
       await localRepo.save(userCfg);
-    } on Exception catch (e) {
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
       await noticeError(e.toString());
     }
   }
