@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/site_datail/site_feed_list.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/rss_feeds_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/dialog/subsc_dialog.dart';
@@ -98,7 +98,7 @@ class SiteDetailWidget extends ConsumerWidget {
             )
           ];
         },
-        body: SiteDetailFeedList(site: site!),
+        body: SiteRssFeedList(site: site!),
       ),
     );
   }
@@ -144,7 +144,7 @@ class SiteDetailWidget extends ConsumerWidget {
   ) {
     if (site != null) {
       if (ref
-          .watch(webUsecaseProvider)
+          .watch(rssUsecaseProvider)
           .userCfg
           .rssFeedSites
           .anySiteOfURL(site.siteUrl)) {

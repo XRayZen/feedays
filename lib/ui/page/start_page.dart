@@ -7,6 +7,7 @@ import 'package:feedays/ui/page/power_search_page.dart';
 import 'package:feedays/ui/page/read_later.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/page/today_sliver_page.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
@@ -60,48 +61,69 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   @override
   Widget build(BuildContext context) {
+    //ここでデータ読み込み処理
+    return ref.watch(appInitProvider).when(
+      data: (data) {
+        return buildStartPage(context);
+      },
+      error: (error, stackTrace) {
+        //エラーで読み込めなかったら初回処理とする
+        return buildStartPage(context);
+      },
+      loading: () {
+        //データを読み込み処理をしめす
+        return CircularProgressIndicator();
+      },
+    );
+  }
+
+  Scaffold buildStartPage(BuildContext context) {
     return Scaffold(
       key: startPageScaffoldKey,
       // ignore: prefer_const_constructors
       drawer: AppDrawerMenu(key: Key('DrawerMenu')),
       // ignore: prefer_const_constructors
       body: BarView(),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (value) => _selectedDestination(value, context),
-        animationDuration: const Duration(seconds: 3),
-        elevation: 20, //標高
-        // height: getResponsiveValue(context, 100, 100, 70),
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        backgroundColor: Colors.black,
-        surfaceTintColor: Colors.black,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
-            tooltip: 'open a menu',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bookmark_border),
-            label: 'ReadLater',
-            tooltip: 'Read later',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book),
-            label: 'TodayArticle',
-            tooltip: 'Today articles',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.add_circle_outline_sharp),
-            label: 'AddContent',
-            tooltip: 'Add Content',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search),
-            label: 'Search',
-            tooltip: 'Search Content',
-          )
-        ],
-      ),
+      bottomNavigationBar: btmNavigationBar(context),
+    );
+  }
+
+  NavigationBar btmNavigationBar(BuildContext context) {
+    return NavigationBar(
+      onDestinationSelected: (value) => _selectedDestination(value, context),
+      animationDuration: const Duration(seconds: 3),
+      elevation: 20, //標高
+      // height: getResponsiveValue(context, 100, 100, 70),
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      // backgroundColor: Colors.black,
+      // surfaceTintColor: Colors.black,
+      destinations: const <Widget>[
+        NavigationDestination(
+          icon: Icon(Icons.menu),
+          label: 'Menu',
+          tooltip: 'open a menu',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.bookmark_border),
+          label: 'ReadLater',
+          tooltip: 'Read later',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.menu_book),
+          label: 'TodayArticle',
+          tooltip: 'Today articles',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.add_circle_outline_sharp),
+          label: 'AddContent',
+          tooltip: 'Add Content',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.search),
+          label: 'Search',
+          tooltip: 'Search Content',
+        )
+      ],
     );
   }
 }

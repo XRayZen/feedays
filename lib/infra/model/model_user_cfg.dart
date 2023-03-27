@@ -6,7 +6,6 @@ import 'package:feedays/infra/model/model_activity.dart';
 import 'package:feedays/infra/model/model_app_cfg.dart';
 import 'package:feedays/infra/model/model_explore.dart';
 import 'package:hive/hive.dart';
-//TODO:試すために一旦AppConfigのメンバーをコピーして動くかどうかテストする
 
 part 'model_user_cfg.g.dart';
 
@@ -148,7 +147,6 @@ class ModelWebSite extends HiveObject {
     required this.siteUrl,
     required this.siteName,
     this.rssUrl = '',
-    this.icon,
     required this.iconLink,
     this.newCount = 0,
     this.readLateCount = 0,
@@ -167,7 +165,6 @@ class ModelWebSite extends HiveObject {
       siteUrl: e.siteUrl,
       siteName: e.siteName,
       rssUrl: e.rssUrl,
-      icon: e.icon,
       iconLink: e.iconLink,
       newCount: e.newCount,
       readLateCount: e.readLateCount,
@@ -187,7 +184,6 @@ class ModelWebSite extends HiveObject {
       siteUrl: siteUrl,
       siteName: siteName,
       rssUrl: rssUrl,
-      icon: icon,
       iconLink: iconLink,
       newCount: newCount,
       readLateCount: readLateCount,
@@ -212,8 +208,6 @@ class ModelWebSite extends HiveObject {
   String siteName;
   @HiveField(5)
   String rssUrl;
-  @HiveField(6)
-  final ByteData? icon;
   @HiveField(7)
   final String iconLink;
   @HiveField(8)

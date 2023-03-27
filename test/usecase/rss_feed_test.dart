@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:feedays/infra/datasources/http_parse.dart';
-import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' show parse;

@@ -2,6 +2,7 @@
 
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/widgets/app_in_browse.dart';
 import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/widgets.dart';
@@ -33,7 +34,7 @@ class ReTryRssFeedNotifier extends Notifier<WebSite> {
   Future<void> retry(BuildContext context, WebSite site) async {
     try {
       state = WebSite.mock('', '', '');
-      final response = await ref.watch(webUsecaseProvider).fetchRssFeed(site);
+      final response = await ref.watch(rssUsecaseProvider).refreshRssFeed(site);
       showSnack(context, 2000, 'Success! Refresh Rss');
       state = response;
     } on Exception catch (e) {

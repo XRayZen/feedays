@@ -5,36 +5,29 @@ import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
+import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
-import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
-import 'package:feedays/mock/gen_data.dart';
 import 'package:feedays/util.dart';
 
 typedef ErrorMessageCallback = Future<void> Function(String message);
 
-class WebUsecase {
+class RssUsecase {
   final WebRepositoryInterface webRepo;
   final BackendApiRepository apiRepo;
-  final RssFeedUsecase rssFeedUsecase;
+  final LocalRepositoryInterface localRepo;
   Future<void> Function(String message) noticeError;
   Future<void> Function(WebSite site) onAddSite;
-  UserConfig userCfg;
-  WebUsecase({
+  Future<void> Function(int count, int all, String msg) progressCallBack;
+  final UserConfig userCfg;
+  RssUsecase({
     required this.webRepo,
     required this.apiRepo,
-    required this.rssFeedUsecase,
+    required this.localRepo,
     required this.noticeError,
     required this.onAddSite,
+    required this.progressCallBack,
     required this.userCfg,
   });
-  //NOTE:プロバイダー経由でクラス変数に代入できるか試す→出来た
-  ///今はテスト用にfakeの`feed`を生成する
-  Future<void> genFakeWebsite(WebSite site) async {
-    userCfg.rssFeedSites.add([site]);
-    userCfg.rssFeedSites.folders.first.children.first.feeds
-        .addAll(await genFakeRssFeeds(50));
-    userCfg.searchHistory.add('http://blog.esuteru.com/');
-  }
 
   Future<List<FeedItem>?> fetchFeedDetail(
     WebSite site,
@@ -68,38 +61,35 @@ class WebUsecase {
     if (parseUrls(request.word) is List<String>) {
       //URLなら既存のデータベースに存在するか調べて返す
       if (userCfg.rssFeedSites.anySiteOfURL(request.word)) {
-        final meta = await webRepo.fetchSiteOgpMeta(request.word);
-        //あったらRSSを更新する
-        final oldSite = userCfg.rssFeedSites
-            .where((site) => site.siteUrl == meta.siteUrl)
+        final foundSite = userCfg.rssFeedSites
+            .where((site) => site.siteUrl == request.word)
             .first;
-        //FIXME:もし、RSSがあるのならリプレースして返す
-        if (meta.feeds.isNotEmpty) {
-          userCfg.rssFeedSites.replaceWebSites(oldSite, meta);
+        //もし、RSSがあるのならリプレースせずそのまま返す
+        if (foundSite.feeds.isNotEmpty) {
           return SearchResult(
             apiResponse: ApiResponseType.accept,
             responseMessage: '',
             resultType: SearchResultType.found,
             searchType: SearchType.addContent,
-            websites: [meta],
+            websites: [foundSite],
+            articles: [],
+          );
+        } else {
+          //無かったらリプレースして置き換える
+          final newSite = await refreshRssFeed(foundSite);
+          return SearchResult(
+            apiResponse: ApiResponseType.accept,
+            responseMessage: '',
+            resultType: SearchResultType.found,
+            searchType: SearchType.addContent,
+            websites: [newSite],
             articles: [],
           );
         }
-        //無かったら更新して置き換える
-        final newSite = await webRepo.refreshRss(meta);
-        userCfg.rssFeedSites.replaceWebSites(oldSite, newSite);
-        return SearchResult(
-          apiResponse: ApiResponseType.accept,
-          responseMessage: '',
-          resultType: SearchResultType.found,
-          searchType: SearchType.addContent,
-          websites: [newSite],
-          articles: [],
-        );
       } else {
         //なかったらRSS登録処理
         try {
-          final resParseRssSite = await webRepo.getFeeds(request.word);
+          final resParseRssSite = await addNewSite(request.word);
           //リザルトはサイトを返す
           //登録するかはUIで判断できるようにする
           return SearchResult(
@@ -122,7 +112,7 @@ class WebUsecase {
       }
     } else {
       //検索程度ならワードでも制限をかけないが将来的な可能性を考慮すると
-      //クラウドリクエスト中間クラスで制限設定を参照しながらリクエスト可否を判定したい
+      //PLAN:クラウドリクエスト中間クラス(APIUseCase)で制限設定を参照しながらリクエスト可否を判定したい
       final res = await apiRepo.searchWord(
         ApiSearchRequest(
           searchType: request.searchType,
@@ -147,21 +137,57 @@ class WebUsecase {
     }
   }
 
+  Future<WebSite> readRssFeed(WebSite site) async {
+    if (userCfg.rssFeedSites.anySiteOfURL(site.siteUrl)) {
+      final sites =
+          userCfg.rssFeedSites.where((p) => p.siteUrl == site.siteUrl);
+      for (final element in sites) {
+        if (element.feeds.isEmpty) {
+          return refreshRssFeed(element);
+        } else {
+          return element;
+        }
+      }
+    }
+    //無かったら取得する
+    return refreshRssFeed(site);
+  }
+
+  Future<WebSite> addNewSite(String url) async {
+    final newSite = await webRepo.getFeeds(
+      url,
+      progressCallBack: progressCallBack,
+    );
+    await registerRssSite([newSite]);
+    return newSite;
+  }
+
   ///サイトを登録処理
-  void registerRssSite(WebSite site) {
-    userCfg.rssFeedSites.add([site]);
-    //PLAN:後々永続化処理
+  Future<void> registerRssSite(List<WebSite> sites) async {
+    userCfg.rssFeedSites.add(sites);
+    await saveData();
   }
 
-  void removeRssSite(String deleteCategory, WebSite site) {
+  Future<void> removeRssSite(String deleteCategory, WebSite site) async {
     userCfg.rssFeedSites.deleteSite(deleteCategory, site);
+    await saveData();
   }
 
-  Future<WebSite> fetchRssFeed(WebSite site) async {
-    final newSite = await webRepo.getFeeds(site.siteUrl);
-      userCfg.rssFeedSites.replaceWebSites(site, newSite);
-      //PLAN:フィードはこの後に永続化処理を検討
-      return newSite;
+  Future<void> removeSiteFolder(
+    String deleteCategory,
+  ) async {
+    userCfg.rssFeedSites.deleteFolder(deleteCategory);
+    await saveData();
+  }
+
+  Future<WebSite> refreshRssFeed(WebSite site) async {
+    final newSite = await webRepo.getFeeds(
+      site.siteUrl,
+      progressCallBack: progressCallBack,
+    );
+    userCfg.rssFeedSites.replaceWebSites(site, newSite);
+    await saveData();
+    return newSite;
   }
 
   Future<List<ExploreCategory>> readCategories() async {
@@ -172,5 +198,13 @@ class WebUsecase {
       }
     }
     throw Exception('Not found category');
+  }
+
+  Future<void> saveData() async {
+    try {
+      await localRepo.save(userCfg);
+    } on Exception catch (e) {
+      await noticeError(e.toString());
+    }
   }
 }

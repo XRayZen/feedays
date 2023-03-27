@@ -1,7 +1,5 @@
-import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 

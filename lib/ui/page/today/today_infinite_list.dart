@@ -1,5 +1,5 @@
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/indicator/empty_list_indicator.dart';
 import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
@@ -35,7 +35,7 @@ class _TodayInfiniteListState extends ConsumerState<TodayInfiniteList> {
       //1 ページを要求されたら取得処理をするコードを書く
       final site = ref.watch(selectWebSiteProvider);
       final datas = await ref
-          .watch(webUsecaseProvider)
+          .watch(rssUsecaseProvider)
           .fetchFeedDetail(site, pageKey, pageSize: 20);
       final previouslyFetchedItemsCount =
           // 2 itemListは、PagingControllerのプロパティです。
@@ -44,7 +44,7 @@ class _TodayInfiniteListState extends ConsumerState<TodayInfiniteList> {
           _pagingController.itemList?.length ?? 0;
       //取得したページがラストなのかどうか判定する
       if (ref
-          .watch(webUsecaseProvider)
+          .watch(rssUsecaseProvider)
           .userCfg
           .rssFeedSites
           .isLastFeed(site, previouslyFetchedItemsCount)) {

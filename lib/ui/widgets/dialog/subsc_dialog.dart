@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, inference_failure_on_function_invocation
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,13 +94,11 @@ class SubscriptionSiteDialog extends ConsumerWidget {
           title: Text('Category:( $deleteName ) to be delete?'),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 //指定したフォルダー・カテゴリーを削除する
-                ref
-                    .watch(webUsecaseProvider)
-                    .userCfg
-                    .rssFeedSites
-                    .deleteFolder(deleteName);
+                await ref
+                    .watch(rssUsecaseProvider)
+                    .removeSiteFolder(deleteName);
                 ref.watch(addedSiteProvider.notifier).state += 1;
                 Navigator.pop(context, true);
               },
@@ -137,7 +136,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
                 //フォルダー・カテゴリー名でカテゴリーを追加
                 if (text != '') {
                   ref
-                      .watch(webUsecaseProvider)
+                      .watch(rssUsecaseProvider)
                       .userCfg
                       .rssFeedSites
                       .addFolder(text);
@@ -165,7 +164,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
       site.siteUrl,
       ref,
     )) {
-      ref.watch(webUsecaseProvider).removeRssSite(list[index].name, site);
+      ref.watch(rssUsecaseProvider).removeRssSite(list[index].name, site);
     } else {
       //ここでサイトを変更すると大元のサイトも変更されてしまうからコピーしてから変更する
       final newEditSite = WebSite(
@@ -185,7 +184,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
         ..readLateCount = site.readLateCount
         ..fav = site.fav
         ..isCloudFeed = site.isCloudFeed;
-      ref.watch(webUsecaseProvider).registerRssSite(newEditSite);
+      ref.watch(rssUsecaseProvider).registerRssSite([newEditSite]);
     }
     ref.watch(addedSiteProvider.notifier).state += 1;
   }

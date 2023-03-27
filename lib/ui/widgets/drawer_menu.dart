@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_bool_literals_in_conditional_expressions
 
-import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/mock/mock_util.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
@@ -154,16 +153,24 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
             });
             startPageScaffoldKey.currentState!.closeDrawer();
           },
+          onLongPress: () async {
+            setState(() async {
+              //試験用に長押ししたらデータをクリアできるようにする
+              await ref.watch(useCaseProvider).localRepo.clear();
+            });
+          },
         ),
         const Divider(thickness: 1, height: 0.05),
         ListTile(
           leading: const Icon(Icons.bookmark_border),
           title: const Text('Read Later'),
           onTap: () async {
-            final webUsecase = ref.watch(webUsecaseProvider);
             final mockValidSites = await genValidSite();
             //今はテスト用にリストを挿入している
-            webUsecase.userCfg.rssFeedSites.add(mockValidSites);
+            await ref
+                .watch(useCaseProvider)
+                .rssUsecase
+                .registerRssSite(mockValidSites);
             // セットステートでUIを再描画させる
             setState(() {});
           },

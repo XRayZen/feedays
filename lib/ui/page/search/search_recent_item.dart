@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +20,9 @@ class SearchRecentItem extends ConsumerWidget {
       key: UniqueKey(),
       onDismissed: (direction) {
         ref
-            .watch(webUsecaseProvider)
-            .userCfg.editRecentSearches(txt, isAddOrRemove: false);
+            .watch(rssUsecaseProvider)
+            .userCfg
+            .editRecentSearches(txt, isAddOrRemove: false);
       },
       //どんなに方向を変えても必ず左に配置されてしまう
       background: const ColoredBox(

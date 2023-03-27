@@ -118,7 +118,6 @@ class ModelWebSiteAdapter extends TypeAdapter<ModelWebSite> {
       siteUrl: fields[3] as String,
       siteName: fields[4] as String,
       rssUrl: fields[5] as String,
-      icon: fields[6] as ByteData?,
       iconLink: fields[7] as String,
       newCount: fields[8] as int,
       readLateCount: fields[9] as int,
@@ -134,7 +133,7 @@ class ModelWebSiteAdapter extends TypeAdapter<ModelWebSite> {
   @override
   void write(BinaryWriter writer, ModelWebSite obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)
@@ -147,8 +146,6 @@ class ModelWebSiteAdapter extends TypeAdapter<ModelWebSite> {
       ..write(obj.siteName)
       ..writeByte(5)
       ..write(obj.rssUrl)
-      ..writeByte(6)
-      ..write(obj.icon)
       ..writeByte(7)
       ..write(obj.iconLink)
       ..writeByte(8)

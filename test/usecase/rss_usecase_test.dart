@@ -1,4 +1,4 @@
-import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
+
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_util.dart';
 import 'package:feedays/util.dart';

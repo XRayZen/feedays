@@ -2,6 +2,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +140,7 @@ class _ReorderableTreeListViewState
     int newListIndex,
   ) {
     setState(() {
-      ref.watch(webUsecaseProvider).userCfg.rssFeedSites.onReorderSiteIndex(
+      ref.watch(rssUsecaseProvider).userCfg.rssFeedSites.onReorderSiteIndex(
             oldItemIndex,
             oldListIndex,
             newItemIndex,
@@ -151,7 +152,7 @@ class _ReorderableTreeListViewState
   void _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
       ref
-          .watch(webUsecaseProvider)
+          .watch(rssUsecaseProvider)
           .userCfg
           .rssFeedSites
           .onReorderFolder(oldListIndex, newListIndex);
@@ -221,7 +222,6 @@ class _ReorderableTreeListViewState
           onTap: () async {
             //タップしたらWebSiteを選択してサイト詳細ページにタブバービューを変更する
             //ページ遷移ではない
-            // ref.watch(selectWebSiteProvider.notifier).state = site;
             ref.watch(selectWebSiteProvider.notifier).selectSite(site);
             startPageScaffoldKey.currentState!.setState(() {
               ref.watch(barViewTypeProvider.notifier).state =

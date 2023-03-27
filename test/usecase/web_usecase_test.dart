@@ -1,7 +1,7 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
-import 'package:feedays/domain/usecase/web_usecase.dart';
+import 'package:feedays/domain/usecase/rss_usecase.dart';
+import 'package:feedays/infra/impl_repo/local_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,13 +10,13 @@ void main() {
   group('description', () {
     final webRepo = WebRepoImpl();
     final apiRepo = MockApiRepository();
-    final rssFeedUse = RssFeedUsecase(webRepo: webRepo);
-    var webUse = WebUsecase(
+    final webUse = RssUsecase(
       webRepo: webRepo,
       apiRepo: apiRepo,
-      rssFeedUsecase: rssFeedUse,
+      localRepo: LocalRepoImpl(),
       noticeError: (message) async {},
       onAddSite: (site) async {},
+      progressCallBack: (count, all, msg) async {},
       userCfg: UserConfig.defaultUserConfig(),
     );
     test(
@@ -29,7 +29,7 @@ void main() {
         //RssLinkとFeedを取得できているのを期待
         expect(res.websites.first.feeds.length, isNonZero);
         //Site registration process
-        webUse.registerRssSite(res.websites.first);
+        await webUse.registerRssSite([res.websites.first]);
         //WebUsecaseのサイトに追加されているか期待する
         expect(
           webUse.userCfg.rssFeedSites.anySiteOfURL(path),

@@ -6,7 +6,6 @@ import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
-import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_util.dart';
 

@@ -1,16 +1,14 @@
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
-import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
+import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
-import 'package:feedays/domain/usecase/rss_feed_usecase.dart';
-import 'package:feedays/domain/usecase/web_usecase.dart';
+import 'package:feedays/domain/usecase/usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
+import 'package:feedays/infra/impl_repo/local_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
-import 'package:feedays/ui/page/search_view_page.dart';
-import 'package:feedays/ui/provider/saerch_vm.dart';
-import 'package:feedays/ui/provider/state_notifier.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final backendApiRepoProvider = Provider<BackendApiRepository>((ref) {
@@ -22,15 +20,15 @@ final webRepoProvider = Provider<WebRepositoryInterface>((ref) {
   return WebRepoImpl();
 });
 
-final userConfigProvider = Provider<UserConfig>((ref) {
-  return UserConfig.defaultUserConfig();
+final localRepoProvider = Provider<LocalRepositoryInterface>((ref) {
+  return LocalRepoImpl();
 });
 
-final webUsecaseProvider = Provider<WebUsecase>((ref) {
-  //テスト用DIをする時に複雑にならない
-  final webRepo = ref.watch(webRepoProvider);
-  final apiRepo = ref.watch(backendApiRepoProvider);
-  final userCOnfig = ref.watch(userConfigProvider);
+// final userConfigProvider = Provider<UserConfig>((ref) {
+//   return UserConfig.defaultUserConfig();
+// });
+
+final useCaseProvider = Provider<Usecase>((ref) {
   Future<void> noticeError(String msg) async {
     //PLAN:エラー通知プロバイダーに送信
     //どう通知するかはプロバイダーで決める
@@ -38,59 +36,28 @@ final webUsecaseProvider = Provider<WebUsecase>((ref) {
   Future<void> onAddSite(WebSite site) async {
     // TODO:UI側のプロバイダーを更新する
   }
-  final webUsecase = WebUsecase(
-    webRepo: webRepo,
-    apiRepo: apiRepo,
-    userCfg: userCOnfig,
+  Future<void> progress(int count, int all, String msg) async {
+    //PLAN:UIに進捗を表示する
+  }
+  return Usecase(
+    webRepo: ref.watch(webRepoProvider),
+    apiRepo: ref.watch(backendApiRepoProvider),
+    localRepo: ref.watch(localRepoProvider),
     noticeError: noticeError,
     onAddSite: onAddSite,
-    rssFeedUsecase: RssFeedUsecase(webRepo: webRepo),
+    progressCallBack: progress,
   );
-  return webUsecase;
 });
 
-void onSearch(SearchRequest request, WidgetRef ref) {
-  //空の文字は検索しない
-  if (request.word.isEmpty) {
-    //TODO:空の文字の場合はスナックバーでエラー警告を出す
-  }
-  ref.watch(searchProvider(request));
-}
-
-final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
-  ref,
-  request,
-) async {
-  // このプロバイダーに引数をつけて実行して結果を
-  //notifierに入れてからモードを切り替える方式を試す
-  late SearchResult result;
-  try {
-    //TODO:ここでダイアログを出して進捗を出す
-    result = await ref.watch(webUsecaseProvider).searchWord(request);
-  } on Exception catch (e) {
-    result = SearchResult(
-      apiResponse: ApiResponseType.refuse,
-      responseMessage: e.toString(),
-      resultType: SearchResultType.error,
-      searchType: request.searchType,
-      websites: [],
-      articles: [],
-    )..exception = e;
-  }
-
-  ref.watch(searchResultViewMode.notifier).state = SearchResultViewMode.result;
-  //resultなら消しておく
-  ref.watch(visibleRecentTextProvider.notifier).state = false;
-  //結果をnotifierに入れる
-  ref.watch(searchResultProvider.notifier).add(result);
-  // return result;
+final appInitProvider = FutureProvider<void>((ref) async {
+  await ref.watch(useCaseProvider).init();
 });
 
-///WebUsecaseの検索履歴を監視するプロバイダー
+///検索履歴を監視するプロバイダー
 final recentSearchesProvider = Provider<List<String>>((ref) {
   //更新の条件を限定
-  final use = ref
-      .watch(webUsecaseProvider.select((value) => value.userCfg.searchHistory));
+  final use =
+      ref.watch(useCaseProvider.select((value) => value.userCfg.searchHistory));
   return use;
 });
 
@@ -101,27 +68,20 @@ final searchTxtFieldProvider = StateProvider<String>((ref) {
 
 final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
   final use = ref.watch(
-    webUsecaseProvider.select((value) => value.userCfg.rssFeedSites.folders),
+    useCaseProvider.select((value) => value.userCfg.rssFeedSites.folders),
   );
   return use;
 });
-
-final selectSitePro =
-    FutureProvider.autoDispose.family<WebSite, WebSite>((ref, site) async {
-  final response = await ref.watch(webUsecaseProvider).fetchRssFeed(site);
-  return response;
+final readRssFolderProvider = Provider<List<WebSiteFolder>>((ref) {
+  final res =
+      ref.watch(useCaseProvider.select((v) => v.userCfg.rssFeedSites.folders));
+  return res;
 });
 
 final readCategoriesProvider =
     FutureProvider<List<ExploreCategory>>((ref) async {
-  final use = await ref.watch(webUsecaseProvider).readCategories();
+  final use = await ref.watch(rssUsecaseProvider).readCategories();
   return use;
-});
-
-final readRssFolderProvider = Provider<List<WebSiteFolder>>((ref) {
-  final res = ref
-      .watch(webUsecaseProvider.select((v) => v.userCfg.rssFeedSites.folders));
-  return res;
 });
 
 bool anySiteOfRssFolders(String folderName, String siteUrl, WidgetRef ref) {

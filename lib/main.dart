@@ -8,7 +8,6 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'ui/page/start_page.dart';
 
 void main({bool isProviderOverRide = true}) async {
-  await initLocalDataHandler();
   if (isProviderOverRide) {
     runApp(
       //統合テスト用にプロバイダー上書きを切り替える
@@ -34,12 +33,13 @@ GlobalKey<ScaffoldState> startPageScaffoldKey = GlobalKey<ScaffoldState>();
 GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       scaffoldMessengerKey: scaffoldMessengerKey,

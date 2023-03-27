@@ -1,16 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/search/list_item/rss_feed_item_ui.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
 import 'package:feedays/ui/widgets/indicator/no_more_item_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SiteDetailFeedList extends ConsumerWidget {
+class SiteRssFeedList extends ConsumerWidget {
   final WebSite site;
-  const SiteDetailFeedList({
+  const SiteRssFeedList({
     super.key,
     required this.site,
   });
@@ -22,15 +22,16 @@ class SiteDetailFeedList extends ConsumerWidget {
       //リトライ処理での結果を反映
       return _buildList(context, retry.feeds, ref);
     } else {
-      final selSite = ref.watch(selectSitePro(site));
-      return selSite.when(
+      //データを読み込む
+      final readSiteResponse = ref.watch(readWebSiteProvider(site));
+      return readSiteResponse.when(
         data: (response) {
           return _buildList(context, response.feeds, ref);
         },
         error: (error, stackTrace) {
           //エラーで既存があるのなら表示する
           final res = ref
-              .watch(webUsecaseProvider)
+              .watch(rssUsecaseProvider)
               .userCfg
               .rssFeedSites
               .searchSiteFeedList(site.siteUrl);

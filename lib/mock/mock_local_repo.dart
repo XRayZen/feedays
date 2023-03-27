@@ -26,4 +26,16 @@ class MockLocalRepo extends LocalRepositoryInterface {
     final data = await rootBundle.load(key);
     return data;
   }
+  
+  @override
+  Future<void> init() {
+    // TODO: implement init
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> clear() {
+    // TODO: implement clear
+    throw UnimplementedError();
+  }
 }

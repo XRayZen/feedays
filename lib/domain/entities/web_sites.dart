@@ -88,7 +88,8 @@ class RssWebSites {
     folders = newList;
   }
 
-  //サイトの上書きして置き換える
+  ///サイトを上書きして置き換える
+  ///フォルダーごとにサイトを探して上書きする
   void replaceWebSites(WebSite oldSite, WebSite newSite) {
     for (var i = 0; i < folders.length; i++) {
       if (folders[i]
@@ -187,7 +188,6 @@ class WebSite {
     required this.siteUrl,
     required this.siteName,
     this.rssUrl = '',
-    this.icon,
     required this.iconLink,
     this.newCount = 0,
     this.readLateCount = 0,
@@ -217,7 +217,6 @@ class WebSite {
   final String siteUrl;
   String siteName;
   String rssUrl;
-  final ByteData? icon;
   final String iconLink;
   int newCount;
   int readLateCount;

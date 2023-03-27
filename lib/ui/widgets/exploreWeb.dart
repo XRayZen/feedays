@@ -2,6 +2,7 @@ import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
+import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
