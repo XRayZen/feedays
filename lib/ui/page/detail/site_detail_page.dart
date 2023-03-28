@@ -67,32 +67,16 @@ class SiteDetailWidget extends ConsumerWidget {
                 title: SafeArea(
                   child: Row(
                     //スペーサーを指定して隙間を開けておく
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          //TODO:タイトルを中央にしておきたいがフォローボタンがいるからかうまく配置できない
+                          // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Padding(padding: EdgeInsets.all(10)),
                             Expanded(child: Container()),
-                            switchFavoriteButton(ref),
-                            const Padding(padding: EdgeInsets.all(5)),
-                            Text(
-                              site!.name,
-                              style: TextStyle(
-                                fontSize: getResponsiveValue(context),
-                              ),
-                            ),
-                            const Padding(padding: EdgeInsets.all(10)),
-                            IconButton(
-                              onPressed: () {
-                                //RSSを更新する
-                                ref
-                                    .watch(reTryRssFeedProvider.notifier)
-                                    .retry(context, site!);
-                              },
-                              icon: const Icon(Icons.refresh),
-                            ),
-                            const Padding(padding: EdgeInsets.all(5)),
+                            Center(child: SiteBarTitle(site: site)),
                             Expanded(child: Container()),
                             Align(
                               alignment: Alignment.centerLeft,
@@ -112,40 +96,6 @@ class SiteDetailWidget extends ConsumerWidget {
         body: SiteRssFeedList(site: site!),
       ),
     );
-  }
-
-  Widget switchFavoriteButton(WidgetRef ref) {
-    if (site != null) {
-      if (ref
-          .watch(favSitesProvider)
-          .any((element) => element.siteUrl == site!.siteUrl)) {
-        return IconButton(
-          tooltip: 'Tap to remove from favorites.',
-          onPressed: () {
-            ref
-                .watch(favSitesProvider)
-                .removeWhere((element) => element.siteUrl == site!.siteUrl);
-            ref.watch(addedSiteProvider.notifier).state += 1;
-          },
-          color: Colors.pink,
-          icon: const Icon(Icons.favorite),
-        );
-      } else {
-        return IconButton(
-          tooltip: 'Add Favorite',
-          onPressed: () async {
-            //お気に入り登録
-            if (site != null) {
-              ref.watch(favSitesProvider).add(site!);
-              ref.watch(addedSiteProvider.notifier).state += 1;
-            }
-          },
-          icon: const Icon(Icons.favorite_border),
-        );
-      }
-    } else {
-      return Container();
-    }
   }
 
   Widget switchFollowButton(
@@ -204,5 +154,71 @@ class SiteDetailWidget extends ConsumerWidget {
         Icon(Icons.check_circle),
       ],
     );
+  }
+}
+
+class SiteBarTitle extends ConsumerWidget {
+  WebSite? site;
+  SiteBarTitle({
+    super.key,
+    required this.site,
+  });
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      children: [
+        switchFavoriteButton(ref),
+        const Padding(padding: EdgeInsets.all(10)),
+        Text(
+          site!.name,
+          style: TextStyle(
+            fontSize: getResponsiveValue(context),
+          ),
+        ),
+        const Padding(padding: EdgeInsets.all(10)),
+        IconButton(
+          key: const Key('RefreshButton'),
+          onPressed: () {
+            //RSSを更新する
+            ref.watch(reTryRssFeedProvider.notifier).retry(context, site!);
+          },
+          icon: const Icon(Icons.refresh),
+        ),
+      ],
+    );
+  }
+
+  Widget switchFavoriteButton(WidgetRef ref) {
+    if (site != null) {
+      if (ref
+          .watch(favSitesProvider)
+          .any((element) => element.siteUrl == site!.siteUrl)) {
+        return IconButton(
+          tooltip: 'Tap to remove from favorites.',
+          onPressed: () {
+            ref
+                .watch(favSitesProvider)
+                .removeWhere((element) => element.siteUrl == site!.siteUrl);
+            ref.watch(addedSiteProvider.notifier).state += 1;
+          },
+          color: Colors.pink,
+          icon: const Icon(Icons.favorite),
+        );
+      } else {
+        return IconButton(
+          tooltip: 'Add Favorite',
+          onPressed: () async {
+            //お気に入り登録
+            if (site != null) {
+              ref.watch(favSitesProvider).add(site!);
+              ref.watch(addedSiteProvider.notifier).state += 1;
+            }
+          },
+          icon: const Icon(Icons.favorite_border),
+        );
+      }
+    } else {
+      return Container();
+    }
   }
 }
