@@ -221,7 +221,7 @@ class RssUsecase {
 
   Future<void> saveData() async {
     try {
-      await localRepo.save(userCfg);
+      await localRepo.saveConfig(userCfg);
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       await noticeError(e.toString());

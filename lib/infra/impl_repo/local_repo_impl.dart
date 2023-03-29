@@ -14,7 +14,7 @@ class LocalRepoImpl extends LocalRepositoryInterface {
   }
 
   @override
-  Future<UserConfig?> read() async {
+  Future<UserConfig?> readConfig() async {
     final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
     final model = box.get(1);
     if (model != null) {
@@ -25,7 +25,7 @@ class LocalRepoImpl extends LocalRepositoryInterface {
   }
 
   @override
-  Future<void> save(UserConfig cfg) async {
+  Future<void> saveConfig(UserConfig cfg) async {
     //Hiveで保存する
     final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
     final model = ModelUserConfig.from(cfg);
@@ -45,8 +45,19 @@ class LocalRepoImpl extends LocalRepositoryInterface {
   @override
   Future<void> clear() async {
     await Hive.deleteBoxFromDisk('UserCfgBox');
-    // final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
-    // await box.clear();
-    // await box.flush();
+    await Hive.deleteBoxFromDisk('WebImageBox');
+  }
+
+  @override
+  Future<Uint8List?> readImage(String link) async {
+    final box = await Hive.openBox<Uint8List>('WebImageBox');
+    return box.get(link);
+  }
+
+  @override
+  Future<void> saveImage(String link, Uint8List data) async {
+    final box = await Hive.openBox<Uint8List>('WebImageBox');
+    await box.put(link, data);
+    await box.flush();
   }
 }

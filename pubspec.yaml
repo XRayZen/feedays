@@ -49,9 +49,8 @@ dependencies:
   html: any
   ogp_data_extract: any
   metadata_fetch: ^0.4.1
-  # flutter_widget_from_html: any
-  # flutter_html: ^3.0.0-alpha.3
-  cached_network_image: ^3.2.3
+  # このプラグインが原因で最新のXcodeではビルド出来ない
+  # cached_network_image: ^3.2.3
   url_launcher: ^6.1.10
   universal_platform: ^1.0.0+1
   # webview_flutter: ^2.8.0

@@ -66,22 +66,18 @@ class SiteDetailWidget extends ConsumerWidget {
               flexibleSpace: FlexibleSpaceBar(
                 title: SafeArea(
                   child: Row(
-                    //スペーサーを指定して隙間を開けておく
-                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Row(
-                          //TODO:タイトルを中央にしておきたいがフォローボタンがいるからかうまく配置できない
-                          // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Padding(padding: EdgeInsets.all(10)),
                             Expanded(child: Container()),
-                            Center(child: SiteBarTitle(site: site)),
+                            SiteBarTitle(site: site),
                             Expanded(child: Container()),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: switchFollowButton(context, ref, site),
                             ),
+                            const Padding(padding: EdgeInsets.all(7)),
                           ],
                         ),
                       ),
@@ -167,6 +163,7 @@ class SiteBarTitle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
+        const Padding(padding: EdgeInsets.only(right: 110)),
         switchFavoriteButton(ref),
         const Padding(padding: EdgeInsets.all(10)),
         Text(

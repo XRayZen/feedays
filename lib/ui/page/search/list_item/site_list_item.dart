@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/site_detail_page.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/widgets/dialog/subsc_dialog.dart';
+import 'package:feedays/ui/widgets/imageView/image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,17 +43,21 @@ class SiteListItem extends ConsumerWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: SizedBox.square(
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: site.iconLink,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+                        child: CachedNetworkImageView(
+                            link: site.iconLink, fit: BoxFit.cover)
+                        // Image.network(site.iconLink,fit: BoxFit.cover)
+                        // CachedNetworkImage(
+                        //   fit: BoxFit.cover,
+                        //   imageUrl: site.iconLink,
+                        //   progressIndicatorBuilder:
+                        //       (context, url, downloadProgress) =>
+                        //           CircularProgressIndicator(
+                        //     value: downloadProgress.progress,
+                        //   ),
+                        //   errorWidget: (context, url, error) =>
+                        //       const Icon(Icons.error),
+                        // )
+                        ,
                       ),
                     ),
                     //ここを縦で配置してタイトル/サブタイトル/ディスクリプション/フィード最新抜粋
@@ -81,9 +85,8 @@ class SiteListItem extends ConsumerWidget {
                     //追加アイコン・ボタン
                     IconButton(
                       onPressed: () {
-                        showSubscriptionDialog(context, site,ref);
+                        showSubscriptionDialog(context, site, ref);
                         // CustomDialog(context).showCustomDialog();
-
                       },
                       icon: const Icon(Icons.add),
                     )

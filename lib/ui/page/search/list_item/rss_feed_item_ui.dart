@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/feed_detail_page.dart';
+import 'package:feedays/ui/widgets/imageView/image_view.dart';
 import 'package:flutter/material.dart';
 
 class RssFeedItemUI extends StatelessWidget {
@@ -26,18 +26,28 @@ class RssFeedItemUI extends StatelessWidget {
           children: [
             //先頭横にイメージを四角で表示
             SizedBox.square(
-              child: CachedNetworkImage(
+              child: CachedNetworkImageView(
+                link: articles[index].image.link,
                 fit: BoxFit.fill,
                 width: 150,
                 height: 100,
-                imageUrl: articles[index].image.link,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(
-                  value: downloadProgress.progress,
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
+              )
+              // Image.network(articles[index].image.link,fit: BoxFit.fill,
+              // width: 150,height: 100,)
+              // CachedNetworkImage(
+              //   fit: BoxFit.fill,
+              //   width: 150,
+              //   height: 100,
+              //   imageUrl: articles[index].image.link,
+              //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+              //       CircularProgressIndicator(
+              //     value: downloadProgress.progress,
+              //   ),
+              //   errorWidget: (context, url, error) => const Icon(Icons.error),
+              // )
+              ,
             ),
+            const Padding(padding: EdgeInsets.all(10)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,6 +60,7 @@ class RssFeedItemUI extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
+                  const Padding(padding: EdgeInsets.all(3)),
                   Text(articles[index].lastModified.toLocal().toString()),
                 ],
               ),
