@@ -97,26 +97,24 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
       onDestinationSelected: (value) => _selectedDestination(value, context),
       animationDuration: const Duration(seconds: 3),
       elevation: 20, //標高
-      // height: getResponsiveValue(context, 100, 100, 70),
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-      // backgroundColor: Colors.black,
-      // surfaceTintColor: Colors.black,
       destinations: const <Widget>[
         NavigationDestination(
           icon: Icon(Icons.menu),
           label: 'Menu',
           tooltip: 'open a menu',
         ),
-        NavigationDestination(
-          icon: Icon(Icons.bookmark_border),
-          label: 'ReadLater',
-          tooltip: 'Read later',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.menu_book),
-          label: 'TodayArticle',
-          tooltip: 'Today articles',
-        ),
+        //これらのページは後で実装する
+        // NavigationDestination(
+        //   icon: Icon(Icons.bookmark_border),
+        //   label: 'ReadLater',
+        //   tooltip: 'Read later',
+        // ),
+        // NavigationDestination(
+        //   icon: Icon(Icons.menu_book),
+        //   label: 'TodayArticle',
+        //   tooltip: 'Today articles',
+        // ),
         NavigationDestination(
           icon: Icon(Icons.add_circle_outline_sharp),
           label: 'AddContent',

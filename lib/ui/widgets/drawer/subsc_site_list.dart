@@ -124,9 +124,14 @@ class _ReorderableTreeListViewState
         ? DragHandleVerticalAlignment.top
         : DragHandleVerticalAlignment.center;
     final handle = DragHandle(
+      onLeft: isList,
       verticalAlignment: alignment,
       child: Container(
-        padding: EdgeInsets.only(right: isList ? 0 : 10, top: isList ? 20 : 0),
+        padding: EdgeInsets.only(
+          right: isList ? 10 : 10,
+          top: isList ? 15 : 0,
+          left: isList ? 15 : 10,
+        ),
         child: const Icon(Icons.menu),
       ),
     );
@@ -172,8 +177,20 @@ class _ReorderableTreeListViewState
           initiallyExpanded: true,
           disableTopAndBottomBorders: false, //拡大時に上下に表示されるボーダーを無効化する。
           listKey: ObjectKey(node),
+          trailing: _isEditMode(ref.watch(isFeedsEditModeProvider))
+              ? IconButton(
+                  onPressed: () {
+                    //フォルダー削除するか確認する
+                    deleteFolderDialog(node);
+                  },
+                  icon: const Icon(Icons.delete),
+                )
+              : null,
           title: Text(node.name),
-          leading: const Icon(Icons.ac_unit),
+          leading: _isEditMode(ref.watch(isFeedsEditModeProvider))
+              ? const Padding(padding: EdgeInsets.only(left: 10))
+              : const Icon(Icons.ac_unit),
+          //  const Icon(Icons.ac_unit),
           //PLAN:feedlyを真似てアロートグルを右に寄せる
           //書き換えてもトグルスイッチの時にアニメコントローラーに指示しないと動かない
           // trailing: ExpansionTileCustomAnimeWidget(),
@@ -195,11 +212,42 @@ class _ReorderableTreeListViewState
             //   }
             // });
           },
-          children: _buildTreeChildNode(node.name,node.children, ref),
+          children: _buildTreeChildNode(node.name, node.children, ref),
         ),
       );
     }
     return widgets;
+  }
+
+  Future<dynamic> deleteFolderDialog(WebSiteFolder node) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final folderName = node.name;
+        return AlertDialog(
+          title: Text('Delete Category $folderName '),
+          content: Text('Do you want to delete the $folderName ?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                //フォルダー削除
+                setState(() {
+                  ref.watch(rssUsecaseProvider).removeSiteFolder(node.name);
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   List<DragAndDropItem> _buildTreeChildNode(
@@ -215,8 +263,26 @@ class _ReorderableTreeListViewState
         canDrag: _isEditMode(ref.watch(isFeedsEditModeProvider)),
         //feedlyと同様タップしたらドロワーメニューを閉じてサイトのfeedPageにページを切り替える
         child: ListTile(
-          title: Text(
-            site.name,
+          title: Row(
+            children: [
+              Visibility(
+                visible: _isEditMode(ref.watch(isFeedsEditModeProvider)),
+                child: IconButton(
+                  onPressed: () {
+                    //削除するかどうか確認するダイアログを表示する
+                    showSiteEditDialog(folderName, site, context);
+                  },
+                  icon: const Icon(
+                    Icons.edit,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  site.name,
+                ),
+              ),
+            ],
           ),
           onTap: () async {
             //タップしたらWebSiteを選択してサイト詳細ページにタブバービューを変更する
@@ -230,7 +296,7 @@ class _ReorderableTreeListViewState
             setState(() {});
           },
           onLongPress: () {
-            showSiteEditDialog(folderName,site, context);
+            showSiteEditDialog(folderName, site, context);
           },
         ),
       );

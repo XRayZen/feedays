@@ -43,7 +43,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
       controller: scrollController,
       slivers: [
         SliverToBoxAdapter(child: _editButton()),
-        SliverToBoxAdapter(child: _pageListTiles()),
+        SliverToBoxAdapter(child: _upperListTiles()),
         SliverToBoxAdapter(child: customExpansion('Feed')),
         SliverVisibility(
           visible: _isExpanded,
@@ -51,33 +51,84 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           maintainState: true,
         ),
         SliverToBoxAdapter(
-          child: Column(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(barViewTypeProvider.notifier).state =
-                      TabBarViewType.addContent;
-                  startPageScaffoldKey.currentState!.closeDrawer();
-                },
-                child: const Text('Add Content'),
-              ),
-              const ListTile(
-                leading: Icon(Icons.message),
-                title: Text('Messages'),
-              ),
-              const ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text('Profile'),
-              ),
-              const ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
-              ),
-            ],
-          ),
+          child: downListTile(),
         )
       ],
     );
+  }
+
+    Widget _upperListTiles() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // const Divider(thickness: 1, height: 5),
+        // TodayTile(),
+        const Divider(thickness: 1, height: 0.05),
+        ListTile(
+          leading: const Icon(Icons.bookmark_border),
+          title: const Text('Mock用機能'),
+          onTap: () async {
+            final mockValidSites = await genValidSite();
+            //今はテスト用にリストを挿入している
+            await ref
+                .watch(useCaseProvider)
+                .rssUsecase
+                .registerRssSite(mockValidSites);
+            // セットステートでUIを再描画させる
+            setState(() {});
+          },
+        ),
+        const Divider(thickness: 1, height: 0.05),
+        Tooltip(
+          waitDuration: const Duration(milliseconds: 700),
+          message: '今はまだ有料化するほどの機能はない',
+          child: ListTile(
+            leading: const Icon(Icons.upcoming),
+            title: const Text('Upgrade'),
+            enabled: false,
+            onTap: () {},
+            //PLAN:今はまだ有料化するほどの機能はない
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column downListTile() {
+    return Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                ref.read(barViewTypeProvider.notifier).state =
+                    TabBarViewType.addContent;
+                startPageScaffoldKey.currentState!.closeDrawer();
+              },
+              child: const Text('AddContent'),
+            ),
+            //これらはページ遷移にする
+            ListTile(
+              leading: const Icon(Icons.message),
+              title: const Text('Messages'),
+              onTap: () {
+                //
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.qr_code_scanner),
+              title: const Text('QR Code Sync'),
+              onTap: () {
+                //
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                //
+              },
+            ),
+          ],
+        );
   }
 
   //既存のExpansionPanelはSliverを使えないためカスタマイズして動作を再現
@@ -139,57 +190,25 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     );
   }
 
-  Widget _pageListTiles() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Divider(thickness: 1, height: 5),
-        ListTile(
-          leading: const Icon(Icons.menu_book),
-          title: const Text('Today'),
-          onTap: () {
-            //TodayPageに表示を切り替えてメニューを閉じる
-            startPageScaffoldKey.currentState!.setState(() {
-              ref.watch(barViewTypeProvider.notifier).state =
-                  TabBarViewType.toDay;
-            });
-            startPageScaffoldKey.currentState!.closeDrawer();
-          },
-          onLongPress: () async {
-            setState(() async {
-              //試験用に長押ししたらデータをクリアできるようにする
-              await ref.watch(useCaseProvider).localRepo.clear();
-            });
-          },
-        ),
-        const Divider(thickness: 1, height: 0.05),
-        ListTile(
-          leading: const Icon(Icons.bookmark_border),
-          title: const Text('Read Later'),
-          onTap: () async {
-            final mockValidSites = await genValidSite();
-            //今はテスト用にリストを挿入している
-            await ref
-                .watch(useCaseProvider)
-                .rssUsecase
-                .registerRssSite(mockValidSites);
-            // セットステートでUIを再描画させる
-            setState(() {});
-          },
-        ),
-        const Divider(thickness: 1, height: 0.05),
-        Tooltip(
-          waitDuration: const Duration(milliseconds: 700),
-          message: '今はまだ有料化するほどの機能はない',
-          child: ListTile(
-            leading: const Icon(Icons.upcoming),
-            title: const Text('Upgrade'),
-            onTap: () {},
-            enabled: false,
-            //PLAN:今はまだ有料化するほどの機能はない
-          ),
-        ),
-      ],
+
+
+  ListTile todayTile() {
+    return ListTile(
+      leading: const Icon(Icons.menu_book),
+      title: const Text('Today'),
+      onTap: () {
+        //TodayPageに表示を切り替えてメニューを閉じる
+        startPageScaffoldKey.currentState!.setState(() {
+          ref.watch(barViewTypeProvider.notifier).state = TabBarViewType.toDay;
+        });
+        startPageScaffoldKey.currentState!.closeDrawer();
+      },
+      onLongPress: () async {
+        setState(() async {
+          //試験用に長押ししたらデータをクリアできるようにする
+          await ref.watch(useCaseProvider).localRepo.clear();
+        });
+      },
     );
   }
   //

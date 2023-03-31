@@ -28,7 +28,7 @@ class FeedDetailPage extends ConsumerWidget {
     final article = articles[index];
     return Scaffold(
       //スクロールするためにスクロールビューを入れる
-      //左右のスワイプを検知する
+      //上下左右のスワイプを検知する
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragEnd: (details) {
@@ -43,10 +43,8 @@ class FeedDetailPage extends ConsumerWidget {
         onVerticalDragEnd: (details) {
           //TODO:上下にスワイプしたらアニメーションしてポップ
           if (details.primaryVelocity! < 0) {
-            //左スワイプで次
             showSnack(context, 500, 'up');
           } else if (details.primaryVelocity! > 0) {
-            // 右スワイプで前
             showSnack(context, 500, 'down');
           }
         },
@@ -77,7 +75,7 @@ class FeedDetailPage extends ConsumerWidget {
                   IconButton(
                     tooltip: 'Set theme and size',
                     onPressed: () {
-                      //テーマやサイズを設定できる小ウインドウを表示
+                      //テーマやサイズを設定できるダイアログを表示
                     },
                     icon: const Icon(Icons.format_size),
                   ),
@@ -98,69 +96,6 @@ class FeedDetailPage extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Row leftRightTapDetect(BuildContext context) {
-    return Row(
-      children: [
-        Flexible(
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              //左のタップ
-              showSnack(
-                context,
-                500,
-                '左のタップ',
-              );
-            },
-          ),
-        ),
-        Flexible(
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              //中央のタップ
-              scaffoldMessengerKey.currentState!.showSnackBar(
-                const SnackBar(
-                  duration: Duration(milliseconds: 500),
-                  content: Text('中央にtap'),
-                ),
-              );
-            },
-          ),
-        ),
-        Flexible(
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              //右のタップ
-              scaffoldMessengerKey.currentState!.showSnackBar(
-                const SnackBar(
-                  duration: Duration(milliseconds: 500),
-                  content: Text('右にtap'),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget slideTransition(
-    BuildContext context,
-    Animation<double> animation,
-    Widget child,
-  ) {
-    const begin = Offset(1, 0);
-    const end = Offset.zero;
-    const curve = Curves.ease;
-    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-    return SlideTransition(
-      position: animation.drive(tween),
-      child: child,
     );
   }
 
