@@ -9,11 +9,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///無かったらダウンロードして返す
 final readImageProvider =
     FutureProvider.family<Uint8List, String>((ref, link) async {
+  //Linkをキーにデータを取得する
   final data = await ref.watch(localRepoProvider).readImage(link);
   if (data != null) {
     return data;
   } else {
-    //取得できないのならダウンロードする
+    //取得できないのならダウンロードして保存する
     final dataImage = await ref.watch(webRepoProvider).fetchHttpByte(link);
     await ref.watch(localRepoProvider).saveImage(link, dataImage);
     return dataImage;

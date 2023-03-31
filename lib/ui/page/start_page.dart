@@ -61,7 +61,11 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   @override
   Widget build(BuildContext context) {
-    //ここでデータ読み込み処理
+    return appInit(context);
+  }
+
+  ///ここでデータ読み込み処理
+  Widget appInit(BuildContext context) {
     return ref.watch(appInitProvider).when(
       data: (data) {
         return buildStartPage(context);

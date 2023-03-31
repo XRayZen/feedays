@@ -35,12 +35,12 @@ class WebRepoImpl extends WebRepositoryInterface {
       throw Exception('Not Found Rss URL: $url');
     }
     return WebSite(
-      key: rssFeed.link,
+      key: rssFeed.siteLink,
       name: rssFeed.title,
-      siteUrl: meta.siteUrl,
+      siteUrl: rssFeed.siteLink,
       siteName: meta.siteName,
-      iconLink: meta.iconLink,
-      rssUrl: rssFeed.link,
+      iconLink: rssFeed.iconLink?? meta.iconLink,
+      rssUrl: rssFeed.feedLink,
       tags: [],
       feeds: await parseImageLink(
         this,
@@ -51,7 +51,7 @@ class WebRepoImpl extends WebRepositoryInterface {
       lastModified: DateTime.now().toLocal(),
     );
   }
-  
+
   @override
   Future<WebSite> refreshRss(
     WebSite site, {
@@ -77,7 +77,6 @@ class WebRepoImpl extends WebRepositoryInterface {
       return true;
     }
   }
-
 
   @override
   Future<WebSite> fetchSiteOgpMeta(String url) async {
@@ -192,6 +191,4 @@ class WebRepoImpl extends WebRepositoryInterface {
       }
     }
   }
-
-
 }

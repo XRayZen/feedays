@@ -7,6 +7,7 @@ import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReTryRssFeedNotifier extends Notifier<WebSite> {

@@ -5,6 +5,7 @@ import 'package:feedays/ui/page/detail/html_view.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
+import 'package:feedays/ui/ui_util.dart';
 import 'package:feedays/ui/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -91,7 +92,7 @@ class FeedDetailPage extends ConsumerWidget {
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: FeedDetailBody(article: article, page: this),  
+                child: FeedDetailBody(article: article, page: this),
               ),
             ],
           ),
@@ -215,13 +216,15 @@ class FeedDetailBody extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
-                // fontFamily: ,
               ),
             ),
+            const Padding(padding: EdgeInsets.all(10)),
             //その下に小さくサイト名/by {Domain}/記事日時
             Text(
-              //FIXME:バグが出る可能性があるからドメイン名抽出は関数化して対策する
               '${article.site}/by ${article.link.split('//').elementAt(1).split('/').elementAt(0)}/${article.lastModified}',
+              style: const TextStyle(
+                fontSize: 20,
+              ),
             ),
             //ディスクリプション
             //Htmlを使おうとすればビルドできなくなる
@@ -233,17 +236,21 @@ class FeedDetailBody extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(9),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      //Shareダイアログ表示
+                  child: Builder(
+                    builder: (context) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          callShare(context, article.link, article.title);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          animationDuration: const Duration(seconds: 3),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        child: const Text('Share'),
+                      );
                     },
-                    style: ElevatedButton.styleFrom(
-                      animationDuration: const Duration(seconds: 3),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    child: const Text('Share'),
                   ),
                 ),
                 Padding(

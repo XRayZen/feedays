@@ -188,7 +188,7 @@ Future<FeedObject?> getRssFeed(
   if (await webRepo.anyPath(url)) {
     try {
       final data = await webRepo.fetchHttpByte(url);
-      final rss = rssDataToRssObj(data, url);
+      final rss = feedDataToRssObj(data, url);
       if (rss != null && rss.items.isNotEmpty) {
         return rss;
       }
@@ -211,15 +211,15 @@ Future<FeedObject?> getRssFeed(
       parse(data),
       RSSorAtom.rss,
     );
-    //FullPathの場合
+    //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
     if (await webRepo.anyPath(url + rssUrl)) {
       final rssData = await webRepo.fetchHttpByte(url + rssUrl);
-      return rssDataToRssObj(rssData, rssUrl);
+      return feedDataToRssObj(rssData, url + rssUrl);
     }
-    //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
+    //FullPathの場合
     else if (await webRepo.anyPath(rssUrl)) {
       final rssData = await webRepo.fetchHttpByte(rssUrl);
-      return rssDataToRssObj(rssData, rssUrl);
+      return feedDataToRssObj(rssData, rssUrl);
     }
   }
   final docBaseSiteMeta = parseDocumentToWebSite(url, parse(data));
@@ -240,10 +240,10 @@ Future<FeedObject?> getRssFeed(
   //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
   if (!rssUrl.contains('://')) {
     final rssData = await webRepo.fetchHttpByte(url + rssUrl);
-    return rssDataToRssObj(rssData, rssUrl);
+    return feedDataToRssObj(rssData, rssUrl);
   }
   final rssData = await webRepo.fetchHttpByte(rssUrl);
-  return rssDataToRssObj(rssData, rssUrl);
+  return feedDataToRssObj(rssData, rssUrl);
 }
 
 Future<WebSite> fetchRss(
@@ -261,17 +261,17 @@ Future<WebSite> fetchRss(
     );
     return meta;
   }
-  final rssFeed = await getRssFeed(webRepo,site.siteUrl);
+  final rssFeed = await getRssFeed(webRepo, site.siteUrl);
   if (rssFeed == null) {
     throw Exception('Not Found Rss URL: $site.siteUrl');
   }
   return WebSite(
-    key: rssFeed.link,
+    key: rssFeed.siteLink,
     name: rssFeed.title,
     siteUrl: meta.siteUrl,
     siteName: meta.siteName,
     iconLink: meta.iconLink,
-    rssUrl: rssFeed.link,
+    rssUrl: rssFeed.siteLink,
     tags: [],
     feeds: await parseImageLink(
       webRepo,

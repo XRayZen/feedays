@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:feedays/ui/provider/ui_provider.dart';
+import 'package:feedays/ui/ui_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-// Import for iOS features.
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class AppInWebBrowse extends ConsumerStatefulWidget {
   const AppInWebBrowse({
@@ -32,7 +31,7 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
   @override
   void initState() {
     super.initState();
-    _url = widget.url.toString();
+    _url = widget.url;
 
     if (UniversalPlatform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
@@ -44,9 +43,12 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        elevation: 0,
         actions: [
           IconButton(
+            tooltip: 'Reload',
             onPressed: () async {
               //リロード
               final controller = await _controller.future;
@@ -54,13 +56,23 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
             },
             icon: const Icon(Icons.replay_outlined),
           ),
-          IconButton(
-            onPressed: () {
-              //シェアポップアップを呼び出す
+          Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  //シェアポップアップを呼び出す
+                  callShare(
+                    context,
+                    widget.url,
+                    'Share this Site',
+                  );
+                },
+                icon: const Icon(Icons.share_sharp),
+              );
             },
-            icon: const Icon(Icons.share_sharp),
           ),
           IconButton(
+            tooltip: 'Open in Browser',
             onPressed: () async {
               //外部ブラウザで開く
               await launchWebUrl(widget.url);

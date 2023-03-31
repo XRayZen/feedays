@@ -248,6 +248,7 @@ class WebSite {
   bool fav;
   String description;
   bool isCloudFeed;
+
   ///最終更新日時
   DateTime lastModified;
 }
@@ -272,6 +273,7 @@ class FeedItem {
   final String site;
   DateTime lastModified;
   bool isReedLate;
+
   ///カテゴリーは取得の際につけられる
   final String category;
 }
@@ -288,14 +290,18 @@ class RssFeedImage {
 class FeedObject {
   List<FeedItem> items;
   String title;
-  String link;
+  String siteLink;
+  String feedLink;
   String description;
   String category;
+  String? iconLink;
   FeedObject({
     required this.items,
     required this.title,
-    required this.link,
+    required this.siteLink,
+    required this.feedLink,
     required this.description,
     required this.category,
+    this.iconLink,
   });
 }

@@ -44,20 +44,9 @@ class SiteListItem extends ConsumerWidget {
                       alignment: Alignment.topLeft,
                       child: SizedBox.square(
                         child: CachedNetworkImageView(
-                            link: site.iconLink, fit: BoxFit.cover)
-                        // Image.network(site.iconLink,fit: BoxFit.cover)
-                        // CachedNetworkImage(
-                        //   fit: BoxFit.cover,
-                        //   imageUrl: site.iconLink,
-                        //   progressIndicatorBuilder:
-                        //       (context, url, downloadProgress) =>
-                        //           CircularProgressIndicator(
-                        //     value: downloadProgress.progress,
-                        //   ),
-                        //   errorWidget: (context, url, error) =>
-                        //       const Icon(Icons.error),
-                        // )
-                        ,
+                          link: site.iconLink,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     //ここを縦で配置してタイトル/サブタイトル/ディスクリプション/フィード最新抜粋

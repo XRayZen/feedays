@@ -16,7 +16,6 @@ class SiteRssFeedList extends ConsumerWidget {
   });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //FIXME:フィード読み込みフローをルール違反・複雑化しているからリファクタリングする
     //リトライ処理で処理が終わったらここから再描画させる
     final retry = ref.watch(reTryRssFeedProvider);
     //リトライプロバイダーのステートが初期状態ならリトライ処理されていない
@@ -54,7 +53,6 @@ class SiteRssFeedList extends ConsumerWidget {
           );
         },
         loading: () {
-          //PLAN:読み込み画面もこだわるべきか
           return const CircularProgressIndicator();
         },
       );
@@ -101,7 +99,7 @@ class SiteRssFeedList extends ConsumerWidget {
       //区分けはカードの隙間にテキストを挟み込んで見る
       return Card(
         margin: const EdgeInsets.all(30),
-        child: Text(list[index].text!),
+        child: Text(list[index].text!, style: const TextStyle(fontSize: 30)),
       );
     } else {
       return RssFeedItemUI(

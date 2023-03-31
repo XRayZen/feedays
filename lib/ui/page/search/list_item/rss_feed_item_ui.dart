@@ -32,8 +32,6 @@ class RssFeedItemUI extends StatelessWidget {
                 width: 150,
                 height: 100,
               )
-              // Image.network(articles[index].image.link,fit: BoxFit.fill,
-              // width: 150,height: 100,)
               // CachedNetworkImage(
               //   fit: BoxFit.fill,
               //   width: 150,

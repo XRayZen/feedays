@@ -87,9 +87,12 @@ class RssUsecase {
           );
         }
       } else {
-        //なかったらRSS登録処理
+        //データに無かったらRSS登録処理
         try {
-          final resParseRssSite = await addNewSite(request.word);
+        final newSite = await webRepo.getFeeds(
+            request.word,
+            progressCallBack: progressCallBack,
+          );
           //リザルトはサイトを返す
           //登録するかはUIで判断できるようにする
           return SearchResult(
@@ -97,7 +100,7 @@ class RssUsecase {
             responseMessage: '',
             resultType: SearchResultType.found,
             searchType: SearchType.addContent,
-            websites: [resParseRssSite],
+            websites: [newSite],
             articles: [],
           );
           // ignore: avoid_catches_without_on_clauses

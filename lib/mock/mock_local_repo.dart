@@ -37,14 +37,12 @@ class MockLocalRepo extends LocalRepositoryInterface {
   }
   
   @override
-  Future<Uint8List?> readImage(String link) {
-    // TODO: implement readImage
-    throw UnimplementedError();
+  Future<Uint8List?> readImage(String link)async {
+    
   }
   
   @override
-  Future<void> saveImage(String link,Uint8List data) {
-    // TODO: implement saveImage
-    throw UnimplementedError();
+  Future<void> saveImage(String link,Uint8List data)async {
+    
   }
 }

@@ -4,11 +4,11 @@ import 'dart:typed_data';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:webfeed/webfeed.dart';
 
-FeedObject? rssDataToRssObj(Uint8List data, String url) {
+FeedObject? feedDataToRssObj(Uint8List data, String url) {
   try {
     final rss = RssFeed.parse(utf8.decode(data.buffer.asUint8List()));
     if (rss.items != null) {
-      return convertRssToFeedObj(rss);
+      return convertRssToFeedObj(rss,url);
     }
     // ignore: avoid_catching_errors, avoid_catches_without_on_clauses
   } catch (_) {
@@ -103,13 +103,15 @@ List<FeedItem> atomFeedConvert(AtomFeed atomFeed) {
   return items;
 }
 
-FeedObject convertRssToFeedObj(RssFeed rssFeed) {
+FeedObject convertRssToFeedObj(RssFeed rssFeed, String feedUrl) {
   return FeedObject(
     items: rssFeedConvert(rssFeed),
     title: rssFeed.title ?? '',
-    link: rssFeed.link ?? '',
+    siteLink: rssFeed.link ?? '',
+    feedLink: feedUrl,
     description: rssFeed.description ?? '',
     category: rssFeed.dc?.subject ?? '',
+    iconLink: rssFeed.image?.url,
   );
 }
 
@@ -117,8 +119,10 @@ FeedObject convertAtomToFeedObj(AtomFeed atomFeed, String url) {
   return FeedObject(
     items: atomFeedConvert(atomFeed),
     title: atomFeed.title ?? '',
-    link: url,
+    siteLink: url,
+    feedLink: url,
     description: atomFeed.subtitle ?? '',
     category: '',
+    iconLink: atomFeed.icon?? atomFeed.logo,
   );
 }
