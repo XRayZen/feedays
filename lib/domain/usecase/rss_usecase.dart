@@ -89,7 +89,7 @@ class RssUsecase {
       } else {
         //データに無かったらRSS登録処理
         try {
-        final newSite = await webRepo.getFeeds(
+          final newSite = await webRepo.getFeeds(
             request.word,
             progressCallBack: progressCallBack,
           );
@@ -173,6 +173,11 @@ class RssUsecase {
     );
     await registerRssSite([newSite]);
     return newSite;
+  }
+
+  Future<void> renameSite(WebSite site, String newName) async {
+    userCfg.rssFeedSites.renameSite(site, newName);
+    await saveData();
   }
 
   ///サイトを登録処理

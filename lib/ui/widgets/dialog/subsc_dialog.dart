@@ -20,7 +20,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
     // シンプルダイアログは静的なコンテンツの表示に適している
     final list = ref.watch(readRssFolderProvider);
     // ignore: unused_local_variable
-    final count = ref.watch(addedSiteProvider);
+    final count = ref.watch(onChangedProvider);
     final scrollCtrl = ScrollController();
     return Column(
       children: [
@@ -99,7 +99,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
                 await ref
                     .watch(rssUsecaseProvider)
                     .removeSiteFolder(deleteName);
-                ref.watch(addedSiteProvider.notifier).state += 1;
+                ref.watch(onChangedProvider.notifier).state += 1;
                 Navigator.pop(context, true);
               },
               child: const Text('OK'),
@@ -141,7 +141,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
                       .rssFeedSites
                       .addFolder(text);
                   //ステートレスだとSetStateが使えないからプロバイダーを使って更新
-                  ref.watch(addedSiteProvider.notifier).state += 1;
+                  ref.watch(onChangedProvider.notifier).state += 1;
                 }
                 Navigator.pop(context, true);
               },
@@ -187,7 +187,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
         ..isCloudFeed = site.isCloudFeed;
       ref.watch(rssUsecaseProvider).registerRssSite([newEditSite]);
     }
-    ref.watch(addedSiteProvider.notifier).state += 1;
+    ref.watch(onChangedProvider.notifier).state += 1;
   }
 }
 
@@ -204,7 +204,7 @@ class AddedSite extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final list = ref.watch(readRssFolderProvider);
     //更新するために監視
-    final count = ref.watch(addedSiteProvider);
+    final count = ref.watch(onChangedProvider);
     return Visibility(
       visible: anySiteOfRssFolders(list[folderIndex].name, site.siteUrl, ref),
       //ダイアログにはサイズ指定が必要
@@ -230,6 +230,7 @@ class AddedSite extends ConsumerWidget {
 
 Future<void> showSubscriptionDialog(
   BuildContext context,
+  String title,
   WebSite site,
   WidgetRef ref,
 ) async {
@@ -239,7 +240,7 @@ Future<void> showSubscriptionDialog(
       return AlertDialog(
         // 背景色を半透明に変更。
         backgroundColor: Theme.of(context).primaryColor.withOpacity(0.64),
-        title: const Text('Add Subscription Site'),
+        title: Text(title),
         //NOTE:表示されないエラーは https://qiita.com/NishiKeiqiita/items/15035fa16e3eb6bfd9aa で解決
         content:
             SingleChildScrollView(child: SubscriptionSiteDialog(site: site)),
@@ -248,6 +249,7 @@ Future<void> showSubscriptionDialog(
           TextButton(
             onPressed: () {
               Navigator.pop(context, true);
+              ref.watch(onChangedProvider.notifier).state += 1;
             },
             child: const Text('Close'),
           ),

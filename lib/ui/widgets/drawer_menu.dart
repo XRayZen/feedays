@@ -4,6 +4,7 @@ import 'package:feedays/main.dart';
 import 'package:feedays/mock/mock_util.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/drawer/subsc_site_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final _add = ref.watch(onChangedProvider);
     return Drawer(
       backgroundColor: Colors.black.withOpacity(0.5),
       //NOTE:feedlyのメニューをパクる

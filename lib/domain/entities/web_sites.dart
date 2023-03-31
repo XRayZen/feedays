@@ -169,6 +169,21 @@ class RssWebSites {
   void deleteFolder(String folderName) {
     folders.removeWhere((element) => element.name == folderName);
   }
+  
+
+  //サイトの名前を変更する
+  //フォルダーごとにサイトを探して上書きする
+  void renameSite(WebSite site, String newName) {
+    for (var i = 0; i < folders.length; i++) {
+      if (folders[i]
+          .children
+          .any((element) => element.siteUrl == site.siteUrl)) {
+        final siteIndex =
+            folders[i].children.indexWhere((e) => e.siteUrl == site.siteUrl);
+        folders[i].children[siteIndex].name = newName;
+      }
+    }
+  }
 }
 
 class WebSiteFolder {

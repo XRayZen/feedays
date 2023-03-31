@@ -47,7 +47,7 @@ class SiteDetailWidget extends ConsumerWidget {
     }
     //Widget更新用
     // ignore: unused_local_variable
-    final count = ref.watch(addedSiteProvider);
+    final count = ref.watch(onChangedProvider);
     return _buildBody(ref);
   }
 
@@ -108,8 +108,8 @@ class SiteDetailWidget extends ConsumerWidget {
         //既にあるのならチェックマークのアイコンで登録済みだと示す
         return GestureDetector(
           onTap: () async {
-            await showSubscriptionDialog(context, site, ref);
-            ref.watch(addedSiteProvider.notifier).state += 1;
+            await showSubscriptionDialog(context, 'Add Subscription',site, ref);
+            ref.watch(onChangedProvider.notifier).state += 1;
           },
           child: Row(
             children: const [
@@ -131,9 +131,9 @@ class SiteDetailWidget extends ConsumerWidget {
             onPressed: () async {
               //購読処理
               //feedlyではスライドしてフォルダを選択するがここはダイアログで選択する
-              await showSubscriptionDialog(context, site, ref);
+              await showSubscriptionDialog(context,'Add Subscription', site, ref);
               //購読処理をしたら更新する必要がある
-              ref.watch(addedSiteProvider.notifier).state += 1;
+              ref.watch(onChangedProvider.notifier).state += 1;
             },
             child: const Text(
               'FOLLOW',
@@ -164,7 +164,12 @@ class SiteBarTitle extends ConsumerWidget {
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(right: 110)),
-        switchFavoriteButton(ref),
+        switchFavoriteButton(
+          site,
+          const Icon(Icons.favorite),
+          const Icon(Icons.favorite_border),
+          ref,
+        ),
         const Padding(padding: EdgeInsets.all(10)),
         Text(
           site!.name,
@@ -184,38 +189,39 @@ class SiteBarTitle extends ConsumerWidget {
       ],
     );
   }
+}
 
-  Widget switchFavoriteButton(WidgetRef ref) {
-    if (site != null) {
-      if (ref
-          .watch(favSitesProvider)
-          .any((element) => element.siteUrl == site!.siteUrl)) {
-        return IconButton(
-          tooltip: 'Tap to remove from favorites.',
-          onPressed: () {
-            ref
-                .watch(favSitesProvider)
-                .removeWhere((element) => element.siteUrl == site!.siteUrl);
-            ref.watch(addedSiteProvider.notifier).state += 1;
-          },
-          color: Colors.pink,
-          icon: const Icon(Icons.favorite),
-        );
-      } else {
-        return IconButton(
-          tooltip: 'Add Favorite',
-          onPressed: () async {
-            //お気に入り登録
-            if (site != null) {
-              ref.watch(favSitesProvider).add(site!);
-              ref.watch(addedSiteProvider.notifier).state += 1;
-            }
-          },
-          icon: const Icon(Icons.favorite_border),
-        );
-      }
+Widget switchFavoriteButton(
+    WebSite? site, Widget onFavIcon, Widget offFavIcon, WidgetRef ref) {
+  if (site != null) {
+    if (ref
+        .watch(favSitesProvider)
+        .any((element) => element.siteUrl == site.siteUrl)) {
+      return IconButton(
+        tooltip: 'Tap to remove from favorites.',
+        onPressed: () {
+          ref
+              .watch(favSitesProvider)
+              .removeWhere((element) => element.siteUrl == site.siteUrl);
+          ref.watch(onChangedProvider.notifier).state += 1;
+        },
+        color: Colors.pink,
+        icon: onFavIcon,
+      );
     } else {
-      return Container();
+      return IconButton(
+        tooltip: 'Add Favorite',
+        onPressed: () async {
+          //お気に入り登録
+          if (site != null) {
+            ref.watch(favSitesProvider).add(site);
+            ref.watch(onChangedProvider.notifier).state += 1;
+          }
+        },
+        icon: offFavIcon,
+      );
     }
+  } else {
+    return Container();
   }
 }

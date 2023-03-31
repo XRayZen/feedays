@@ -12,8 +12,6 @@ class SiteListItem extends ConsumerWidget {
   final WebSite site;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //RSSサイト検索結果リストのアイテムUIを実装する
-    //feedlyを似せる
     return GestureDetector(
       onTap: () async {
         ref.watch(selectWebSiteProvider.notifier).state = site;
@@ -65,17 +63,19 @@ class SiteListItem extends ConsumerWidget {
                           ),
                           //ディスクリプション
                           Text(site.description),
-                          //フィード先頭三件タイトルを表示したいが省く
-                          //フィードが取得出来ていないのなら非表示
-                          //クラウド必須だがフォロワー数と週間記事数を表示しているが今は実装しない
+                          //PLAN:クラウド必須だがフォロワー数と週間記事数を表示しているが今は実装しない
                         ],
                       ),
                     ),
                     //追加アイコン・ボタン
                     IconButton(
                       onPressed: () {
-                        showSubscriptionDialog(context, site, ref);
-                        // CustomDialog(context).showCustomDialog();
+                        showSubscriptionDialog(
+                          context,
+                          'Add Subscription',
+                          site,
+                          ref,
+                        );
                       },
                       icon: const Icon(Icons.add),
                     )

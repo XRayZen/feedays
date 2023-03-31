@@ -4,6 +4,7 @@ import 'package:feedays/main.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
+import 'package:feedays/ui/widgets/dialog/site_edit_dialog.dart';
 import 'package:feedays/ui/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -194,7 +195,7 @@ class _ReorderableTreeListViewState
             //   }
             // });
           },
-          children: _buildTreeChildNode(node.children, ref),
+          children: _buildTreeChildNode(node.name,node.children, ref),
         ),
       );
     }
@@ -202,6 +203,7 @@ class _ReorderableTreeListViewState
   }
 
   List<DragAndDropItem> _buildTreeChildNode(
+    String folderName,
     List<WebSite> models,
     WidgetRef ref,
   ) {
@@ -211,9 +213,6 @@ class _ReorderableTreeListViewState
     return models.map((site) {
       return DragAndDropItem(
         canDrag: _isEditMode(ref.watch(isFeedsEditModeProvider)),
-        //ドラッグしてるときの様子
-        // feedbackWidget: ,
-        //PLAN:後回し
         //feedlyと同様タップしたらドロワーメニューを閉じてサイトのfeedPageにページを切り替える
         child: ListTile(
           title: Text(
@@ -229,6 +228,9 @@ class _ReorderableTreeListViewState
             });
             startPageScaffoldKey.currentState!.closeDrawer();
             setState(() {});
+          },
+          onLongPress: () {
+            showSiteEditDialog(folderName,site, context);
           },
         ),
       );

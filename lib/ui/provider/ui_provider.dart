@@ -55,6 +55,7 @@ Future<void> launchWebUrl(
   }
 }
 
-final addedSiteProvider = StateProvider<int>((ref) {
+///ドロワーメニューなどのWidgetを更新させるために使う
+final onChangedProvider = StateProvider<int>((ref) {
   return 0;
 });
