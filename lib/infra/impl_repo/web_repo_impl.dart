@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/infra/datasources/http_parse.dart';
@@ -39,7 +38,7 @@ class WebRepoImpl extends WebRepositoryInterface {
       name: rssFeed.title,
       siteUrl: rssFeed.siteLink,
       siteName: meta.siteName,
-      iconLink: rssFeed.iconLink?? meta.iconLink,
+      iconLink: rssFeed.iconLink ?? meta.iconLink,
       rssUrl: rssFeed.feedLink,
       tags: [],
       feeds: await parseImageLink(
@@ -69,12 +68,15 @@ class WebRepoImpl extends WebRepositoryInterface {
   @override
   Future<bool> anyPath(String path) async {
     final target = Uri.parse(path);
-    // final response = await http.get(target);
-    final response = await Dio().getUri(target);
-    if (response.statusCode != 200) {
+    try {
+      final response = await http.get(target);
+      if (response.statusCode != 200) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (_) {
       return false;
-    } else {
-      return true;
     }
   }
 
@@ -124,18 +126,11 @@ class WebRepoImpl extends WebRepositoryInterface {
   @override
   Future<Uint8List> fetchHttpByte(String url) async {
     final target = Uri.parse(url);
-    // https://github.com/cfug/dio/blob/main/example/lib/download.dart
-    final response = await Dio().getUri<Uint8List>(
-      target,
-      options: Options(
-        responseType: ResponseType.bytes,
-        receiveTimeout: const Duration(seconds: 50),
-      ),
-    );
+    final response = await http.get(target);
     if (response.statusCode != 200) {
       throw Exception('ERROR: ${response.statusCode}');
     }
-    return response.data!;
+    return response.bodyBytes;
   }
 
   @override

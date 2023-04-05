@@ -249,14 +249,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.5"
-  dio:
-    dependency: "direct main"
-    description:
-      name: dio
-      sha256: f7c26ddb3a10ff033cf1bfbf2c668feb3472327f48385775f7cf25b104f8bfce
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   drag_and_drop_lists:
     dependency: "direct main"
     description:
@@ -400,6 +392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.3+1"
+  flutter_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_picker
+      sha256: "2f94c6eefba8697b07e3cd008b75f06b4ba7053cb26d23ae0fcd5932b7dc75af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -535,6 +535,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  infinite_listview:
+    dependency: transitive
+    description:
+      name: infinite_listview
+      sha256: f6062c1720eb59be553dfa6b89813d3e8dd2f054538445aaa5edaddfa5195ce6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   infinite_scroll_pagination:
     dependency: "direct main"
     description:
@@ -652,6 +660,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  numberpicker:
+    dependency: "direct main"
+    description:
+      name: numberpicker
+      sha256: "73723bd13c940ebcd9e5f0ed56b4874588c1748a9a6a38254f97ad627715142e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   numerus:
     dependency: transitive
     description:

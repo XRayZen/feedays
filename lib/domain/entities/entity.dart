@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
+import 'package:feedays/domain/entities/ui_config.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
+import 'package:flutter/material.dart';
 
 import './app_config.dart';
 
@@ -9,10 +11,10 @@ import './app_config.dart';
 class UserConfig {
   String userName;
   String password;
-  String userID; //ユーザーidは初回起動時でサーバーから割り振っれるユニークなid
+  String userID; //ユーザーidは初回起動時でサーバーから割り振られるユニークなid
   bool isGuest;
   RssWebSites rssFeedSites;
-  AppConfig config;
+  AppConfig appConfig;
   UserIdentInfo identInfo;
   UserAccountType accountType;
   List<String> searchHistory;
@@ -23,7 +25,7 @@ class UserConfig {
     required this.userID,
     required this.isGuest,
     required this.rssFeedSites,
-    required this.config,
+    required this.appConfig,
     required this.identInfo,
     required this.accountType,
     required this.searchHistory,
@@ -37,13 +39,28 @@ class UserConfig {
       userID: 'userID',
       isGuest: true,
       rssFeedSites: RssWebSites(folders: []),
-      config: AppConfig(
+      appConfig: AppConfig(
         apiRequestConfig: ApiRequestLimitConfig(
           trendRequestLimit: 10,
           noneRssFeedRequestLimit: 10,
           sendActivityMinute: 10,
         ),
         rssFeedConfig: RssFeedConfig(),
+        uiConfig: UiConfig(
+          themeColorValue: Colors.amber.value,
+          themeMode: AppThemeMode.system,
+          feedDetailFontSize: UiResponsiveFontSize(
+            mobile: 18,
+            tablet: 24,
+            defaultSize: 15,
+          ),
+          siteFeedListFontSize: UiResponsiveFontSize(
+            mobile: 11,
+            tablet: 15,
+            defaultSize: 10,
+          ),
+          drawerMenuOpacity: 0.5,
+        ),
       ),
       identInfo: UserIdentInfo(
         ip: '0',

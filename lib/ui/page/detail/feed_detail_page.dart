@@ -1,31 +1,36 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file:  inference_failure_on_instance_creation
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:feedays/main.dart';
 import 'package:feedays/ui/page/detail/html_view.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/ui_util.dart';
-import 'package:feedays/ui/widgets/snack_bar.dart';
+import 'package:feedays/ui/widgets/dialog/feed_detail_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-class FeedDetailPage extends ConsumerWidget {
-  const FeedDetailPage({
-    super.key,
-    required this.index,
-    required this.articles,
-  });
+class FeedDetailPageView extends ConsumerStatefulWidget {
   final List<FeedItem> articles;
   final int index;
-
-  //スワイプするととなりのフィード詳細に遷移
-
+  const FeedDetailPageView({
+    super.key,
+    required this.articles,
+    required this.index,
+  });
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final article = articles[index];
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _FeedDetailPageViewState();
+}
+
+class _FeedDetailPageViewState extends ConsumerState<FeedDetailPageView> {
+  @override
+  Widget build(BuildContext context) {
+    //UI再描画用プロバイダーを呼んでおく
+    final _ = ref.watch(onChangedProvider);
+    final article = widget.articles[widget.index];
     return Scaffold(
       //スクロールするためにスクロールビューを入れる
       //上下左右のスワイプを検知する
@@ -38,14 +43,6 @@ class FeedDetailPage extends ConsumerWidget {
           } else if (details.primaryVelocity! > 0) {
             // 右スワイプで前
             nextPageNavigate(context);
-          }
-        },
-        onVerticalDragEnd: (details) {
-          //TODO:上下にスワイプしたらアニメーションしてポップ
-          if (details.primaryVelocity! < 0) {
-            showSnack(context, 500, 'up');
-          } else if (details.primaryVelocity! > 0) {
-            showSnack(context, 500, 'down');
           }
         },
         child: NestedScrollView(
@@ -76,6 +73,8 @@ class FeedDetailPage extends ConsumerWidget {
                     tooltip: 'Set theme and size',
                     onPressed: () {
                       //テーマやサイズを設定できるダイアログを表示
+                      //TODO:フィード詳細ページのフォントサイズを設定できるダイアログを実装する
+                      showFeedDetailDialog(context, ref);
                     },
                     icon: const Icon(Icons.format_size),
                   ),
@@ -90,7 +89,7 @@ class FeedDetailPage extends ConsumerWidget {
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: FeedDetailBody(article: article, page: this),
+                child: FeedDetailBody(article: article, page: widget),
               ),
             ],
           ),
@@ -103,23 +102,29 @@ class FeedDetailPage extends ConsumerWidget {
     if (backOrNext) {
       //前の記事に遷移
       //マイナスになったら遷移しない
-      if (0 <= index - 1) {
+      if (0 <= widget.index - 1) {
         Navigator.of(context).push(
           PageTransition(
-            child: FeedDetailPage(index: index - 1, articles: articles),
+            child: FeedDetailPageView(
+              index: widget.index - 1,
+              articles: widget.articles,
+            ),
             type: PageTransitionType.leftToRightJoined,
-            childCurrent: this,
+            childCurrent: widget,
           ),
         );
       }
     } else {
-      if (articles.length > index + 1) {
+      if (widget.articles.length > widget.index + 1) {
         // 次の記事に遷移
         Navigator.of(context).push(
           PageTransition(
-            child: FeedDetailPage(index: index + 1, articles: articles),
+            child: FeedDetailPageView(
+              index: widget.index + 1,
+              articles: widget.articles,
+            ),
             type: PageTransitionType.rightToLeft,
-            childCurrent: this,
+            childCurrent: widget,
           ),
         );
       }
@@ -135,7 +140,7 @@ class FeedDetailBody extends StatelessWidget {
   });
 
   final FeedItem article;
-  final FeedDetailPage page;
+  final FeedDetailPageView page;
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +149,6 @@ class FeedDetailBody extends StatelessWidget {
         width: 800,
         child: Column(
           children: [
-            //長かったら折り返す
             //一番上に太字でタイトル
             Text(
               article.title,
@@ -164,7 +168,7 @@ class FeedDetailBody extends StatelessWidget {
             //ディスクリプション
             //Htmlを使おうとすればビルドできなくなる
             //NOTE:チャンネルをステープルにしてようやく出来た
-            HtmlWidget(data: article.description),
+            HtmlViewWidget(data: article.description),
             //横に配置でシェアボタンとビューWebサイトボタン
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -2,14 +2,16 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/feed_detail_page.dart';
 import 'package:feedays/ui/widgets/imageView/image_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RssFeedItemUI extends StatelessWidget {
+class RssFeedItemUI extends ConsumerWidget {
   const RssFeedItemUI({super.key, required this.articles, required this.index});
   final List<FeedItem> articles;
   final int index;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    //uiConfigを取得
     return GestureDetector(
       onTap: () {
         //タップしたらフィード詳細ページに遷移
@@ -17,7 +19,7 @@ class RssFeedItemUI extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                FeedDetailPage(index: index, articles: articles),
+                FeedDetailPageView(index: index, articles: articles),
           ),
         );
       },
@@ -31,19 +33,7 @@ class RssFeedItemUI extends StatelessWidget {
                 fit: BoxFit.fill,
                 width: 150,
                 height: 100,
-              )
-              // CachedNetworkImage(
-              //   fit: BoxFit.fill,
-              //   width: 150,
-              //   height: 100,
-              //   imageUrl: articles[index].image.link,
-              //   progressIndicatorBuilder: (context, url, downloadProgress) =>
-              //       CircularProgressIndicator(
-              //     value: downloadProgress.progress,
-              //   ),
-              //   errorWidget: (context, url, error) => const Icon(Icons.error),
-              // )
-              ,
+              ),
             ),
             const Padding(padding: EdgeInsets.all(10)),
             Expanded(

@@ -7,6 +7,7 @@ import 'package:feedays/domain/repositories/api/backend_repository_interface.dar
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/domain/usecase/api_usecase.dart';
+import 'package:feedays/domain/usecase/config_usecase.dart';
 import 'package:feedays/domain/usecase/rss_usecase.dart';
 
 class Usecase {
@@ -17,6 +18,7 @@ class Usecase {
   Future<void> Function(WebSite site) onAddSite;
   Future<void> Function(int count, int all, String msg) progressCallBack;
   late UserConfig userCfg;
+  late ConfigUsecase configUsecase;
   late RssUsecase rssUsecase;
   late ApiUsecase apiUsecase;
   Usecase({
@@ -40,6 +42,10 @@ class Usecase {
       userCfg = UserConfig.defaultUserConfig();
     }
     //インスタンス化
+    configUsecase = ConfigUsecase(
+      localRepo: localRepo,
+      userCfg: userCfg,
+    );
     rssUsecase = RssUsecase(
       webRepo: webRepo,
       apiRepo: apiRepo,

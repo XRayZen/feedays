@@ -153,7 +153,7 @@ class RssUsecase {
         } else {
           //サイトの最終更新日時が設定期限よりも古かったら更新して返す
           if (element.isRssFeedRefreshTime(
-            userCfg.config.rssFeedConfig.limitLastFetchTime,
+            userCfg.appConfig.rssFeedConfig.limitLastFetchTime,
           )) {
             return refreshRssFeed(element);
           } else {

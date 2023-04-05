@@ -11,7 +11,6 @@ class AddContentPage extends ConsumerStatefulWidget {
   ConsumerState<AddContentPage> createState() => _AddContentPageState();
 }
 
-//// TODO(@XRayZen):UI: #6 コンテンツ追加ページを実装する
 class _AddContentPageState extends ConsumerState<AddContentPage> {
   @override
   Widget build(BuildContext context) {

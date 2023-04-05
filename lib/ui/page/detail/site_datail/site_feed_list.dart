@@ -85,7 +85,7 @@ class SiteRssFeedList extends ConsumerWidget {
     );
   }
 
-  StatelessWidget _buildListItem(
+  Widget _buildListItem(
     List<RssListViewModel> list,
     int index,
     List<FeedItem> feeds,

@@ -49,10 +49,6 @@ class MyApp extends ConsumerWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: Colors.amber,
         brightness: Brightness.dark,
-        // colorScheme: const ColorScheme.dark(
-        //   primary: Colors.amber,
-        //   // secondary: Colors.white54,
-        // ),
         fontFamily: 'Noto Sans JP',
         useMaterial3: true,
       ),

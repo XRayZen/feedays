@@ -28,6 +28,9 @@ void registerAdapter() {
   Hive.registerAdapter(ModelAppConfigAdapter());
   Hive.registerAdapter(ModelApiRequestLimitConfigAdapter());
   Hive.registerAdapter(ModelRssFeedConfigAdapter());
+  Hive.registerAdapter(ModelUiConfigAdapter());
+  Hive.registerAdapter(ModelUiResponsiveFontSizeAdapter());
+  Hive.registerAdapter(ModelAppThemeModeAdapter());
   //model_activity
   Hive.registerAdapter(ModelUserReadActivityAdapter());
   Hive.registerAdapter(ModelUserSubscribeActivityAdapter());

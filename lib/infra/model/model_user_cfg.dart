@@ -34,7 +34,7 @@ class ModelUserConfig extends HiveObject {
       userID: e.userID,
       isGuest: e.isGuest,
       rssFeedSiteFolders: obj,
-      config: ModelAppConfig.from(e.config),
+      config: ModelAppConfig.from(e.appConfig),
       identInfo: ModelUserIdentInfo.from(e.identInfo),
       accountType: convertUserAccountType(e.accountType),
       searchHistory: e.searchHistory,
@@ -50,7 +50,7 @@ class ModelUserConfig extends HiveObject {
       rssFeedSites: RssWebSites(
         folders: rssFeedSiteFolders.map((e) => e.to()).toList(),
       ),
-      config: config.to(),
+      appConfig: config.to(),
       identInfo: identInfo.to(),
       accountType: convertModelUserAccountType(accountType),
       searchHistory: searchHistory,
@@ -161,7 +161,7 @@ class ModelWebSite extends HiveObject {
     this.fav = false,
     required this.description,
     this.isCloudFeed = false,
-    this.lastModified=0,
+    this.lastModified = 0,
   });
   factory ModelWebSite.from(WebSite e) {
     return ModelWebSite(
@@ -200,7 +200,7 @@ class ModelWebSite extends HiveObject {
       fav: fav,
       description: description,
       isCloudFeed: isCloudFeed,
-      lastModified:DateTime.fromMillisecondsSinceEpoch(lastModified) ,
+      lastModified: DateTime.fromMillisecondsSinceEpoch(lastModified),
     );
   }
 
@@ -302,17 +302,16 @@ class ModelFeedItem extends HiveObject {
 class ModelRssFeedImage extends HiveObject {
   ModelRssFeedImage({
     required this.link,
-    required this.image,
   });
   factory ModelRssFeedImage.from(RssFeedImage i) {
-    return ModelRssFeedImage(link: i.link, image: i.image);
+    return ModelRssFeedImage(
+      link: i.link,
+    );
   }
   RssFeedImage to() {
-    return RssFeedImage(link: link, image: image);
+    return RssFeedImage(link: link, image: null);
   }
 
   @HiveField(0)
   final String link;
-  @HiveField(1)
-  final ByteData? image;
 }

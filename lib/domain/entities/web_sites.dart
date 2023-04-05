@@ -97,7 +97,7 @@ class RssWebSites {
           .any((element) => element.siteUrl == oldSite.siteUrl)) {
         //置き換えずfeed他を更新するだけ
         final siteIndex =
-            folders[i].children.indexWhere((e) => e.siteUrl == newSite.siteUrl);
+            folders[i].children.indexWhere((e) => e.siteUrl == oldSite.siteUrl);
         oldSite
           ..feeds = newSite.feeds
           ..name = newSite.name;
@@ -169,7 +169,6 @@ class RssWebSites {
   void deleteFolder(String folderName) {
     folders.removeWhere((element) => element.name == folderName);
   }
-  
 
   //サイトの名前を変更する
   //フォルダーごとにサイトを探して上書きする

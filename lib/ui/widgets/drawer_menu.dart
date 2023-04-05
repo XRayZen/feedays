@@ -33,7 +33,6 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     final _add = ref.watch(onChangedProvider);
     return Drawer(
       backgroundColor: Colors.black.withOpacity(0.5),
-      //NOTE:feedlyのメニューをパクる
       child: _sliver(),
     );
   }
@@ -43,7 +42,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
       controller: scrollController,
       slivers: [
         SliverToBoxAdapter(child: _editButton()),
-        SliverToBoxAdapter(child: _upperListTiles()),
+        SliverToBoxAdapter(child: upperListTiles()),
         SliverToBoxAdapter(child: customExpansion('Feed')),
         SliverVisibility(
           visible: _isExpanded,
@@ -51,18 +50,18 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           maintainState: true,
         ),
         SliverToBoxAdapter(
-          child: downListTile(),
+          child: downListTiles(),
         )
       ],
     );
   }
 
-    Widget _upperListTiles() {
+  Widget upperListTiles() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // const Divider(thickness: 1, height: 5),
-        // TodayTile(),
+        const Divider(thickness: 1, height: 5),
+        todayTile(),
         const Divider(thickness: 1, height: 0.05),
         ListTile(
           leading: const Icon(Icons.bookmark_border),
@@ -94,41 +93,41 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     );
   }
 
-  Column downListTile() {
+  Column downListTiles() {
     return Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                ref.read(barViewTypeProvider.notifier).state =
-                    TabBarViewType.addContent;
-                startPageScaffoldKey.currentState!.closeDrawer();
-              },
-              child: const Text('AddContent'),
-            ),
-            //これらはページ遷移にする
-            ListTile(
-              leading: const Icon(Icons.message),
-              title: const Text('Messages'),
-              onTap: () {
-                //
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.qr_code_scanner),
-              title: const Text('QR Code Sync'),
-              onTap: () {
-                //
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                //
-              },
-            ),
-          ],
-        );
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            ref.read(barViewTypeProvider.notifier).state =
+                TabBarViewType.addContent;
+            startPageScaffoldKey.currentState!.closeDrawer();
+          },
+          child: const Text('AddContent'),
+        ),
+        //これらはページ遷移にする
+        ListTile(
+          leading: const Icon(Icons.message),
+          title: const Text('Messages'),
+          onTap: () {
+            //
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.qr_code_scanner),
+          title: const Text('QR Code Sync'),
+          onTap: () {
+            //
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text('Settings'),
+          onTap: () {
+            //
+          },
+        ),
+      ],
+    );
   }
 
   //既存のExpansionPanelはSliverを使えないためカスタマイズして動作を再現
@@ -190,8 +189,6 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
     );
   }
 
-
-
   ListTile todayTile() {
     return ListTile(
       leading: const Icon(Icons.menu_book),
@@ -204,10 +201,9 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
         startPageScaffoldKey.currentState!.closeDrawer();
       },
       onLongPress: () async {
-        setState(() async {
-          //試験用に長押ししたらデータをクリアできるようにする
-          await ref.watch(useCaseProvider).localRepo.clear();
-        });
+        //試験用に長押ししたらデータをクリアできるようにする
+        await ref.watch(useCaseProvider).localRepo.clear();
+        setState(() {});
       },
     );
   }

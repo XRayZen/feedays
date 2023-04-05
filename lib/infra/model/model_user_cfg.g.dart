@@ -253,18 +253,15 @@ class ModelRssFeedImageAdapter extends TypeAdapter<ModelRssFeedImage> {
     };
     return ModelRssFeedImage(
       link: fields[0] as String,
-      image: fields[1] as ByteData?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ModelRssFeedImage obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.link)
       ..writeByte(1)
-      ..write(obj.image);
+      ..writeByte(0)
+      ..write(obj.link);
   }
 
   @override

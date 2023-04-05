@@ -53,7 +53,6 @@ dependencies:
   # cached_network_image: ^3.2.3
   url_launcher: ^6.1.10
   universal_platform: ^1.0.0+1
-  dio: ^5.0.2
   flutter_html_all: ^3.0.0-alpha.6
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -61,6 +60,8 @@ dependencies:
   build_runner: ^2.3.3
   webview_flutter: ^3.0.4
   share_plus: ^6.3.1
+  numberpicker: ^2.1.1
+  flutter_picker: ^2.1.0
   
 
 
