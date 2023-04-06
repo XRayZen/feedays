@@ -67,6 +67,7 @@ class RssUsecase {
       );
     }
     userCfg.editRecentSearches(request.word);
+    await saveData();
     //ワードがURLかどうか判定する
     if (parseUrls(request.word) is List<String>) {
       //URLなら既存のデータベースに存在するか調べて返す
@@ -205,6 +206,11 @@ class RssUsecase {
     String deleteCategory,
   ) async {
     userCfg.rssFeedSites.deleteFolder(deleteCategory);
+    await saveData();
+  }
+
+  Future<void> removeSearchHistory(String word) async {
+    userCfg.editRecentSearches(word, isAddOrRemove: false);
     await saveData();
   }
 

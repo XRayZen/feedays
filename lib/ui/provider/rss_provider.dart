@@ -23,7 +23,6 @@ final readWebSiteProvider =
 void onSearch(SearchRequest request, WidgetRef ref) {
   //空の文字は検索しない
   if (request.word.isEmpty) {
-    //TODO:空の文字の場合はスナックバーでエラー警告を出す
   }
   ref.watch(searchProvider(request));
 }
@@ -36,7 +35,6 @@ final searchProvider = FutureProvider.autoDispose.family<void, SearchRequest>((
   //notifierに入れてからモードを切り替える方式を試す
   late SearchResult result;
   try {
-    //TODO:ここでダイアログを出して進捗を出す
     result = await ref.watch(rssUsecaseProvider).searchWord(request);
   } on Exception catch (e) {
     result = SearchResult(
