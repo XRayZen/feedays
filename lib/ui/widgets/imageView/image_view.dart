@@ -48,12 +48,21 @@ class _ImageViewsState extends ConsumerState<CachedNetworkImageView> {
     final result = ref.watch(readImageProvider(widget.link));
     return result.when(
       data: (data) {
-        return Image.memory(
-          data,
-          fit: widget.fit ?? BoxFit.fill,
-          width: widget.width ?? 150,
-          height: widget.height ?? 100,
-        );
+        if (data.isEmpty) {
+          return Image.asset(
+            'assets/empty-box.png',
+            fit: widget.fit ?? BoxFit.fill,
+            width: widget.width ?? 150,
+            height: widget.height ?? 100,
+          );
+        } else {
+          return Image.memory(
+            data,
+            fit: widget.fit ?? BoxFit.fill,
+            width: widget.width ?? 150,
+            height: widget.height ?? 100,
+          );
+        }
       },
       error: (error, stackTrace) {
         return Image.asset(

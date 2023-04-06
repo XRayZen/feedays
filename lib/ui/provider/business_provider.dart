@@ -1,4 +1,3 @@
-import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
@@ -8,6 +7,7 @@ import 'package:feedays/domain/usecase/usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/local_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
+import 'package:feedays/ui/provider/rss_feeds_provider.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,9 +36,11 @@ final useCaseProvider = Provider<Usecase>((ref) {
   Future<void> onAddSite(WebSite site) async {
     // TODO:UI側のプロバイダーを更新する
   }
-  Future<void> progress(int count, int all, String msg) async {
-    //PLAN:UIに進捗を表示する
+  void progress(int count, int all, String msg) async {
+    //UIに進捗を表示する
+    ref.watch(rssProgressProvider.notifier).state = count / all;
   }
+
   return Usecase(
     webRepo: ref.watch(webRepoProvider),
     apiRepo: ref.watch(backendApiRepoProvider),

@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_decorated_box
+import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
@@ -24,51 +26,8 @@ class _ExploreWebState extends ConsumerState<ExploreWeb> {
     //ビジネスロジック上のカテゴリを読み込んでカテゴリを生成する
     final res = ref.watch(readCategoriesProvider);
     return res.when(
-      data: (data) {
-        final list = data.map((e) {
-          return const ResponsiveRowColumnItem(
-            child: Card(),
-          );
-        }).toList();
-        return ResponsiveGridView.builder(
-          itemCount: data.length,
-          padding: const EdgeInsets.all(8),
-          shrinkWrap: true,
-          gridDelegate: const ResponsiveGridDelegate(
-            crossAxisSpacing: 50,
-            mainAxisSpacing: 50,
-            minCrossAxisExtent: 150,
-          ),
-          itemBuilder: (context, index) {
-            final item = data[index];
-            return ListTile(
-              leading: Text(item.name),
-              onTap: () {
-                //TODO:カテゴリを検索する
-                //検索ページに遷移してコントローラーにキーワードを入れる
-                //検索を実行して表示する
-                ref.watch(searchResultViewMode.notifier).state =
-                    SearchResultViewMode.none;
-                ref.watch(searchResultProvider.notifier).clear();
-                ref.watch(barViewTypeProvider.notifier).state =
-                    TabBarViewType.searchView;
-                setState(() {
-                  ref.watch(onTextFieldTapProvider.notifier).state = false;
-                  ref.watch(searchTxtFieldProvider.notifier).state = item.name;
-                  onSearch(
-                    SearchRequest(
-                      searchType: SearchType.exploreWeb,
-                      word: item.name,
-                    ),
-                    ref,
-                  );
-                  ref.watch(isSearchTxtAutoFocus.notifier).state = false;
-                  //検索を実行
-                });
-              },
-            );
-          },
-        );
+      data: (readResponse) {
+        return ExploreWebBody(exploreList: readResponse);
       },
       error: (error, stackTrace) {
         return ErrorIndicator(
@@ -78,6 +37,74 @@ class _ExploreWebState extends ConsumerState<ExploreWeb> {
       },
       loading: () {
         return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ExploreWebBody extends ConsumerStatefulWidget {
+  final List<ExploreCategory> exploreList;
+  const ExploreWebBody({
+    super.key,
+    required this.exploreList,
+  });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _ExploreWebBodyState();
+}
+
+class _ExploreWebBodyState extends ConsumerState<ExploreWebBody> {
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveGridView.builder(
+      itemCount: widget.exploreList.length,
+      padding: const EdgeInsets.all(8),
+      shrinkWrap: true,
+      gridDelegate: const ResponsiveGridDelegate(
+        crossAxisSpacing: 50,
+        mainAxisSpacing: 50,
+        minCrossAxisExtent: 150,
+      ),
+      itemBuilder: (context, index) {
+        final item = widget.exploreList[index];
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10),
+            image:
+                DecorationImage(image: NetworkImage(item.iconLink, scale: 1)),
+          ),
+          child: ListTile(
+            leading: Text(
+              item.name,
+              style: const TextStyle(fontSize: 24),
+            ),
+            onTap: () {
+              //カテゴリを検索する
+              //検索ページに遷移してコントローラーにキーワードを入れる
+              //検索を実行して表示する
+              ref.watch(searchResultViewMode.notifier).state =
+                  SearchResultViewMode.none;
+              ref.watch(searchResultProvider.notifier).clear();
+              ref.watch(barViewTypeProvider.notifier).state =
+                  TabBarViewType.searchView;
+              setState(() {
+                ref.watch(onTextFieldTapProvider.notifier).state = false;
+                ref.watch(searchTxtFieldProvider.notifier).state =
+                    '#${item.name}';
+                onSearch(
+                  SearchRequest(
+                    searchType: SearchType.exploreWeb,
+                    word: '#${item.name}',
+                  ),
+                  ref,
+                );
+                ref.watch(isSearchTxtAutoFocus.notifier).state = false;
+                //検索を実行
+              });
+            },
+          ),
+        );
       },
     );
   }

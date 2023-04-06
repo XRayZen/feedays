@@ -100,7 +100,8 @@ class RssWebSites {
             folders[i].children.indexWhere((e) => e.siteUrl == oldSite.siteUrl);
         oldSite
           ..feeds = newSite.feeds
-          ..name = newSite.name;
+          // ..name = newSite.name
+          ..lastModified = newSite.lastModified;
         folders[i].children[siteIndex] = oldSite;
         folders[i].children.sort((a, b) => a.index.compareTo(b.index));
       }
@@ -227,20 +228,17 @@ class WebSite {
       lastModified: DateTime.now().toLocal(),
     );
   }
-  //TODO:要テスト
-  ///更新期限が現在日時を下回ったら更新する
+
+  ///現在が更新期限よりも新しかったら更新する
   bool isRssFeedRefreshTime(
     int limitTime,
   ) {
     //更新期限
     final refreshExpireTime = lastModified
-        .add(Duration(minutes: limitTime))
         .toLocal()
+        .add(Duration(minutes: limitTime))
         .millisecondsSinceEpoch;
-    //現在日時
-    final nowTime = DateTime.now().toLocal().millisecondsSinceEpoch;
-    //更新期限が現在日時を下回ったら更新する
-    if (refreshExpireTime < nowTime) {
+    if (refreshExpireTime< DateTime.now().toLocal().millisecondsSinceEpoch) {
       return true;
     } else {
       return false;

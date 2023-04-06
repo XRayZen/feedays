@@ -57,7 +57,8 @@ class WebRepoImpl extends WebRepositoryInterface {
     void Function(int count, int all, String msg)? progressCallBack,
   }) async {
     //RSS取得変換して既存を比較して新しいのをカウントインサートして例外有りで返す
-    final res = await refreshRssConvert(this, site);
+    final res =
+        await refreshRssConvert(this, site, progressCallBack: progressCallBack);
     if (res == null) {
       throw Exception('ERROR Refresh Rss');
     } else {

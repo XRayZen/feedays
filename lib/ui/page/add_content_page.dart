@@ -17,7 +17,8 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
     return Scaffold(
       key: addContentPageScaffoldKey,
       body: DefaultTabController(
-        length: 4,
+        //実装するページ数
+        length: 1,
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
@@ -35,9 +36,9 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
                 child: TabBar(
                   tabs: [
                     Tab(key: Key('TabWebSites'), text: 'WebSites'),
-                    Tab(key: Key('TabTwitter'), text: 'Twitter'),
-                    Tab(key: Key('TabReddit'), text: 'Reddit'),
-                    Tab(key: Key('TabNewsSites'), text: 'NewsSites'),
+                    // Tab(key: Key('TabTwitter'), text: 'Twitter'),
+                    // Tab(key: Key('TabReddit'), text: 'Reddit'),
+                    // Tab(key: Key('TabNewsSites'), text: 'NewsSites'),
                   ],
                 ),
               )
@@ -46,9 +47,9 @@ class _AddContentPageState extends ConsumerState<AddContentPage> {
           body: const TabBarView(
             children: [
               TabWebSite(),
-              Center(child: Text('Twitter')),
-              Center(child: Text('Reddit')),
-              Center(child: Text('NewsSites')),
+              // Center(child: Text('Twitter')),
+              // Center(child: Text('Reddit')),
+              // Center(child: Text('NewsSites')),
             ],
           ),
         ),

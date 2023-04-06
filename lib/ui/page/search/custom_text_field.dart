@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +12,14 @@ final isSearchTxtAutoFocus = StateProvider<bool>((ref) {
   return true;
 });
 
+final AddContentTextFieldProvider = StateProvider<String>((ref) {
+  return '';
+});
+
 class CustomTextField extends ConsumerWidget {
   final TextEditingController editingController;
   final FocusNode focusNode;
-  final VoidCallback onFieldSubmitted;
+  final void Function(String) onFieldSubmitted;
   const CustomTextField({
     super.key,
     required this.editingController,
@@ -34,16 +37,18 @@ class CustomTextField extends ConsumerWidget {
           //遡ったら処理が見当たらないからカスタムしても良いかもしれない
           onFieldSubmitted: (value) {
             ref.watch(onTextFieldTapProvider.notifier).state = false;
-            onFieldSubmitted();
+            onFieldSubmitted(value);
             if (value.isEmpty) {
               editingController.clear();
             }
             //入れておかないと入力候補第一位が入れられてしまう
             editingController.text = value;
-            onSearch(
-              SearchRequest(searchType: SearchType.addContent, word: value),
-              ref,
-            );
+            if (value.isNotEmpty) {
+              onSearch(
+                SearchRequest(searchType: SearchType.addContent, word: value),
+                ref,
+              );
+            }
           },
           onChanged: (value) {
             if (value.isEmpty) {
@@ -79,6 +84,9 @@ class CustomTextField extends ConsumerWidget {
             //リザルトページにジェスチャーをおいてタップすれば消せるか→仕様上の制限で出来ない
             ref.watch(searchResultViewMode.notifier).state =
                 SearchResultViewMode.result;
+          },
+          onEditingComplete: () {
+            //
           },
         ),
         //テキストをタップしてフィールドに文字があったらフィールドの上にクリアボタンを置く

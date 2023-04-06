@@ -1,7 +1,7 @@
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/page/search/list_item/rss_feed_item_ui.dart';
 import 'package:feedays/ui/page/search/list_item/site_list_item.dart';
+import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,6 +46,10 @@ class _ResultSliverState extends ConsumerState<SearchResultList> {
     //NOTE:無限スクロールでは負担軽減だが検索フロー全体をリファクタしなければならないので
     //一旦Sliverにしておく
     final res = ref.watch(searchResultProvider);
+    //空なら何も表示しない
+    if (res.websites.isEmpty && res.articles.isEmpty) {
+      return const SliverToBoxAdapter();
+    }
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {

@@ -35,11 +35,11 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
         ref.watch(useCaseProvider).userCfg.appConfig.uiConfig.drawerMenuOpacity;
     return Drawer(
       backgroundColor: Colors.black.withOpacity(opacity),
-      child: _sliver(),
+      child: _sliverLayout(),
     );
   }
 
-  Widget _sliver() {
+  Widget _sliverLayout() {
     return CustomScrollView(
       controller: scrollController,
       slivers: [
@@ -98,6 +98,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   Column downListTiles() {
     return Column(
       children: [
+        const Padding(padding: EdgeInsets.only(top: 10)),
         ElevatedButton(
           onPressed: () {
             ref.read(barViewTypeProvider.notifier).state =
@@ -106,7 +107,9 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           },
           child: const Text('Add Site'),
         ),
+        const Padding(padding: EdgeInsets.only(top: 10)),
         const Divider(thickness: 2, height: 2),
+        const Padding(padding: EdgeInsets.only(top: 10)),
         //透明度を設定するスライダー
         const Text('Opacity'),
         Slider(
@@ -127,14 +130,6 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           divisions: 10,
         ),
         const Divider(thickness: 1, height: 1),
-        //これらはページ遷移にする
-        ListTile(
-          leading: const Icon(Icons.message),
-          title: const Text('Message'),
-          onTap: () {
-            //
-          },
-        ),
         ListTile(
           leading: const Icon(Icons.qr_code_scanner),
           title: const Text('QR Code Sync'),
@@ -154,29 +149,20 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   }
 
   //既存のExpansionPanelはSliverを使えないためカスタマイズして動作を再現
-  ElevatedButton customExpansion(String listTitle) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(shape: const BeveledRectangleBorder()),
-      onPressed: () {
+  Widget customExpansion(String listTitle) {
+    return ListTile(
+      title: Center(child: Text(listTitle)),
+      trailing: ExpandIcon(
+        isExpanded: _isExpanded,
+        onPressed: (isEx) {
+          setState(() {
+            _isExpanded = isEx ? false : true;
+          });
+        },
+      ),
+      onTap: () {
         setState(() => _isExpanded = _isExpanded ? false : true);
       },
-      child: Row(
-        children: <Widget>[
-          const Padding(padding: EdgeInsets.all(10)),
-          ExpandIcon(
-            isExpanded: _isExpanded,
-            onPressed: (bool isEx) {
-              setState(() {
-                _isExpanded = isEx ? false : true;
-              });
-            },
-          ),
-          const Padding(padding: EdgeInsets.all(10)),
-          Expanded(
-            child: Text(listTitle),
-          ),
-        ],
-      ),
     );
   }
 

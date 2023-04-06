@@ -22,24 +22,24 @@ Future<List<WebSite>> genValidSite() async {
 
 List<WebSite> genExploreList() {
   final gameSites = {
-    WebSite.mock('https://jp.ign.com/', 'IGN', 'Game'),
-    WebSite.mock('https://automaton-media.com/', 'AUTOMATION', 'Game'),
-    WebSite.mock('https://www.4gamer.net/', '4Gamer', 'Game'),
+    WebSite.mock('https://jp.ign.com/', 'IGN', '#Game'),
+    WebSite.mock('https://automaton-media.com/', 'AUTOMATION', '#Game'),
+    WebSite.mock('https://www.4gamer.net/', '4Gamer', '#Game'),
   };
-  const invest = 'Invest';
+  const invest = '#Invest';
   final investSites = {
     WebSite.mock('https://randomwalker.blog.fc2.com/', '商店街ランダムウォーカー', invest),
     WebSite.mock('https://takezo50.com/', 'たけぞう', invest),
     WebSite.mock('https://kabumatome.doorblog.jp/', '二階建て', invest),
   };
-  const cate = 'Programming';
+  const cate = '#Programming';
   final programmingSites = {
     WebSite.mock('https://techlife.cookpad.com/', 'クックパッド開発', cate),
     WebSite.mock('https://codezine.jp/', 'CodeZine', cate),
     WebSite.mock('https://techblog.yahoo.co.jp/', 'Yahoo JP Tech', cate),
     WebSite.mock('https://developer.hatenastaff.com/', 'Hatena Dev Blog', cate),
   };
-  const category3 = 'News';
+  const category3 = '#News';
   final sites3 = {
     WebSite.mock('https://news.yahoo.co.jp/rss/topics/top-picks.xml', 'Yahoo主要',
         category3,),

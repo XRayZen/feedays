@@ -45,7 +45,11 @@ class MyApp extends ConsumerWidget {
         // これがアプリケーションのテーマです。
         //PLAN:設定で切り替えられるようにする
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        primarySwatch: Colors.amber,
+        //ダークテーマ時のカラーを青色にする
+        colorScheme: ColorScheme.dark(
+          primary: Colors.amber,
+          secondary: Colors.amber,
+        ),
         brightness: Brightness.dark,
         fontFamily: 'Noto Sans JP',
         useMaterial3: true,

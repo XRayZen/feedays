@@ -17,7 +17,7 @@ class RssUsecase {
   final LocalRepositoryInterface localRepo;
   Future<void> Function(String message) noticeError;
   Future<void> Function(WebSite site) onAddSite;
-  Future<void> Function(int count, int all, String msg) progressCallBack;
+  void Function(int count, int all, String msg) progressCallBack;
   final UserConfig userCfg;
   RssUsecase({
     required this.webRepo,
@@ -56,6 +56,16 @@ class RssUsecase {
   Future<SearchResult> searchWord(
     SearchRequest request,
   ) async {
+    if (request.word == '') {
+      return SearchResult(
+        apiResponse: ApiResponseType.refuse,
+        responseMessage: '',
+        resultType: SearchResultType.error,
+        searchType: SearchType.addContent,
+        websites: [],
+        articles: [],
+      );
+    }
     userCfg.editRecentSearches(request.word);
     //ワードがURLかどうか判定する
     if (parseUrls(request.word) is List<String>) {
@@ -151,7 +161,7 @@ class RssUsecase {
         if (element.feeds.isEmpty) {
           return refreshRssFeed(element);
         } else {
-          //サイトの最終更新日時が設定期限よりも古かったら更新して返す
+          //サイトの現在が更新期限よりも新しかったら更新して返す
           if (element.isRssFeedRefreshTime(
             userCfg.appConfig.rssFeedConfig.limitLastFetchTime,
           )) {

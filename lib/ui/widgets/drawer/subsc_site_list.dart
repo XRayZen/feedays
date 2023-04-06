@@ -23,7 +23,7 @@ class _ReorderableTreeListViewState
   @override
   Widget build(BuildContext context) {
     final res = ref.watch(subscribeWebSitesProvider);
-    //PLAN:このフラグがオンなら色々とアイコンの位置をずらす必要がある
+    //このフラグがオンなら色々とアイコンの位置をずらす必要がある
     final isEditFlg = _isEditMode(ref.watch(isFeedsEditModeProvider));
     if (res.isEmpty) {
       return const SliverToBoxAdapter(child: Center(child: Text('リストが空です')));
@@ -302,57 +302,5 @@ class _ReorderableTreeListViewState
         ),
       );
     }).toList();
-  }
-}
-
-//他のクラスでも使いたいが渡す必要があるため渡せない
-//StateNotifierでなら渡せる
-//これ以上のプロバイダーコードはProviderレイヤーで書く
-// final expansionTileCustomAnimePro = Provider.autoDispose<AnimationController, bool>((ref, lo) {
-//   return ;
-// });
-final List<AnimationController> expansionTileCustomAnimePro = [];
-
-class ExpansionTileCustomAnimeWidget extends ConsumerStatefulWidget {
-  const ExpansionTileCustomAnimeWidget({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ExpansionTileAnimeState();
-}
-
-class _ExpansionTileAnimeState
-    extends ConsumerState<ExpansionTileCustomAnimeWidget>
-    with TickerProviderStateMixin {
-  static final Animatable<double> _easeInTween =
-      CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0, end: 0.5);
-  // late final AnimationController _controller;
-  late Animation<double> _iconTurns;
-  @override
-  void initState() {
-    super.initState();
-    final controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
-    expansionTileCustomAnimePro.add(controller);
-    _iconTurns =
-        expansionTileCustomAnimePro[0].drive(_halfTween.chain(_easeInTween));
-  }
-
-  @override
-  void dispose() {
-    expansionTileCustomAnimePro[0].dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RotationTransition(
-      turns: _iconTurns,
-      child: const Icon(Icons.expand_more),
-    );
   }
 }

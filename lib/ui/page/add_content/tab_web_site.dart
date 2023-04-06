@@ -49,8 +49,23 @@ class TabWebSite extends ConsumerWidget {
           ),
         ),
         //PLAN:カテゴリごとにおすすめが配置されている
-        //NOTE:おすすめはクラウド上にリクエストして表示する必要があるがVer1では実装しない
-        ExploreWeb(con: con),
+        Column(
+          children: [
+            const Padding(padding: EdgeInsets.all(8.0)),
+            Text(
+              'Recommended for you',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const Padding(padding: EdgeInsets.all(8.0)),
+            Row(
+              children: [
+                Expanded(child: Container()),
+                Expanded(child: ExploreWeb(con: con)),
+                Expanded(child: Container()),
+              ],
+            ),
+          ],
+        ),
       ],
     );
   }

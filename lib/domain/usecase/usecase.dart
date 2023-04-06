@@ -16,7 +16,7 @@ class Usecase {
   final LocalRepositoryInterface localRepo;
   Future<void> Function(String message) noticeError;
   Future<void> Function(WebSite site) onAddSite;
-  Future<void> Function(int count, int all, String msg) progressCallBack;
+  void Function(int count, int all, String msg) progressCallBack;
   late UserConfig userCfg;
   late ConfigUsecase configUsecase;
   late RssUsecase rssUsecase;

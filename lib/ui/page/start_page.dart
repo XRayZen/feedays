@@ -48,7 +48,9 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
     } else if (value == 4) {
       return TabBarViewType.powerSearch;
     } else {
-      return TabBarViewType.toDay;
+      //Ver1.3まではAddContentページが最初に表示するページ
+      return TabBarViewType.addContent;
+      // return TabBarViewType.toDay;
     }
   }
 
@@ -99,7 +101,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
     return NavigationBar(
       onDestinationSelected: (value) => _selectedTabPage(value, context),
       animationDuration: const Duration(seconds: 3),
-      elevation: 20, //標高
+      elevation: 10, //標高
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
       destinations: const <Widget>[
         NavigationDestination(
@@ -119,15 +121,16 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
         //   tooltip: 'Today articles',
         // ),
         NavigationDestination(
-          icon: Icon(Icons.add_circle_outline_sharp),
-          label: 'AddContent',
-          tooltip: 'Add Content',
-        ),
-        NavigationDestination(
           icon: Icon(Icons.search),
           label: 'Search',
           tooltip: 'Search Content',
-        )
+        ),
+        // NavigationDestination(
+        //   // icon: Icon(Icons.add_circle_outline_sharp),
+        //   icon: Icon(Icons.search),
+        //   label: 'AddContent',
+        //   tooltip: 'Add Content',
+        // ),
       ],
     );
   }

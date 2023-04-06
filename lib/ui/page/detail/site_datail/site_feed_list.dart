@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/search/list_item/rss_feed_item_ui.dart';
+import 'package:feedays/ui/provider/rss_feeds_provider.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/widgets/indicator/error_indicator.dart';
@@ -53,7 +54,9 @@ class SiteRssFeedList extends ConsumerWidget {
           );
         },
         loading: () {
-          return const CircularProgressIndicator();
+          return CircularProgressIndicator(
+            value: ref.watch(rssProgressProvider),
+          );
         },
       );
     }

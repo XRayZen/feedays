@@ -5,6 +5,7 @@
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search/result_view.dart';
 import 'package:feedays/ui/page/search/search_auto_comp.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,8 @@ class SearchViewPageBackButton extends StatelessWidget {
           ref.watch(barViewTypeProvider.notifier).state =
               TabBarViewType.addContent;
         }
+        //テキストフィールドのテキストをクリアにしておく
+        ref.watch(searchTxtFieldProvider.notifier).state = '';
       },
       icon: const Icon(Icons.arrow_back),
     );

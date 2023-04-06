@@ -91,6 +91,10 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
                       value: _downloadProgress,
                     ),
                     Text(
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                       'Web site is loading... (Progress : $_progress%)',
                     )
                   ],

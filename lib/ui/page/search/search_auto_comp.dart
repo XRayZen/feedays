@@ -1,6 +1,6 @@
 import 'package:feedays/domain/entities/search.dart';
-import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/page/search/search_recent_item.dart';
+import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +19,23 @@ class _SearchAutoCompState extends ConsumerState<SearchAutoComp> {
   @override
   Widget build(BuildContext context) {
     final recentList = ref.watch(recentSearchesProvider);
+    var txt = 'Empty';
     return Autocomplete<String>(
       key: const Key('AutoCompField'),
       initialValue: TextEditingValue(text: ref.watch(searchTxtFieldProvider)),
       onSelected: (selectItem) {
         ref.watch(onTextFieldTapProvider.notifier).state = false;
-        onSearch(
-          SearchRequest(searchType: SearchType.addContent, word: selectItem),
-          ref,
-        );
+        if (txt == '') {
+          onSearch(
+            SearchRequest(searchType: SearchType.addContent, word: txt),
+            ref,
+          );
+        } else {
+          onSearch(
+            SearchRequest(searchType: SearchType.addContent, word: selectItem),
+            ref,
+          );
+        }
       },
       //候補リストをカスタマイズ
       //それをすると履歴リストが自動で消えなくなる
@@ -40,7 +48,12 @@ class _SearchAutoCompState extends ConsumerState<SearchAutoComp> {
         return CustomTextField(
           editingController: textEditingController,
           focusNode: focusNode,
-          onFieldSubmitted: onFieldSubmitted,
+          onFieldSubmitted: (value) {
+            txt = value;
+            onFieldSubmitted();
+            //テキストフィールドの入力履歴を非表示にする
+            ref.watch(visibleRecentViewProvider.notifier).state = false;
+          },
         );
       },
       // 自動補完の動作を定義

@@ -9,7 +9,6 @@ import 'package:feedays/domain/repositories/api/backend_repository_interface.dar
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_util.dart';
 
-
 class MockApiRepository extends BackendApiRepository {
   // int ff = 0;//これの変数を次第で動作を変える予定
   @override
@@ -26,13 +25,24 @@ class MockApiRepository extends BackendApiRepository {
 
   @override
   Future<SearchResult> searchWord(ApiSearchRequest request) async {
-    //TODO:#を含んだワードが来たらカテゴリごとの検索として該当カテゴリのサイトリストを返す
+    //#を含んだワードが来たらカテゴリごとの検索として該当カテゴリのサイトリストを返す
     //サイトは5つの実際のサイトを参考に偽データを生成
     final webRepo = WebRepoImpl();
     final list = genExploreList();
     final word = request.word;
     switch (request.searchType) {
       case SearchType.addContent:
+        //検索分が空ならnot foundを返す
+        if (word == '') {
+          return SearchResult(
+            apiResponse: ApiResponseType.accept,
+            responseMessage: 'not found',
+            resultType: SearchResultType.none,
+            searchType: request.searchType,
+            websites: [],
+            articles: [],
+          );
+        }
         const path = 'https://iphone-mania.jp/';
         final rssParseRssSite = await webRepo.getFeeds(path);
         final fakeSearchResult = SearchResult(

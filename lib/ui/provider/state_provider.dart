@@ -14,7 +14,7 @@ final selectedMainPageProvider = StateProvider<int>((ref) {
 });
 
 final barViewTypeProvider =
-    StateProvider<TabBarViewType>((ref) => TabBarViewType.toDay);
+    StateProvider<TabBarViewType>((ref) => TabBarViewType.addContent);
 
 enum TabBarViewType {
   readLater,

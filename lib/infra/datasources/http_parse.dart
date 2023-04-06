@@ -285,16 +285,21 @@ Future<WebSite> fetchRss(
 
 ///RSSを更新する
 Future<WebSite?> refreshRssConvert(
-    WebRepositoryInterface webRepo, WebSite site) async {
+  WebRepositoryInterface webRepo,
+  WebSite site, {
+  void Function(int count, int all, String msg)? progressCallBack,
+}) async {
   //新規サイトを取得
   if (site.rssUrl.isEmpty) {
-    final res = await fetchRss(webRepo, site);
+    final res =
+        await fetchRss(webRepo, site, progressCallBack: progressCallBack);
     res.newCount = res.feeds.length;
     return res;
   }
   //既存サイトを更新する
   final newFeedItems =
-      await fetchRss(webRepo, site).then((value) => value.feeds);
+      await fetchRss(webRepo, site, progressCallBack: progressCallBack)
+          .then((value) => value.feeds);
   if (site.feeds.isEmpty) {
     site.feeds.addAll(newFeedItems);
     site.newCount = newFeedItems.length;

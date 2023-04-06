@@ -43,3 +43,8 @@ final rssFeedsProvider =
 final favSitesProvider = Provider<List<WebSite>>((ref) {
   return List.empty(growable: true);
 });
+
+//RSS取得状況を示すプログレスプロバイダー
+final rssProgressProvider = StateProvider<double>((ref) {
+  return 0.0;
+});
