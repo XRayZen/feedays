@@ -37,9 +37,12 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   TabBarViewType howPageIndex(int value) {
     if (value == 1) {
-      return TabBarViewType.readLater;
+      //後で実装するのはReadLaterとTodayだからタブページを変更する
+      // return TabBarViewType.readLater;
+      return TabBarViewType.addContent;
     } else if (value == 2) {
-      return TabBarViewType.toDay;
+      // return TabBarViewType.toDay;
+      return TabBarViewType.powerSearch;
     } else if (value == 3) {
       return TabBarViewType.addContent;
     } else if (value == 4) {
@@ -49,7 +52,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
     }
   }
 
-  void _selectedDestination(int value, BuildContext context) {
+  void _selectedTabPage(int value, BuildContext context) {
     setState(() {
       if (value == 0) {
         startPageScaffoldKey.currentState!.openDrawer();
@@ -94,7 +97,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
 
   NavigationBar btmNavigationBar(BuildContext context) {
     return NavigationBar(
-      onDestinationSelected: (value) => _selectedDestination(value, context),
+      onDestinationSelected: (value) => _selectedTabPage(value, context),
       animationDuration: const Duration(seconds: 3),
       elevation: 20, //標高
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
@@ -105,16 +108,16 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
           tooltip: 'open a menu',
         ),
         //これらのページは後で実装する
-        NavigationDestination(
-          icon: Icon(Icons.bookmark_border),
-          label: 'ReadLater',
-          tooltip: 'Read later',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.menu_book),
-          label: 'TodayArticle',
-          tooltip: 'Today articles',
-        ),
+        // NavigationDestination(
+        //   icon: Icon(Icons.bookmark_border),
+        //   label: 'ReadLater',
+        //   tooltip: 'Read later',
+        // ),
+        // NavigationDestination(
+        //   icon: Icon(Icons.menu_book),
+        //   label: 'TodayArticle',
+        //   tooltip: 'Today articles',
+        // ),
         NavigationDestination(
           icon: Icon(Icons.add_circle_outline_sharp),
           label: 'AddContent',

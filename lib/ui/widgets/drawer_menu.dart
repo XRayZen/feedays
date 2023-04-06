@@ -31,8 +31,10 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
   @override
   Widget build(BuildContext context) {
     final _add = ref.watch(onChangedProvider);
+    final opacity =
+        ref.watch(useCaseProvider).userCfg.appConfig.uiConfig.drawerMenuOpacity;
     return Drawer(
-      backgroundColor: Colors.black.withOpacity(0.5),
+      backgroundColor: Colors.black.withOpacity(opacity),
       child: _sliver(),
     );
   }
@@ -102,12 +104,33 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
                 TabBarViewType.addContent;
             startPageScaffoldKey.currentState!.closeDrawer();
           },
-          child: const Text('AddContent'),
+          child: const Text('Add Site'),
         ),
+        const Divider(thickness: 2, height: 2),
+        //透明度を設定するスライダー
+        const Text('Opacity'),
+        Slider(
+          value: ref
+              .watch(useCaseProvider)
+              .userCfg
+              .appConfig
+              .uiConfig
+              .drawerMenuOpacity,
+          onChanged: (double value) {
+            setState(() {
+              ref
+                  .watch(useCaseProvider)
+                  .configUsecase
+                  .updateDrawerOpacity(context, value);
+            });
+          },
+          divisions: 10,
+        ),
+        const Divider(thickness: 1, height: 1),
         //これらはページ遷移にする
         ListTile(
           leading: const Icon(Icons.message),
-          title: const Text('Messages'),
+          title: const Text('Message'),
           onTap: () {
             //
           },

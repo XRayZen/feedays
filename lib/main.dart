@@ -1,4 +1,3 @@
-import 'package:feedays/infra/model/hive_ctrl.dart';
 import 'package:feedays/mock/mock_api_repository.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +38,6 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return MaterialApp(
       title: 'Flutter Demo',
       scaffoldMessengerKey: scaffoldMessengerKey,

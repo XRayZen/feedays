@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_catches_without_on_clauses
+
 import 'dart:typed_data';
 
 import 'package:feedays/domain/entities/entity.dart';
@@ -15,11 +17,16 @@ class LocalRepoImpl extends LocalRepositoryInterface {
 
   @override
   Future<UserConfig?> readConfig() async {
-    final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
-    final model = box.get(1);
-    if (model != null) {
-      return model.to();
-    } else {
+    try {
+      final box = await Hive.openBox<ModelUserConfig>('UserCfgBox');
+      final model = box.get(1);
+      if (model != null) {
+        return model.to();
+      } else {
+        await clear();
+        return null;
+      }
+    } catch (_) {
       return null;
     }
   }

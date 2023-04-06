@@ -1,4 +1,3 @@
-
 import 'package:feedays/domain/entities/ui_config.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -51,7 +50,7 @@ double getResponsiveValue(
 }
 
 //デバイスタイプに応じてフォントサイズを返す
-double getFontSize(BuildContext context,UiResponsiveFontSize size) {
+double getFontSize(BuildContext context, UiResponsiveFontSize size) {
   switch (howDeviceType(context)) {
     case DeviceType.mobile:
       return size.mobile;
@@ -83,6 +82,20 @@ List<String>? parseUrls(String word) {
 void showDownloadProgress(received, total, msg) {
   if (total != -1) {
     print(msg + (received / total * 100).toStringAsFixed(0) + '%');
+  }
+}
+
+
+
+//uiConfigのテーマモードに基づいてBrightnessを返す
+Brightness getBrightness(UiConfig uiConfig) {
+  switch (uiConfig.themeMode) {
+    case AppThemeMode.light:
+      return Brightness.light;
+    case AppThemeMode.dark:
+      return Brightness.dark;
+    case AppThemeMode.system:
+      return WidgetsBinding.instance.window.platformBrightness;
   }
 }
 

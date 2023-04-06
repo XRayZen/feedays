@@ -4,9 +4,10 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/html_view.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search_view_page.dart';
+import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/ui_util.dart';
-import 'package:feedays/ui/widgets/dialog/feed_detail_dialog.dart';
+import 'package:feedays/ui/widgets/dialog/select_font_size_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
@@ -70,18 +71,28 @@ class _FeedDetailPageViewState extends ConsumerState<FeedDetailPageView> {
                 actions: [
                   // テーマやサイズを設定できる小ウインドウを表示させるAaアイコンボタン
                   IconButton(
-                    tooltip: 'Set theme and size',
+                    tooltip: 'Set FontSize',
                     onPressed: () {
-                      //テーマやサイズを設定できるダイアログを表示
-                      //TODO:フィード詳細ページのフォントサイズを設定できるダイアログを実装する
-                      showFeedDetailDialog(context, ref);
+                      showSelectFontSizeDialog(
+                        context,
+                        ref,
+                        confirmCallBack: (value) {
+                          //設定UseCaseの該当メソッドに設定内容を渡して更新・永続化する
+                          ref
+                              .watch(useCaseProvider)
+                              .configUsecase
+                              .updateFeedDetailFontSize(
+                                context,
+                                value.toDouble(),
+                              );
+                        },
+                      );
                     },
                     icon: const Icon(Icons.format_size),
                   ),
-                  //ReadLaterフラグを立てるアイコン・ボタン
+                  //ReadLaterフラグを立てるアイコン・ボタン ※実装延期
                   // お気に入り登録するアイコン・ボタン
                   //プラットフォームごとに動作するシェアボタン
-                  //外部サービスと連携して記事を送信できる3ポイントアイコン・ボタン
                 ],
               )
             ];

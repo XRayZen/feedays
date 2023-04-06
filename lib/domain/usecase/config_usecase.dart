@@ -40,12 +40,25 @@ class ConfigUsecase {
     }
     await saveConfig();
   }
+
   //ドロワーメニューの透明度を受け取りドロワーの設定を更新して永続化する
   Future<void> updateDrawerOpacity(
     BuildContext context,
     double opacity,
   ) async {
     userCfg.appConfig.uiConfig.drawerMenuOpacity = opacity;
+    await saveConfig();
+  }
+
+  bool isDarkMode() {
+    return userCfg.appConfig.uiConfig.themeMode == AppThemeMode.dark
+        ? true
+        : false;
+  }
+
+  Future<void> updateDarkMode(BuildContext context, bool isDarkMode) async {
+    userCfg.appConfig.uiConfig.themeMode =
+        isDarkMode ? AppThemeMode.dark : AppThemeMode.light;
     await saveConfig();
   }
 }

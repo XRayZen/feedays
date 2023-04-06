@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/app_config.dart';
 import 'package:feedays/domain/entities/ui_config.dart';
-import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/config_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/util.dart';
@@ -21,14 +20,20 @@ double readFontSize(BuildContext context, WidgetRef ref, AppConfig appConfig) {
   }
 }
 
-void showFeedDetailDialog(BuildContext context, WidgetRef ref) {
+///フォントサイズを変更する汎用的ダイアログを表示する
+void showSelectFontSizeDialog(
+  BuildContext context,
+  WidgetRef ref, {
+  ///フォントサイズを変更した後に呼び出すコールバック
+  void Function(int value)? confirmCallBack,
+}) {
   final appConfig = ref.watch(AppCfgProvider);
   var fontSize = readFontSize(context, ref, appConfig);
   Picker(
     backgroundColor: Theme.of(context).brightness == Brightness.dark
         ? ThemeData.dark().primaryColor
         : Colors.grey[100],
-    title: Text("Please select a font size"),
+    title: const Text('Please select a font size'),
     adapter: NumberPickerAdapter(
       data: [
         NumberPickerColumn(
@@ -44,11 +49,9 @@ void showFeedDetailDialog(BuildContext context, WidgetRef ref) {
       fontSize = selected[index].toDouble();
     },
     onConfirm: (Picker picker, List value) {
-      //設定UseCaseの該当メソッドに設定内容を渡して更新・永続化する
-      ref.watch(useCaseProvider).configUsecase.updateFeedDetailFontSize(
-            context,
-            fontSize + 1,
-          );
+      if (confirmCallBack != null) {
+        confirmCallBack(fontSize.toInt() + 1);
+      }
       //UI再描画用プロバイダーを呼んでUIを再描画する
       ref.watch(onChangedProvider.notifier).state += 1;
     },

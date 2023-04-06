@@ -15,9 +15,12 @@ final readImageProvider =
     return data;
   } else {
     //取得できないのならダウンロードして保存する
-    final dataImage = await ref.watch(webRepoProvider).fetchHttpByte(link);
-    await ref.watch(localRepoProvider).saveImage(link, dataImage);
-    return dataImage;
+    if (link.isNotEmpty) {
+      final dataImage = await ref.watch(webRepoProvider).fetchHttpByte(link);
+      await ref.watch(localRepoProvider).saveImage(link, dataImage);
+      return dataImage;
+    }
+    return Uint8List(0);
   }
 });
 
