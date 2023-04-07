@@ -9,6 +9,7 @@ import 'package:feedays/ui/widgets/dialog/subsc_dialog.dart';
 import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class SiteDetailPage extends ConsumerWidget {
   WebSite? site;
@@ -55,36 +56,25 @@ class SiteDetailWidget extends ConsumerWidget {
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          //バックボタン(leading)はハートボタンでお気に入り登録
-          //バーはフレキシブルで最後にFOLLOWテキストボタン
-          //スクロールした後のタイトルはサイトの名前
           return [
             SliverAppBar(
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
               pinned: true,
               expandedHeight: 100,
+              //フレキシブル無しでもいいが、若干視認性が悪くなるのでフレキシブルにしておく
+              // title: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: appBarLayout(context, ref),
+              // ),
+              centerTitle: true,
               flexibleSpace: FlexibleSpaceBar(
                 title: SafeArea(
+                  minimum: const EdgeInsets.only(top: 10),
                   child: Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(child: Container()),
-                            SiteBarTitle(site: site),
-                            Expanded(child: Container()),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: switchFollowButton(context, ref, site),
-                            ),
-                            const Padding(padding: EdgeInsets.all(7)),
-                          ],
-                        ),
-                      ),
-                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: appBarLayout(context, ref),
                   ),
                 ),
-                centerTitle: true,
               ),
             )
           ];
@@ -94,54 +84,108 @@ class SiteDetailWidget extends ConsumerWidget {
     );
   }
 
+  ///解像度に応じてレイアウトを変える
+  List<Widget> appBarLayout(BuildContext context, WidgetRef ref) {
+    if (ResponsiveWrapper.of(context).isSmallerThan(TABLET)) {
+      //モバイルの場合
+      return [
+        switchFavoriteButton(
+          site,
+          const Icon(Icons.favorite),
+          const Icon(Icons.favorite_border),
+          ref,
+        ),
+        Flexible(
+          child: Text(
+            site!.name,
+            style: const TextStyle(
+              //モバイルだとこのサイズでないと文字がスマホのトップバーに入ってしまい視認性が悪くなる
+              //SafeAreaを使っても解決しなかったので現時点ではこのサイズで固定する
+              fontSize: 12,
+            ),
+          ),
+        ),
+        Flexible(
+          child: IconButton(
+            key: const Key('RefreshButton'),
+            onPressed: () {
+              //RSSを更新する
+              ref.watch(reTryRssFeedProvider.notifier).retry(context, site!);
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: switchFollowButton(context, ref, site),
+        ),
+      ];
+    } else {
+      //タブレットの場合
+      return [
+        const Padding(padding: EdgeInsets.all(10)),
+        switchFavoriteButton(
+          site,
+          const Icon(Icons.favorite),
+          const Icon(Icons.favorite_border),
+          ref,
+        ),
+        Text(
+          site!.name,
+          style: TextStyle(
+            fontSize: getResponsiveValue(context),
+          ),
+        ),
+        // const Padding(padding: EdgeInsets.all(10)),
+        IconButton(
+          key: const Key('RefreshButton'),
+          onPressed: () {
+            //RSSを更新する
+            ref.watch(reTryRssFeedProvider.notifier).retry(context, site!);
+          },
+          icon: const Icon(Icons.refresh),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: switchFollowButton(context, ref, site),
+        ),
+        // const Padding(padding: EdgeInsets.all(7)),
+      ];
+    }
+  }
+
+  //未購読ならフォローボタンを表示する
   Widget switchFollowButton(
     BuildContext context,
     WidgetRef ref,
     WebSite? site,
   ) {
     if (site != null) {
-      if (ref
-          .watch(rssUsecaseProvider)
-          .userCfg
-          .rssFeedSites
-          .anySiteOfURL(site.siteUrl)) {
-        //既にあるのならチェックマークのアイコンで登録済みだと示す
-        return GestureDetector(
-          onTap: () async {
-            await showSubscriptionDialog(context, 'Add Subscription',site, ref);
+      return Visibility(
+        visible: !ref
+            .watch(rssUsecaseProvider)
+            .userCfg
+            .rssFeedSites
+            .anySiteOfURL(site.siteUrl),
+        child: TextButton(
+          onPressed: () async {
+            //購読処理
+            //feedlyではスライドしてフォルダを選択するがここはダイアログで選択する
+            await showSubscriptionDialog(
+              context,
+              'Add Subscription',
+              site,
+              ref,
+            );
+            //購読処理をしたら更新する必要がある
             ref.watch(onChangedProvider.notifier).state += 1;
           },
-          child: Row(
-            children: const [
-              Text(
-                'ADDED',
-                style: TextStyle(
-                  color: Colors.lightGreen,
-                ),
-              ),
-              Padding(padding: EdgeInsets.all(3)),
-              Icon(color: Colors.lightGreen, Icons.check_circle),
-            ],
+          child: const Text(
+            'FOLLOW',
+            style: TextStyle(color: Colors.green),
           ),
-        );
-      } else {
-        //未購読ならフォローボタンを表示
-        return Flexible(
-          child: TextButton(
-            onPressed: () async {
-              //購読処理
-              //feedlyではスライドしてフォルダを選択するがここはダイアログで選択する
-              await showSubscriptionDialog(context,'Add Subscription', site, ref);
-              //購読処理をしたら更新する必要がある
-              ref.watch(onChangedProvider.notifier).state += 1;
-            },
-            child: const Text(
-              'FOLLOW',
-              style: TextStyle(color: Colors.green),
-            ),
-          ),
-        );
-      }
+        ),
+      );
     }
     return Row(
       children: const [
@@ -163,21 +207,21 @@ class SiteBarTitle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
-        const Padding(padding: EdgeInsets.only(right: 110)),
+        // const Padding(padding: EdgeInsets.only(right: 110)),
         switchFavoriteButton(
           site,
           const Icon(Icons.favorite),
           const Icon(Icons.favorite_border),
           ref,
         ),
-        const Padding(padding: EdgeInsets.all(10)),
+        // const Padding(padding: EdgeInsets.all(10)),
         Text(
           site!.name,
           style: TextStyle(
             fontSize: getResponsiveValue(context),
           ),
         ),
-        const Padding(padding: EdgeInsets.all(10)),
+        // const Padding(padding: EdgeInsets.all(10)),
         IconButton(
           key: const Key('RefreshButton'),
           onPressed: () {

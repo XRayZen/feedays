@@ -109,7 +109,7 @@ class _StartPageViewState extends ConsumerState<StartPageView> {
           label: 'Menu',
           tooltip: 'open a menu',
         ),
-        //これらのページは後で実装する
+        //PLAN:これらのページは後で実装する
         // NavigationDestination(
         //   icon: Icon(Icons.bookmark_border),
         //   label: 'ReadLater',

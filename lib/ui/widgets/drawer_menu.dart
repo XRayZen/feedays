@@ -5,6 +5,7 @@ import 'package:feedays/mock/mock_util.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
 import 'package:feedays/ui/provider/ui_provider.dart';
+import 'package:feedays/ui/widgets/dialog/sync_dialog.dart';
 import 'package:feedays/ui/widgets/drawer/subsc_site_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -134,7 +135,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
           leading: const Icon(Icons.qr_code_scanner),
           title: const Text('QR Code Sync'),
           onTap: () {
-            //
+            showSyncDialog(context);
           },
         ),
         ListTile(
