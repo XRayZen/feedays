@@ -123,7 +123,9 @@ class SiteDetailWidget extends ConsumerWidget {
     } else {
       //タブレットの場合
       return [
-        const Padding(padding: EdgeInsets.all(10)),
+        // const Padding(padding: EdgeInsets.all(78)),
+        Expanded(child: Container()),
+        Expanded(child: Container()),
         switchFavoriteButton(
           site,
           const Icon(Icons.favorite),
@@ -145,10 +147,12 @@ class SiteDetailWidget extends ConsumerWidget {
           },
           icon: const Icon(Icons.refresh),
         ),
+        Expanded(child: Container()),
         Align(
           alignment: Alignment.centerLeft,
           child: switchFollowButton(context, ref, site),
         ),
+        Expanded(child: Container()),
         // const Padding(padding: EdgeInsets.all(7)),
       ];
     }
