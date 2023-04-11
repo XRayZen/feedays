@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:feedays/ui/provider/ui_provider.dart';
 import 'package:feedays/ui/ui_util.dart';
+import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -43,9 +44,28 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
+        notificationPredicate: (notification) {
+          if (notification is ScrollUpdateNotification) {
+            // リストビューのスクロール時にはAppBarを非表示にする
+            return false;
+          }
+          return true;
+        },
+        title: Text(
+          _url,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: getResponsiveValue(
+              context,
+              mobileValue: 15,
+              tabletValue: 22,
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: 'Reload',
@@ -83,22 +103,20 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
       ),
       body: Column(
         children: [
-          _isLoading
-              ? Stack(
-                  alignment: Alignment.topCenter,
-                  children: [
-                    LinearProgressIndicator(
-                      value: _downloadProgress,
+          // ページ読み込み中のプログレスバー
+          _isLoading || _downloadProgress < 1.0 || _progress < 100
+              ? Column(children: [
+                  LinearProgressIndicator(
+                    value: _downloadProgress,
+                  ),
+                  Text(
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
                     ),
-                    Text(
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                      'Web site is loading... (Progress : $_progress%)',
-                    )
-                  ],
-                )
+                    'Web site is loading... (Progress : $_progress%)',
+                  )
+                ])
               : const SizedBox.shrink(),
           Expanded(
             child: WebView(

@@ -1,6 +1,7 @@
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/page/detail/feed_detail_page.dart';
 import 'package:feedays/ui/widgets/imageView/image_view.dart';
+import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,9 +44,9 @@ class RssFeedItemUI extends ConsumerWidget {
                   //タイトルは太字
                   Text(
                     articles[index].title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: getResponsiveValue(context, tabletValue: 25),
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(3)),

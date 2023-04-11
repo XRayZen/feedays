@@ -43,7 +43,6 @@ class _QRScanViewState extends ConsumerState<QRScanView> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) async {
-      print(scanData.code);
       // ここで、スキャンされたコードを処理します。
       //ApiUsecaseを呼び出して同期する
     });
