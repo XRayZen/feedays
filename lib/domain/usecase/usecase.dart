@@ -29,7 +29,7 @@ class Usecase {
     required this.progressCallBack,
     required this.noticeError,
   });
-
+  /// 起動時の処理  
   Future<void> init() async {
     //起動時にデータを読み込む
     await localRepo.init();

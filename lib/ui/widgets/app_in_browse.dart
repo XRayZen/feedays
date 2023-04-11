@@ -46,14 +46,9 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        //Androidなら有効だが、iOSでは透明にできない
         backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
-        notificationPredicate: (notification) {
-          if (notification is ScrollUpdateNotification) {
-            // リストビューのスクロール時にはAppBarを非表示にする
-            return false;
-          }
-          return true;
-        },
+        centerTitle: true,
         title: Text(
           _url,
           overflow: TextOverflow.ellipsis,
@@ -105,18 +100,20 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
         children: [
           // ページ読み込み中のプログレスバー
           _isLoading || _downloadProgress < 1.0 || _progress < 100
-              ? Column(children: [
-                  LinearProgressIndicator(
-                    value: _downloadProgress,
-                  ),
-                  Text(
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+              ? Column(
+                  children: [
+                    LinearProgressIndicator(
+                      value: _downloadProgress,
                     ),
-                    'Web site is loading... (Progress : $_progress%)',
-                  )
-                ])
+                    Text(
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: getResponsiveValue(context),
+                      ),
+                      'Web site is loading... (Progress : $_progress%)',
+                    )
+                  ],
+                )
               : const SizedBox.shrink(),
           Expanded(
             child: WebView(

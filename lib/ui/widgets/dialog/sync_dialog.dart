@@ -155,7 +155,7 @@ class ShowQRCodeWidget extends StatelessWidget {
                         data:
                             ref.watch(useCaseProvider).apiUsecase.getSyncCode(),
                         version: QrVersions.auto,
-                        size: 200.0,
+                        size: 200,
                       ),
                     ],
                   ),
