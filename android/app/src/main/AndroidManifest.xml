@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.feedays">
+    <!-- カメラを使う時に必要な権限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
    <application
         android:label="feedays"
         android:name="${applicationName}"

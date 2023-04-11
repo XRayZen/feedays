@@ -1,4 +1,5 @@
 // ignore_for_file:  use_decorated_box
+import 'package:feedays/ui/widgets/QRScanView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -35,6 +36,7 @@ class _SyncDialogWidgetState extends ConsumerState<SyncDialogWidget> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(widget.context).size;
+
     return SafeArea(
       child: SizedBox(
         height: size.height * 0.5,
@@ -70,15 +72,23 @@ class _SyncDialogWidgetState extends ConsumerState<SyncDialogWidget> {
                         ),
                       ),
                       child: ListTile(
-                        title: const Text('Sacn QR Code'),
+                        title: const Text('Scan QR Code'),
                         subtitle:
                             const Text('Scan the QR code on the other device'),
                         onTap: () {
-                          //TODO: QRコードを読み込む処理を書く
-                          //カメラを起動してQRコードを読み込む
-
-                          //読み込んだQRコードを解析する
-                          //解析した結果をもとにデータを同期する
+                          //QRScanViewに移動する
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => QRScanView(
+                                code: (code) {
+                                  //QRコードを読み込んだら戻る
+                                  Navigator.of(context).pop();
+                                  //解析した結果をもとにデータを同期したら戻す
+                                },
+                              ),
+                            ),
+                          );
+                          //解析した結果をもとにデータを同期したら戻す
                         },
                       ),
                     ),
@@ -98,20 +108,27 @@ class _SyncDialogWidgetState extends ConsumerState<SyncDialogWidget> {
                         subtitle:
                             const Text('Show the QR code on the other device'),
                         onTap: () {
-                          //TODO: QRコードを表示する処理を書く
                           //QRコードを表示する
                           showDialog(
                             context: context,
                             builder: (context) {
                               return Dialog(
                                 child: SingleChildScrollView(
-                                  child: QrImage(
-                                    //背景を白くする
-                                    backgroundColor: Colors.white,
-                                    //QRコードのデータはユーザーIDを使用する
-                                    data: 'test',
-                                    version: QrVersions.auto,
-                                    size: 200.0,
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        'QR Code',
+                                        style: TextStyle(fontSize: 40),
+                                      ),
+                                      QrImage(
+                                        //背景を白くする
+                                        backgroundColor: Colors.white,
+                                        //QRコードのデータはユーザーIDを使用する
+                                        data: 'test',
+                                        version: QrVersions.auto,
+                                        size: 200.0,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );
