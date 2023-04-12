@@ -9,6 +9,8 @@ import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/domain/usecase/api_usecase.dart';
 import 'package:feedays/domain/usecase/config_usecase.dart';
 import 'package:feedays/domain/usecase/rss_usecase.dart';
+import 'package:feedays/util.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class Usecase {
   final WebRepositoryInterface webRepo;
@@ -29,7 +31,8 @@ class Usecase {
     required this.progressCallBack,
     required this.noticeError,
   });
-  /// 起動時の処理  
+
+  /// 起動時の処理
   Future<void> init() async {
     //起動時にデータを読み込む
     await localRepo.init();
@@ -46,17 +49,20 @@ class Usecase {
       localRepo: localRepo,
       userCfg: userCfg,
     );
+    apiUsecase = ApiUsecase(
+      backendApiRepo: apiRepo,
+      noticeError: noticeError,
+      userCfg: userCfg,
+      identInfo: await localRepo.getDevice(),
+    );
     rssUsecase = RssUsecase(
       webRepo: webRepo,
       apiRepo: apiRepo,
       localRepo: localRepo,
+      apiUsecase: apiUsecase,
       noticeError: noticeError,
       onAddSite: onAddSite,
       progressCallBack: progressCallBack,
-      userCfg: userCfg,
-    );
-    apiUsecase = ApiUsecase(
-      backendApiRepo: apiRepo,
       userCfg: userCfg,
     );
   }

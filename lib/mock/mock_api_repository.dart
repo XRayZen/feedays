@@ -90,7 +90,7 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<bool> userRegister(UserIdentInfo identInfo) {
+  Future<bool> userRegister(UserAccessIdentInfo identInfo) {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
@@ -108,7 +108,7 @@ class MockApiRepository extends BackendApiRepository {
 
   @override
   Future<List<ExploreCategory>> getExploreCategories(
-    UserIdentInfo identInfo,
+    UserAccessIdentInfo identInfo,
   ) async {
     //アイコンリンクは初期はイラストやか無料素材を検討
     return [

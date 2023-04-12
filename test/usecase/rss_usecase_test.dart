@@ -1,5 +1,7 @@
+import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
+import 'package:feedays/domain/usecase/api_usecase.dart';
 import 'package:feedays/domain/usecase/rss_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/local_repo_impl.dart';
@@ -19,6 +21,20 @@ void main() {
       webRepo: WebRepoImpl(),
       apiRepo: BackendApiRepoImpl(),
       localRepo: MockLocalRepo(),
+      apiUsecase: ApiUsecase(
+        backendApiRepo: BackendApiRepoImpl(),
+        noticeError: (message) async {},
+        userCfg: UserConfig.defaultUserConfig(),
+        identInfo: UserAccessIdentInfo(
+          uUid: 'test',
+          accessPlatform: UserAccessPlatform.mobile,
+          platformType: UserPlatformType.android,
+          brand: 'test',
+          deviceName: 'test',
+          osVersion: 'test',
+          isPhysics: false,
+        ),
+      ),
       noticeError: (message) async {},
       onAddSite: (site) async {},
       progressCallBack: (count, all, msg) async {},

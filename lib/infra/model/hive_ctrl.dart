@@ -34,6 +34,4 @@ void registerAdapter() {
   //model_activity
   Hive.registerAdapter(ModelUserReadActivityAdapter());
   Hive.registerAdapter(ModelUserSubscribeActivityAdapter());
-  Hive.registerAdapter(ModelUserIdentInfoAdapter());
-  Hive.registerAdapter(ModelUserAccessPlatformAdapter());
 }

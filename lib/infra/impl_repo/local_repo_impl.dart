@@ -2,10 +2,12 @@
 
 import 'dart:typed_data';
 
+import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/infra/model/hive_ctrl.dart';
 import 'package:feedays/infra/model/model_user_cfg.dart';
+import 'package:feedays/util.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class LocalRepoImpl extends LocalRepositoryInterface {
@@ -66,5 +68,24 @@ class LocalRepoImpl extends LocalRepositoryInterface {
     final box = await Hive.openBox<Uint8List>('WebImageBox');
     await box.put(link, data);
     await box.flush();
+  }
+
+  @override
+  Future<UserAccessIdentInfo> getDevice() async {
+    //端末情報を取得する
+    final deviceData = await detectDeviceInfo();
+    bool isPhysics = false;
+    if (deviceData['isPhysicalDevice'] != null) {
+      isPhysics = deviceData['isPhysicalDevice'] == true;
+    }
+    return UserAccessIdentInfo(
+      uUid: deviceData['UUID']?.toString() ?? 'None',
+      brand: deviceData['brand']?.toString() ?? '',
+      platformType: detectPlatformType(),
+      accessPlatform: detectAccessPlatformType(),
+      deviceName: deviceData['device']?.toString() ?? '',
+      osVersion: deviceData['OS.Version'].toString(),
+      isPhysics: isPhysics,
+    );
   }
 }

@@ -23,7 +23,6 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
       isGuest: fields[2] as bool,
       rssFeedSiteFolders: (fields[3] as List).cast<ModelWebSiteFolder>(),
       config: fields[4] as ModelAppConfig,
-      identInfo: fields[5] as ModelUserIdentInfo,
       accountType: fields[6] as ModelUserAccountType,
       searchHistory: (fields[7] as List).cast<String>(),
       categories: (fields[8] as List).cast<ModelExploreCategory>(),
@@ -33,7 +32,7 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
   @override
   void write(BinaryWriter writer, ModelUserConfig obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userName)
       ..writeByte(1)
@@ -44,8 +43,6 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
       ..write(obj.rssFeedSiteFolders)
       ..writeByte(4)
       ..write(obj.config)
-      ..writeByte(5)
-      ..write(obj.identInfo)
       ..writeByte(6)
       ..write(obj.accountType)
       ..writeByte(7)

@@ -7,6 +7,7 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
+import 'package:feedays/domain/usecase/api_usecase.dart';
 import 'package:feedays/util.dart';
 
 typedef ErrorMessageCallback = Future<void> Function(String message);
@@ -15,6 +16,7 @@ class RssUsecase {
   final WebRepositoryInterface webRepo;
   final BackendApiRepository apiRepo;
   final LocalRepositoryInterface localRepo;
+  final ApiUsecase apiUsecase;
   Future<void> Function(String message) noticeError;
   Future<void> Function(WebSite site) onAddSite;
   void Function(int count, int all, String msg) progressCallBack;
@@ -23,6 +25,7 @@ class RssUsecase {
     required this.webRepo,
     required this.apiRepo,
     required this.localRepo,
+    required this.apiUsecase,
     required this.noticeError,
     required this.onAddSite,
     required this.progressCallBack,
@@ -125,29 +128,10 @@ class RssUsecase {
         }
       }
     } else {
-      //検索程度ならワードでも制限をかけないが将来的な可能性を考慮すると
-      //PLAN:クラウドリクエスト中間クラス(APIUseCase)で制限設定を参照しながらリクエスト可否を判定したい
-      final res = await apiRepo.searchWord(
-        ApiSearchRequest(
-          searchType: request.searchType,
-          queryType: SearchQueryType.word,
-          word: request.word,
-          userID: userCfg.userID,
-          identInfo: userCfg.identInfo,
-          accountType: userCfg.accountType,
-        ),
-      );
-      switch (res.apiResponse) {
-        case ApiResponseType.refuse:
-          //refuseならエラーメッセージを通知する
-          //関数形式でエラーメッセージ処理を
-          await noticeError(res.responseMessage);
-          throw Exception(
-            'Api SearchRequest error: ${res.responseMessage}',
-          );
-        case ApiResponseType.accept:
-          return res;
-      }
+      //クラウドリクエスト中間クラス(APIUseCase)で制限設定を参照しながらリクエスト可否を判定
+      //ApiUsecsse経由でリクエストする
+      //エラー処理はApiUseCaseで行う
+      return apiUsecase.search(request);
     }
   }
 
@@ -224,24 +208,6 @@ class RssUsecase {
     return newSite;
   }
 
-  Future<List<ExploreCategory>> readCategories() async {
-    //ここもカテゴリーを保存しておらず例外処理も十分にしていない
-    if (userCfg.categories.isEmpty) {
-      final cate = await apiRepo.getExploreCategories(userCfg.identInfo);
-      if (cate.isNotEmpty) {
-        userCfg.categories = cate;
-        //ここでカテゴリが入ったデータを保存する
-        return cate;
-      } else {
-        await noticeError('Not found category');
-        return [];
-      }
-    } else {
-      //NOTE:カテゴリ情報はバックエンドが管理するためApiから取るべき
-      //PLAN:あとでコンフィグにカテゴリの有効期限を設定する項目をつき加える
-      return userCfg.categories;
-    }
-  }
 
   Future<void> saveData() async {
     try {

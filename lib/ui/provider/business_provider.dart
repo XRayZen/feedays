@@ -82,7 +82,7 @@ final readRssFolderProvider = Provider<List<WebSiteFolder>>((ref) {
 
 final readCategoriesProvider =
     FutureProvider<List<ExploreCategory>>((ref) async {
-  final use = await ref.watch(rssUsecaseProvider).readCategories();
+  final use = await ref.watch(useCaseProvider).apiUsecase.getCategories();
   return use;
 });
 

@@ -18,7 +18,6 @@ class ModelUserConfig extends HiveObject {
     required this.isGuest,
     required this.rssFeedSiteFolders,
     required this.config,
-    required this.identInfo,
     required this.accountType,
     required this.searchHistory,
     required this.categories,
@@ -35,7 +34,6 @@ class ModelUserConfig extends HiveObject {
       isGuest: e.isGuest,
       rssFeedSiteFolders: obj,
       config: ModelAppConfig.from(e.appConfig),
-      identInfo: ModelUserIdentInfo.from(e.identInfo),
       accountType: convertUserAccountType(e.accountType),
       searchHistory: e.searchHistory,
       categories: e.categories.map(ModelExploreCategory.from).toList(),
@@ -51,7 +49,6 @@ class ModelUserConfig extends HiveObject {
         folders: rssFeedSiteFolders.map((e) => e.to()).toList(),
       ),
       appConfig: config.to(),
-      identInfo: identInfo.to(),
       accountType: convertModelUserAccountType(accountType),
       searchHistory: searchHistory,
       categories: categories.map((e) => e.to()).toList(),
@@ -68,8 +65,6 @@ class ModelUserConfig extends HiveObject {
   List<ModelWebSiteFolder> rssFeedSiteFolders;
   @HiveField(4)
   ModelAppConfig config;
-  @HiveField(5)
-  ModelUserIdentInfo identInfo;
   @HiveField(6)
   ModelUserAccountType accountType;
   @HiveField(7)

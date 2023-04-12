@@ -38,7 +38,7 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<bool> userRegister(UserIdentInfo identInfo) {
+  Future<bool> userRegister(UserAccessIdentInfo identInfo) {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
@@ -56,7 +56,8 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<List<ExploreCategory>> getExploreCategories(UserIdentInfo identInfo) {
+  Future<List<ExploreCategory>> getExploreCategories(
+      UserAccessIdentInfo identInfo) {
     // TODO: implement getExploreCategories
     throw UnimplementedError();
   }

@@ -15,18 +15,19 @@ class SearchRequest {
 
 class ApiSearchRequest {
   final SearchType searchType;
-  final SearchQueryType queryType;
   final String word;
   final String userID;
-  final UserIdentInfo identInfo;
+  final UserAccessIdentInfo identInfo;
   final UserAccountType accountType;
+  //リクエスト時間(UTC)
+  final DateTime requestTime;
   ApiSearchRequest({
     required this.searchType,
-    required this.queryType,
     required this.word,
     required this.userID,
     required this.identInfo,
     required this.accountType,
+    required this.requestTime,
   });
 }
 

@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/ui_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 ///レスポンシブ対応のテキストスタイルを生成
@@ -85,8 +91,6 @@ void showDownloadProgress(received, total, msg) {
   }
 }
 
-
-
 //uiConfigのテーマモードに基づいてBrightnessを返す
 Brightness getBrightness(UiConfig uiConfig) {
   switch (uiConfig.themeMode) {
@@ -99,7 +103,8 @@ Brightness getBrightness(UiConfig uiConfig) {
   }
 }
 
-///今の解像度がモバイルかタブレットかPCかを判定する関数
+///今の解像度からモバイルかタブレットかPCかを判定する関数
+///関数名をよりわかりやすくしたい
 DeviceType howDeviceType(BuildContext context) {
   if (ResponsiveWrapper.of(context).isSmallerThan(MOBILE)) {
     return DeviceType.mobile;
@@ -120,4 +125,117 @@ bool isTablet(BuildContext context) {
 
 bool isDesktop(BuildContext context) {
   return ResponsiveWrapper.of(context).isSmallerThan(DESKTOP);
+}
+
+UserPlatformType detectPlatformType() {
+  if (kIsWeb) {
+    return UserPlatformType.web;
+  } else if (Platform.isAndroid) {
+    return UserPlatformType.android;
+  } else if (Platform.isIOS) {
+    return UserPlatformType.ios;
+  } else if (Platform.isLinux) {
+    return UserPlatformType.linux;
+  } else if (Platform.isMacOS) {
+    return UserPlatformType.mac;
+  } else if (Platform.isWindows) {
+    return UserPlatformType.windows;
+  } else {
+    return UserPlatformType.other;
+  }
+}
+
+UserAccessPlatform detectAccessPlatformType() {
+  if (kIsWeb) {
+    return UserAccessPlatform.web;
+  } else if ((Platform.isAndroid) || (Platform.isIOS)) {
+    return UserAccessPlatform.mobile;
+  } else if ((Platform.isLinux) || (Platform.isMacOS) || (Platform.isWindows)) {
+    return UserAccessPlatform.pc;
+  }  else {
+    return UserAccessPlatform.pc;
+  }
+}
+
+///実行しているデバイスの情報を取得する
+Future<Map<String, dynamic>> detectDeviceInfo() async {
+  var deviceData = <String, dynamic>{};
+  final deviceInfoPlugin = DeviceInfoPlugin();
+  try {
+    if (kIsWeb) {
+      deviceData = _readWebBrowserInfo(await deviceInfoPlugin.webBrowserInfo);
+    } else {
+      if (Platform.isAndroid) {
+        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+      } else if (Platform.isIOS) {
+        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+      } else if (Platform.isLinux) {
+        deviceData = _readLinuxDeviceInfo(await deviceInfoPlugin.linuxInfo);
+      } else if (Platform.isMacOS) {
+        deviceData = _readMacOsDeviceInfo(await deviceInfoPlugin.macOsInfo);
+      } else if (Platform.isWindows) {
+        deviceData = _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo);
+      }
+    }
+    return deviceData;
+  } on PlatformException {
+    throw Exception('Failed to get platform version.');
+  }
+}
+//以下は省略している
+
+Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+  return <String, dynamic>{
+    'OS.Version': build.version.release,
+    'brand': build.brand,
+    'device': build.device,
+    //UUID
+    'UUID': build.id,
+    'isPhysicalDevice': build.isPhysicalDevice,
+  };
+}
+
+Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+  final sysName = data.systemName ?? 'IOS';
+  final sysVersion = data.systemVersion ?? 'Unknown';
+  return <String, dynamic>{
+    'OS.Version': '$sysName: $sysVersion',
+    'brand': 'Apple',
+    'device': data.model,
+    //UUID
+    'UUID': data.identifierForVendor,
+    'isPhysicalDevice': data.isPhysicalDevice,
+  };
+}
+
+Map<String, dynamic> _readLinuxDeviceInfo(LinuxDeviceInfo data) {
+  return <String, dynamic>{
+    'OS.Version': data.version,
+    'brand': data.prettyName+' : '+data.name,
+    'device': data.id,
+  };
+}
+
+Map<String, dynamic> _readWebBrowserInfo(WebBrowserInfo data) {
+  return <String, dynamic>{
+    'OS.Version': data.userAgent,
+    'brand': data.vendor,
+    'device': data.platform,
+  };
+}
+
+Map<String, dynamic> _readMacOsDeviceInfo(MacOsDeviceInfo data) {
+  return <String, dynamic>{
+    'OS.Version': data.majorVersion,
+    'brand': 'Apple',
+    'device': data.model,
+  };
+}
+
+Map<String, dynamic> _readWindowsDeviceInfo(WindowsDeviceInfo data) {
+  return <String, dynamic>{
+    'OS.Version': data.majorVersion,
+    'brand': 'Microsoft',
+    'device': data.productName,
+  };
 }

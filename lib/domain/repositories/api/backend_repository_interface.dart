@@ -5,7 +5,7 @@ import 'package:feedays/domain/entities/web_sites.dart';
 
 abstract class BackendApiRepository {
   Future<bool> login();
-  Future<bool> userRegister(UserIdentInfo identInfo);
+  Future<bool> userRegister(UserAccessIdentInfo identInfo);
 
   ///クラウドフィードサイトの更新を問い合わせる
   Future<WebSite?> requestCloudFeed(String url);
@@ -14,5 +14,6 @@ abstract class BackendApiRepository {
   Future<bool> isCompatibleCloudFeed(String url);
   Future<SearchResult> searchWord(ApiSearchRequest request);
   Future<void> editRecentSearches(String text, {bool isAddOrRemove = true});
-  Future<List<ExploreCategory>> getExploreCategories(UserIdentInfo identInfo);
+  Future<List<ExploreCategory>> getExploreCategories(
+      UserAccessIdentInfo identInfo);
 }

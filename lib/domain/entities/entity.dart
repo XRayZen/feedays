@@ -11,11 +11,11 @@ import './app_config.dart';
 class UserConfig {
   String userName;
   String password;
-  String userID; //ユーザーidは初回起動時でサーバーから割り振られるユニークなid
+  //ユーザーidは初回起動時でサーバーから割り振られるユニークなid
+  String userID;
   bool isGuest;
   RssWebSites rssFeedSites;
   AppConfig appConfig;
-  UserIdentInfo identInfo;
   UserAccountType accountType;
   List<String> searchHistory;
   List<ExploreCategory> categories;
@@ -26,7 +26,6 @@ class UserConfig {
     required this.isGuest,
     required this.rssFeedSites,
     required this.appConfig,
-    required this.identInfo,
     required this.accountType,
     required this.searchHistory,
     required this.categories,
@@ -61,12 +60,6 @@ class UserConfig {
           ),
           drawerMenuOpacity: 0.5,
         ),
-      ),
-      identInfo: UserIdentInfo(
-        ip: '0',
-        macAddress: 'macAddress',
-        token: 'token',
-        accessPlatform: UserAccessPlatform.mobile,
       ),
       accountType: UserAccountType.guest,
       searchHistory: [],

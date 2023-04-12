@@ -1,3 +1,4 @@
+import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/mock/mock_util.dart';
@@ -35,14 +36,16 @@ class MockLocalRepo extends LocalRepositoryInterface {
     // TODO: implement clear
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<Uint8List?> readImage(String link)async {
-    
-  }
-  
+  Future<Uint8List?> readImage(String link) async {}
+
   @override
-  Future<void> saveImage(String link,Uint8List data)async {
-    
+  Future<void> saveImage(String link, Uint8List data) async {}
+
+  @override
+  Future<UserAccessIdentInfo> getDevice() {
+    // TODO: implement getDevice
+    throw UnimplementedError();
   }
 }

@@ -26,6 +26,7 @@
 		<true/>
 		<key>io.flutter.embedded_views_preview</key>
 		<true/>
+		<!-- 権限 -->
 		<key>NSCameraUsageDescription</key>
 		<string>カメラを使用してQRコードを読み取ります</string>
 		<key>NSAppTransportSecurity</key>

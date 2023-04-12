@@ -29,21 +29,28 @@ class UserSubscribeActivity {
   });
 }
 
-class UserIdentInfo {
-  final String ip;
-  final String macAddress;
-  final String? uUid; //端末で取得出来たら
-  //初回起動時にサーバーから付与されるパスワードのようなもの
-  //サーバーにはそれに対応したSHAハッシュ値のみ登録される
-  final String token;
+///ユーザーがアクセスした端末の情報
+///Apiにリクエストする際に生成して送信する
+class UserAccessIdentInfo {
+  final String uUid; //端末で取得出来たら
   final UserAccessPlatform accessPlatform;
-  UserIdentInfo({
-    required this.ip,
-    required this.macAddress,
-    this.uUid,
-    required this.token,
+  final UserPlatformType platformType;
+  final String brand;
+  final String deviceName;
+  //OSのバージョン
+  final String osVersion;
+  final bool isPhysics;
+  UserAccessIdentInfo({
+    required this.uUid,
     required this.accessPlatform,
+    required this.platformType,
+    required this.brand,
+    required this.deviceName,
+    required this.osVersion,
+    required this.isPhysics,
   });
 }
 
-enum UserAccessPlatform { pc, web, mobile, tablet }
+enum UserAccessPlatform { pc, web, mobile, other }
+
+enum UserPlatformType { android, ios, windows, mac, linux, web, other }
