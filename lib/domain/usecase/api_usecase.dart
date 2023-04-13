@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_catches_without_on_clauses
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
@@ -83,6 +83,7 @@ class ApiUsecase {
         //APIに送信するときにエラーが発生した場合
       }
     }
+    return null;
   }
 
   //検索ページの入力履歴を送信する

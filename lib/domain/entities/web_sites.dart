@@ -2,9 +2,9 @@
 import 'dart:typed_data';
 
 ///フィード・サイトリストへの操作を集中して実装する
-class RssWebSites {
-  List<WebSiteFolder> folders;
-  RssWebSites({
+class WebFeedData {
+  List<RssFeedFolder> folders;
+  WebFeedData({
     required this.folders,
   });
 
@@ -119,7 +119,7 @@ class RssWebSites {
     if (folderName == '') {
       if (folders.any((element) => element.name != 'UnCategorized') ||
           folders.isEmpty) {
-        folders.add(WebSiteFolder(name: 'UnCategorized', children: [site]));
+        folders.add(RssFeedFolder(name: 'UnCategorized', children: [site]));
       } else {
         final index =
             folders.indexWhere((element) => element.name == 'UnCategorized');
@@ -138,7 +138,7 @@ class RssWebSites {
             .indexWhere((element) => element.siteUrl == site.siteUrl);
         folders[folderIndex].children[siteIndex].index = siteIndex;
       } else {
-        folders.add(WebSiteFolder(name: folderName, children: [site]));
+        folders.add(RssFeedFolder(name: folderName, children: [site]));
       }
     }
   }
@@ -164,7 +164,7 @@ class RssWebSites {
   }
 
   void addFolder(String folderName) {
-    folders.add(WebSiteFolder(name: folderName, children: []));
+    folders.add(RssFeedFolder(name: folderName, children: []));
   }
 
   void deleteFolder(String folderName) {
@@ -186,10 +186,10 @@ class RssWebSites {
   }
 }
 
-class WebSiteFolder {
+class RssFeedFolder {
   String name;
   List<WebSite> children;
-  WebSiteFolder({
+  RssFeedFolder({
     required this.name,
     required this.children,
   });

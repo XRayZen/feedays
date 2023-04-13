@@ -20,6 +20,7 @@ class RssUsecase {
   Future<void> Function(String message) noticeError;
   Future<void> Function(WebSite site) onAddSite;
   void Function(int count, int all, String msg) progressCallBack;
+  WebFeedData rssFeedData;
   final UserConfig userCfg;
   RssUsecase({
     required this.webRepo,
@@ -29,6 +30,7 @@ class RssUsecase {
     required this.noticeError,
     required this.onAddSite,
     required this.progressCallBack,
+    required this.rssFeedData,
     required this.userCfg,
   });
 
@@ -41,7 +43,7 @@ class RssUsecase {
       //PLAN:Repository経由でRss情報を取得する
       //TODO:レポジトリのモックを作る
     } else {
-      final res = userCfg.rssFeedSites.pickupRssFeeds(site, pageNum, pageSize);
+      final res = rssFeedData.pickupRssFeeds(site, pageNum, pageSize);
       if (res is List<Article>) {
         //NOTE:詳細と言ってもxml取得時点で十分な情報を得ている
         //要求されたのが非RSSならバックエンドに要求しなければならない
@@ -74,10 +76,9 @@ class RssUsecase {
     //ワードがURLかどうか判定する
     if (parseUrls(request.word) is List<String>) {
       //URLなら既存のデータベースに存在するか調べて返す
-      if (userCfg.rssFeedSites.anySiteOfURL(request.word)) {
-        final foundSite = userCfg.rssFeedSites
-            .where((site) => site.siteUrl == request.word)
-            .first;
+      if (rssFeedData.anySiteOfURL(request.word)) {
+        final foundSite =
+            rssFeedData.where((site) => site.siteUrl == request.word).first;
         //もし、RSSがあるのならリプレースせずそのまま返す
         if (foundSite.feeds.isNotEmpty) {
           return SearchResult(
@@ -139,9 +140,8 @@ class RssUsecase {
   ///
   ///無かったらフィードを更新する
   Future<WebSite> readRssFeed(WebSite site) async {
-    if (userCfg.rssFeedSites.anySiteOfURL(site.siteUrl)) {
-      final sites =
-          userCfg.rssFeedSites.where((p) => p.siteUrl == site.siteUrl);
+    if (rssFeedData.anySiteOfURL(site.siteUrl)) {
+      final sites = rssFeedData.where((p) => p.siteUrl == site.siteUrl);
       for (final element in sites) {
         if (element.feeds.isEmpty) {
           return refreshRssFeed(element);
@@ -171,25 +171,25 @@ class RssUsecase {
   }
 
   Future<void> renameSite(WebSite site, String newName) async {
-    userCfg.rssFeedSites.renameSite(site, newName);
+    rssFeedData.renameSite(site, newName);
     await saveData();
   }
 
   ///サイトを登録処理
   Future<void> registerRssSite(List<WebSite> sites) async {
-    userCfg.rssFeedSites.add(sites);
+    rssFeedData.add(sites);
     await saveData();
   }
 
   Future<void> removeRssSite(String deleteCategory, WebSite site) async {
-    userCfg.rssFeedSites.deleteSite(deleteCategory, site);
+    rssFeedData.deleteSite(deleteCategory, site);
     await saveData();
   }
 
   Future<void> removeSiteFolder(
     String deleteCategory,
   ) async {
-    userCfg.rssFeedSites.deleteFolder(deleteCategory);
+    rssFeedData.deleteFolder(deleteCategory);
     await saveData();
   }
 
@@ -199,11 +199,12 @@ class RssUsecase {
   }
 
   Future<WebSite> refreshRssFeed(WebSite site) async {
+    //FIXME:バックエンドが完成するとApiUseCaseを経由するようにする
     final newSite = await webRepo.getFeeds(
       site.siteUrl,
       progressCallBack: progressCallBack,
     );
-    userCfg.rssFeedSites.replaceWebSites(site, newSite);
+    rssFeedData.replaceWebSites(site, newSite);
     await saveData();
     return newSite;
   }
@@ -211,6 +212,7 @@ class RssUsecase {
   Future<void> saveData() async {
     try {
       await localRepo.saveConfig(userCfg);
+      await localRepo.saveFeedData(rssFeedData);
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       await noticeError(e.toString());

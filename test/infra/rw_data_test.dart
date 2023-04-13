@@ -31,10 +31,6 @@ void main() {
       () async {
         //変換するデータを用意する
         final preData = UserConfig.defaultUserConfig();
-        //サイトリストを入れる
-        final list = genExploreList();
-        //RSS取得はここでは出来ない
-        preData.rssFeedSites.add(list);
         //データをModelに変換する
         final model = ModelUserConfig.from(preData);
         //Hiveを使い保存する

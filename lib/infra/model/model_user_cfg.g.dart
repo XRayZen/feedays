@@ -21,7 +21,6 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
       password: fields[9] as String,
       userID: fields[1] as String,
       isGuest: fields[2] as bool,
-      rssFeedSiteFolders: (fields[3] as List).cast<ModelWebSiteFolder>(),
       config: fields[4] as ModelAppConfig,
       accountType: fields[6] as ModelUserAccountType,
       searchHistory: (fields[7] as List).cast<String>(),
@@ -32,15 +31,13 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
   @override
   void write(BinaryWriter writer, ModelUserConfig obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.userName)
       ..writeByte(1)
       ..write(obj.userID)
       ..writeByte(2)
       ..write(obj.isGuest)
-      ..writeByte(3)
-      ..write(obj.rssFeedSiteFolders)
       ..writeByte(4)
       ..write(obj.config)
       ..writeByte(6)
@@ -64,24 +61,58 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
           typeId == other.typeId;
 }
 
-class ModelWebSiteFolderAdapter extends TypeAdapter<ModelWebSiteFolder> {
+class ModelWebFeedDataAdapter extends TypeAdapter<ModelWebFeedData> {
   @override
-  final int typeId = 1;
+  final int typeId = 12;
 
   @override
-  ModelWebSiteFolder read(BinaryReader reader) {
+  ModelWebFeedData read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ModelWebSiteFolder(
+    return ModelWebFeedData(
+      folders: (fields[0] as List).cast<ModelFeedFolder>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ModelWebFeedData obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.folders);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ModelWebFeedDataAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ModelFeedFolderAdapter extends TypeAdapter<ModelFeedFolder> {
+  @override
+  final int typeId = 1;
+
+  @override
+  ModelFeedFolder read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ModelFeedFolder(
       name: fields[0] as String,
       children: (fields[1] as List).cast<ModelWebSite>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, ModelWebSiteFolder obj) {
+  void write(BinaryWriter writer, ModelFeedFolder obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
@@ -96,7 +127,7 @@ class ModelWebSiteFolderAdapter extends TypeAdapter<ModelWebSiteFolder> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ModelWebSiteFolderAdapter &&
+      other is ModelFeedFolderAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

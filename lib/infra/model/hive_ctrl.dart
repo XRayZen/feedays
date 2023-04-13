@@ -17,7 +17,8 @@ void registerAdapter() {
   //使うクラスのアダプターを全て登録しとく必要がある
   //model_user_cfg
   Hive.registerAdapter(ModelUserConfigAdapter());
-  Hive.registerAdapter(ModelWebSiteFolderAdapter());
+  Hive.registerAdapter(ModelWebFeedDataAdapter());
+  Hive.registerAdapter(ModelFeedFolderAdapter());
   Hive.registerAdapter(ModelWebSiteAdapter());
   Hive.registerAdapter(ModelFeedItemAdapter());
   Hive.registerAdapter(ModelRssFeedImageAdapter());

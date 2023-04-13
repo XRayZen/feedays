@@ -68,15 +68,14 @@ final searchTxtFieldProvider = StateProvider<String>((ref) {
   return '';
 });
 
-final subscribeWebSitesProvider = Provider<List<WebSiteFolder>>((ref) {
+final subscribeWebSitesProvider = Provider<List<RssFeedFolder>>((ref) {
   final use = ref.watch(
-    useCaseProvider.select((value) => value.userCfg.rssFeedSites.folders),
+    useCaseProvider.select((value) => value.rssFeedData.folders),
   );
   return use;
 });
-final readRssFolderProvider = Provider<List<WebSiteFolder>>((ref) {
-  final res =
-      ref.watch(useCaseProvider.select((v) => v.userCfg.rssFeedSites.folders));
+final readRssFolderProvider = Provider<List<RssFeedFolder>>((ref) {
+  final res = ref.watch(useCaseProvider.select((v) => v.rssFeedData.folders));
   return res;
 });
 
