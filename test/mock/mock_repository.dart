@@ -50,7 +50,7 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<WebSite?> requestCloudFeed(String url) {
+  Future<WebSite?> fetchCloudFeed(String url) {
     // TODO: implement requestCloudFeed
     throw UnimplementedError();
   }

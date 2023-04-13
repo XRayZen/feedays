@@ -53,6 +53,7 @@ class Usecase {
       backendApiRepo: apiRepo,
       noticeError: noticeError,
       userCfg: userCfg,
+      //ユーザーデバイス識別情報はここで取得
       identInfo: await localRepo.getDevice(),
     );
     rssUsecase = RssUsecase(

@@ -40,9 +40,9 @@ class RssWebSites {
   }
 
   ///リストから指定された上限と下限の件数を抜き出す
-  List<FeedItem>? pickupRssFeeds(WebSite site, int pageNum, int pageMax) {
+  List<Article>? pickupRssFeeds(WebSite site, int pageNum, int pageMax) {
     if (anySiteOfURL(site.siteUrl)) {
-      final list = <FeedItem>[];
+      final list = <Article>[];
       for (final element
           in where((element) => element.name == site.name).first.feeds) {
         if (element.index > pageNum) {
@@ -153,7 +153,7 @@ class RssWebSites {
     }
   }
 
-  List<FeedItem>? searchSiteFeedList(String siteUrl) {
+  List<Article>? searchSiteFeedList(String siteUrl) {
     if (anySiteOfURL(siteUrl)) {
       final res = where((p) => p.siteUrl == siteUrl).first.feeds;
       if (res.isNotEmpty) {
@@ -230,15 +230,17 @@ class WebSite {
   }
 
   ///現在が更新期限よりも新しかったら更新する
+  ///
+  ///更新期限は最終更新日時+limitTime
   bool isRssFeedRefreshTime(
     int limitTime,
   ) {
-    //更新期限
+    //更新期限は最終更新日時+limitTime
     final refreshExpireTime = lastModified
         .toLocal()
         .add(Duration(minutes: limitTime))
         .millisecondsSinceEpoch;
-    if (refreshExpireTime< DateTime.now().toLocal().millisecondsSinceEpoch) {
+    if (refreshExpireTime < DateTime.now().toLocal().millisecondsSinceEpoch) {
       return true;
     } else {
       return false;
@@ -256,7 +258,7 @@ class WebSite {
   int readLateCount;
   String category;
   List<String> tags;
-  List<FeedItem> feeds;
+  List<Article> feeds;
   bool fav;
   String description;
   bool isCloudFeed;
@@ -265,8 +267,8 @@ class WebSite {
   DateTime lastModified;
 }
 
-class FeedItem {
-  FeedItem({
+class Article {
+  Article({
     required this.index,
     required this.title,
     required this.description,
@@ -300,7 +302,7 @@ class RssFeedImage {
 }
 
 class FeedObject {
-  List<FeedItem> items;
+  List<Article> items;
   String title;
   String siteLink;
   String feedLink;

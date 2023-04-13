@@ -48,14 +48,14 @@ class ModelApiRequestLimitConfig extends HiveObject {
   factory ModelApiRequestLimitConfig.from(ApiRequestLimitConfig cfg) {
     return ModelApiRequestLimitConfig(
       trendRequestLimit: cfg.trendRequestLimit,
-      noneRssFeedRequestLimit: cfg.noneRssFeedRequestLimit,
+      noneRssFeedRequestLimit: cfg.fetchRssFeedRequestLimit,
       sendActivityMinute: cfg.sendActivityMinute,
     );
   }
   ApiRequestLimitConfig to() {
     return ApiRequestLimitConfig(
       trendRequestLimit: trendRequestLimit,
-      noneRssFeedRequestLimit: noneRssFeedRequestLimit,
+      fetchRssFeedRequestLimit: noneRssFeedRequestLimit,
       sendActivityMinute: sendActivityMinute,
     );
   }

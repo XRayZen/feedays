@@ -18,7 +18,7 @@ class TodayInfiniteList extends ConsumerStatefulWidget {
 }
 
 class _TodayInfiniteListState extends ConsumerState<TodayInfiniteList> {
-  final _pagingController = PagingController<int, FeedItem>(
+  final _pagingController = PagingController<int, Article>(
     // 2 firstPageKey パラメータを使って、ページ初期値を設定する必要がある
     //今回使う`API`の場合、ページキーは1から始まりますが、他のAPIの場合は0から始まるかもしれない
     firstPageKey: 0,
@@ -76,7 +76,7 @@ class _TodayInfiniteListState extends ConsumerState<TodayInfiniteList> {
         // ),
         PagedSliverList(
           pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<FeedItem>(
+          builderDelegate: PagedChildBuilderDelegate<Article>(
             itemBuilder: (context, feed, index) {
               //アイテムをデザインする
               //カードにするか
@@ -110,7 +110,7 @@ class FeedItemView extends StatelessWidget {
     super.key,
     required this.feed,
   });
-  final FeedItem feed;
+  final Article feed;
 
   @override
   Widget build(BuildContext context) {

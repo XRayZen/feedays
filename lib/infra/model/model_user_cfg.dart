@@ -246,7 +246,7 @@ class ModelFeedItem extends HiveObject {
     required this.lastModified,
     this.isReedLate = false,
   });
-  factory ModelFeedItem.from(FeedItem e) {
+  factory ModelFeedItem.from(Article e) {
     return ModelFeedItem(
       index: e.index,
       title: e.title,
@@ -259,8 +259,8 @@ class ModelFeedItem extends HiveObject {
       site: e.site,
     );
   }
-  FeedItem to() {
-    return FeedItem(
+  Article to() {
+    return Article(
       index: index,
       title: title,
       description: description,

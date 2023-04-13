@@ -3,8 +3,8 @@ import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
-import 'package:feedays/util.dart';
 
 class ApiUsecase {
   final BackendApiRepository backendApiRepo;
@@ -20,6 +20,14 @@ class ApiUsecase {
   });
   //WARNING:ApiにリクエストするときはUTC現在日時を入れておく
 
+  Future<void> registerUser(UserConfig cfg) async {
+    //初回起動時にユーザー登録を行う
+  }
+
+  Future<void> syncConfig(UserConfig cfg) async {
+    //
+  }
+
   String getSyncCode() {
     //現時点では同期コードはユーザーIDをそのまま返す
     return userCfg.userID;
@@ -27,6 +35,11 @@ class ApiUsecase {
 
   void codeSync(String? code) {
     //Apiにリクエストして設定を受け取り、上書き更新する
+  }
+
+  //アクテビティを報告する
+  Future<void> reportActivity() async {
+    //アクテビティを保存する
   }
 
   //検索するとき
@@ -44,6 +57,53 @@ class ApiUsecase {
     );
     return result;
   }
+
+  //サイトのフィードを取得する
+  Future<WebSite?> fetchCloudFeed(WebSite requestSite) async {
+    // フィード取得はApi設定で更新頻度を制限
+    // 1. WebSiteの最終更新日時が設定値より古い場合は更新
+    if (requestSite.isRssFeedRefreshTime(
+      userCfg.appConfig.apiRequestConfig.fetchRssFeedRequestLimit,
+    )) {
+      try {
+        // 2. フィード取得
+        final res = await backendApiRepo.fetchCloudFeed(requestSite.siteUrl);
+        switch (res.responseType) {
+          case ApiResponseType.refuse:
+            //更新が無いか、何らかの理由で拒否された場合は通知した後は特に何もしない
+            await noticeError(res.error);
+            return null;
+          case ApiResponseType.accept:
+            requestSite.feeds.addAll(res.feeds);
+            // 3. フィード取得日時を更新
+            requestSite.lastModified = DateTime.now().toUtc();
+            return requestSite;
+        }
+      } catch (e) {
+        //APIに送信するときにエラーが発生した場合
+      }
+    }
+  }
+
+  //検索ページの入力履歴を送信する
+  Future<void> editRecentSearches(
+    String text, {
+    bool isAddOrRemove = true,
+  }) async {
+    try {
+      //入力履歴を保存する
+      //Responseを受け取っても対応する必要があるのか
+      await backendApiRepo.editRecentSearches(
+        text,
+        isAddOrRemove: isAddOrRemove,
+      );
+
+    } catch (e) {
+      //APIに送信するときにエラーが発生した場合
+    }
+  }
+
+  //
 
   Future<List<ExploreCategory>> getCategories() async {
     //ここもカテゴリーを保存しておらず例外処理も十分にしていない

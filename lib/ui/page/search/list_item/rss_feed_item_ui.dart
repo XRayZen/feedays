@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RssFeedItemUI extends ConsumerWidget {
   const RssFeedItemUI({super.key, required this.articles, required this.index});
-  final List<FeedItem> articles;
+  final List<Article> articles;
   final int index;
 
   @override

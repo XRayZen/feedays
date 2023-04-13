@@ -64,7 +64,7 @@ class SiteRssFeedList extends ConsumerWidget {
 
   Widget _buildList(
     BuildContext context,
-    List<FeedItem> feeds,
+    List<Article> feeds,
     WidgetRef ref,
   ) {
     final modelList = convertViewModel(feeds);
@@ -91,7 +91,7 @@ class SiteRssFeedList extends ConsumerWidget {
   Widget _buildListItem(
     List<RssListViewModel> list,
     int index,
-    List<FeedItem> feeds,
+    List<Article> feeds,
   ) {
     //もしインデックスが範囲外ならno more Item
     if (list.length <= index) {
@@ -113,7 +113,7 @@ class SiteRssFeedList extends ConsumerWidget {
   }
 
   ///リストに表示するためのビューモデルを生成する
-  List<RssListViewModel> convertViewModel(List<FeedItem> items) {
+  List<RssListViewModel> convertViewModel(List<Article> items) {
     //Todayなどにフィードを分けるために一旦モデルに変換してから表示する
     final list = List<RssListViewModel>.empty(growable: true);
     //時間が今日ならToday 昨日ならYesterday それ以降は日付
@@ -183,6 +183,6 @@ class RssListViewModel {
   });
   final bool isSection;
   final String? text;
-  final FeedItem? item;
+  final Article? item;
   final int? index;
 }

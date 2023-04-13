@@ -8,7 +8,7 @@ FeedObject? feedDataToRssObj(Uint8List data, String url) {
   try {
     final rss = RssFeed.parse(utf8.decode(data.buffer.asUint8List()));
     if (rss.items != null) {
-      return convertRssToFeedObj(rss,url);
+      return convertRssToFeedObj(rss, url);
     }
     // ignore: avoid_catching_errors, avoid_catches_without_on_clauses
   } catch (_) {
@@ -20,8 +20,8 @@ FeedObject? feedDataToRssObj(Uint8List data, String url) {
   return null;
 }
 
-List<FeedItem> rssFeedConvert(RssFeed rssFeed) {
-  final items = List<FeedItem>.empty(growable: true);
+List<Article> rssFeedConvert(RssFeed rssFeed) {
+  final items = List<Article>.empty(growable: true);
   if (rssFeed.items != null && rssFeed.items!.isNotEmpty) {
     var index = 0;
     for (final item in rssFeed.items!) {
@@ -29,7 +29,7 @@ List<FeedItem> rssFeedConvert(RssFeed rssFeed) {
       if (item.content != null && item.content!.images.isNotEmpty) {
         imageLink = item.content!.images.first;
       }
-      final feedItem = FeedItem(
+      final feedItem = Article(
         index: index,
         title: item.title ?? '',
         description: item.description ?? '',
@@ -49,8 +49,8 @@ List<FeedItem> rssFeedConvert(RssFeed rssFeed) {
   return items;
 }
 
-List<FeedItem> atomFeedConvert(AtomFeed atomFeed) {
-  final items = List<FeedItem>.empty(growable: true);
+List<Article> atomFeedConvert(AtomFeed atomFeed) {
+  final items = List<Article>.empty(growable: true);
   if (atomFeed.items != null && atomFeed.items!.isNotEmpty) {
     var index = 0;
     for (final item in atomFeed.items!) {
@@ -84,7 +84,7 @@ List<FeedItem> atomFeedConvert(AtomFeed atomFeed) {
       if (item.categories != null && item.categories!.isNotEmpty) {
         cate = item.categories!.first.label ?? '';
       }
-      final feedItem = FeedItem(
+      final feedItem = Article(
         index: index,
         title: item.title ?? '',
         description: item.summary ?? '',
@@ -123,6 +123,6 @@ FeedObject convertAtomToFeedObj(AtomFeed atomFeed, String url) {
     feedLink: url,
     description: atomFeed.subtitle ?? '',
     category: '',
-    iconLink: atomFeed.icon?? atomFeed.logo,
+    iconLink: atomFeed.icon ?? atomFeed.logo,
   );
 }

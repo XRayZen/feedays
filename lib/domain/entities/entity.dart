@@ -41,7 +41,7 @@ class UserConfig {
       appConfig: AppConfig(
         apiRequestConfig: ApiRequestLimitConfig(
           trendRequestLimit: 10,
-          noneRssFeedRequestLimit: 10,
+          fetchRssFeedRequestLimit: 10,
           sendActivityMinute: 10,
         ),
         rssFeedConfig: RssFeedConfig(),

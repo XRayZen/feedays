@@ -160,9 +160,9 @@ Future<WebSite> parseRssToWebSiteMeta(
   );
 }
 
-Future<List<FeedItem>> parseImageLink(
+Future<List<Article>> parseImageLink(
   WebRepositoryInterface webRepo,
-  List<FeedItem> items, {
+  List<Article> items, {
   void Function(int count, int all, String msg)? progressCallBack,
 }) async {
   for (var i = 0; i < items.length; i++) {
@@ -308,7 +308,7 @@ Future<WebSite?> refreshRssConvert(
   //既存と比べて新しいフィードをカウントする
   site.newCount = 0;
   // ignore: omit_local_variable_types, prefer_final_locals
-  List<FeedItem> newItems = <FeedItem>[];
+  List<Article> newItems = <Article>[];
   for (final newItem in newFeedItems) {
     if (site.feeds.any(
       (x) =>

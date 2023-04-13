@@ -47,7 +47,7 @@ class SearchResult {
   ///PowerSearchなら記事を返す
   SearchType searchType;
   final List<WebSite> websites;
-  List<FeedItem> articles;
+  List<Article> articles;
   SearchResult({
     required this.apiResponse,
     required this.responseMessage,

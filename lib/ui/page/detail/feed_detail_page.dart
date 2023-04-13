@@ -14,7 +14,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class FeedDetailPageView extends ConsumerStatefulWidget {
-  final List<FeedItem> articles;
+  final List<Article> articles;
   final int index;
   const FeedDetailPageView({
     super.key,
@@ -150,7 +150,7 @@ class FeedDetailBody extends StatelessWidget {
     required this.page,
   });
 
-  final FeedItem article;
+  final Article article;
   final FeedDetailPageView page;
 
   @override
