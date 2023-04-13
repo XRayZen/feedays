@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+
+    <channel>
+    <atom:link href="http://gigazine.net/news/rss_2.0/" rel="self" type="application/rss+xml"/>
+    <title>GIGAZINE</title>
+    <link>https://gigazine.net/</link>
+    <description>日々のあらゆる雑談に役立つネタを提供するIT系ニュースサイト。起きている限りほぼ毎日更新中。</description>
+    <dc:language>ja-JP</dc:language>
+    
+    <dc:rights>Copyright 2023</dc:rights>
+    <dc:date>2023-02-21T11:08:00+09:00</dc:date>
+    <admin:generatorAgent rdf:resource="http://www.pmachine.com/"/>
+    
+
+    <item>
+      <title>未開封の初代iPhoneが史上最高額の約850万円で落札される</title>
+      <link>https://gigazine.net/news/20230221-iphone-sold-for-over-63000-dollars/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230221-iphone-sold-for-over-63000-dollars/</guid>
+      <description><![CDATA[2007年に発売されたAppleの初代iPhoneで「工場出荷状態から未開封のまま」という新品同様のものがオークションに出品され、iPhoneとしては史上最高額となる6万3000ドル(約850万円)以上で落札されました。<p><b><a href="https://gigazine.net/news/20230221&#45;iphone&#45;sold&#45;for&#45;over&#45;63000&#45;dollars/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Tue, 21 Feb 2023 11:08:00 +0900</pubDate>
+      <dc:subject>モバイル, ハードウェア,</dc:subject>
+      <dc:date>2023-02-21T11:08:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>Twitterが家主・コンサルタント・ベンダーから18億円超の滞納で複数件訴えられている</title>
+      <link>https://gigazine.net/news/20230221-twitter-14-milion-unpaid-bills/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230221-twitter-14-milion-unpaid-bills/</guid>
+      <description><![CDATA[イーロン・マスクCEOのもと徹底的な経費削減に取り組むTwitterが、未払いの家賃やコンサルタント料などの合計1400万ドル(約18億8000万円)以上の支払いに関する訴訟に直面しています。<p><b><a href="https://gigazine.net/news/20230221&#45;twitter&#45;14&#45;milion&#45;unpaid&#45;bills/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Tue, 21 Feb 2023 10:54:00 +0900</pubDate>
+      <dc:subject>ネットサービス,</dc:subject>
+      <dc:date>2023-02-21T10:54:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>新型Nintendo Switchの可能性がイギリス政府の文書から浮上</title>
+      <link>https://gigazine.net/news/20230221-nintendo-switch-uk-government/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230221-nintendo-switch-uk-government/</guid>
+      <description><![CDATA[2017年3月にNintendo Switchが発売されてから記事作成時点までに約6年が経過していますが、「Nintendo Switch Lite」や「Nintendo Switch（有機ELモデル）」といった派生モデルは登場しているものの、次世代ゲーム機の情報は公開されていません。そんな中、イギリスの公正取引委員会が公開した文書の中に任天堂の次世代機の存在を示唆する文面が含まれていることが話題となっています。<p><b><a href="https://gigazine.net/news/20230221&#45;nintendo&#45;switch&#45;uk&#45;government/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Tue, 21 Feb 2023 10:35:00 +0900</pubDate>
+      <dc:subject>ハードウェア, ゲーム,</dc:subject>
+      <dc:date>2023-02-21T10:35:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>2要素認証のショートメールを要求しまくるボットのせいでTwitterは年間80億円も失っていた</title>
+      <link>https://gigazine.net/news/20230221-twitter-lost-60-million-dollars-2fa-sms/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230221-twitter-lost-60-million-dollars-2fa-sms/</guid>
+      <description><![CDATA[2023年2月15日、Twitterがショートメッセージサービス(SMS)を使った2要素認証設定を同年3月20日以降に有料化する方針を明らかにしました。これまで無料で使えていたものが有料になるということで一部ユーザーに混乱をもたらしましたが、有料化となる理由の1つに「悪質なボットの台頭」があることをTwitterのCEOであるイーロン・マスク氏が伝えました。<p><b><a href="https://gigazine.net/news/20230221&#45;twitter&#45;lost&#45;60&#45;million&#45;dollars&#45;2fa&#45;sms/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Tue, 21 Feb 2023 08:00:00 +0900</pubDate>
+      <dc:subject>ネットサービス,</dc:subject>
+      <dc:date>2023-02-21T08:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>太陽光発電プロジェクトを阻止するため暗躍している活動家グループがいるとの報道</title>
+      <link>https://gigazine.net/news/20230221-solar-power-misinformation-activists/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230221-solar-power-misinformation-activists/</guid>
+      <description><![CDATA[太陽光発電は風力と並んで環境にやさしい再生可能エネルギーの筆頭とされていますが、設置のために森林が伐採されるような環境負荷も指摘されています。このような地元住民の不安をあおり、太陽光発電プロジェクトを中止に追い込むことを目的に活動をしている市民団体について、アメリカの公共ラジオであるNPRがまとめました。<p><b><a href="https://gigazine.net/news/20230221&#45;solar&#45;power&#45;misinformation&#45;activists/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Tue, 21 Feb 2023 07:00:00 +0900</pubDate>
+      <dc:subject>メモ,</dc:subject>
+      <dc:date>2023-02-21T07:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>文章を書いたのが人間なのかAIなのかを見分けるツール「GPTZero」の精度はどれほどなのか？</title>
+      <link>https://gigazine.net/news/20230221-gptzero-case-study-false-positives/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230221-gptzero-case-study-false-positives/</guid>
+      <description><![CDATA[高精度な文章を生成する「GPT-3」や「ChatGPT」の登場を受けて、「どうすれば人間が書いた文章とAIが書いた文章を見分けることができるのか？」という課題が浮上しています。そんな中、アメリカのプリンストン大学に在籍するEdward Tian氏は、人間が書いた文章とChatGPTが書いた文章を見分けるツール「GPTZero」を公開し、大きな話題を集めました。これに対し、テクノロジー関連のブログを運営する大学生のJacob Gonzales氏が、GPTZeroの精度はどれほどなのかを医学論文でテストした結果を報告しています。<p><b><a href="https://gigazine.net/news/20230221&#45;gptzero&#45;case&#45;study&#45;false&#45;positives/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Tue, 21 Feb 2023 06:00:00 +0900</pubDate>
+      <dc:subject>ソフトウェア, ネットサービス,</dc:subject>
+      <dc:date>2023-02-21T06:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>ChatGPTの学習にウォール・ストリート・ジャーナルやCNNなどの記事が許可なく使われていると報じられる</title>
+      <link>https://gigazine.net/news/20230220-openai-chatgpt-training-article/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-openai-chatgpt-training-article/</guid>
+      <description><![CDATA[AI研究団体・OpenAIが開発した対話型チャットAIのChatGPTは、人間からの質問に対して非常に自然に受け答えできるだけでなく、プログラムの作成や判決文の作成などに活用されています。しかしChatGPTの機械学習に複数のニュースメディアの記事が許可なく使用されていることがジャーナリストのフランチェスコ・マルコーニ氏によって指摘されています。<p><b><a href="https://gigazine.net/news/20230220&#45;openai&#45;chatgpt&#45;training&#45;article/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 23:00:00 +0900</pubDate>
+      <dc:subject>ネットサービス,</dc:subject>
+      <dc:date>2023-02-20T23:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>タンパク質10g超えのグレープ味ヨーグルト「ダノン オイコス 脂肪 0 レッドグレープ」＆まろやかな酸味の「ダノンビオ さくらんぼ＆ベリー」試食レビュー</title>
+      <link>https://gigazine.net/news/20230220-danone-bio-oikos-cherry-berry/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-danone-bio-oikos-cherry-berry/</guid>
+      <description><![CDATA[さくらんぼの果汁やクランベリーの果肉が入った甘酸っぱい味わいのヨーグルト「ダノンビオ さくらんぼ＆ベリー」と、低カロリーかつ高タンパクなぶどう味のヨーグルト「ダノン オイコス 脂肪 0 レッドグレープ」が2023年2月13日(月)に登場しました。それぞれどんな味に仕上がっているのか気になったので、実際に食べてみました。<p><b><a href="https://gigazine.net/news/20230220&#45;danone&#45;bio&#45;oikos&#45;cherry&#45;berry/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 22:00:00 +0900</pubDate>
+      <dc:subject>試食,</dc:subject>
+      <dc:date>2023-02-20T22:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>中国がChatGPTのようなAIツールで後れを取っているのは検閲と地政学的な緊張による統制の強化が原因との指摘</title>
+      <link>https://gigazine.net/news/20230220-china-develop-ai/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-china-develop-ai/</guid>
+      <description><![CDATA[一般大衆向けチャット型AIを完成させたOpenAIやMicrosoftに対し、中国テクノロジー企業は同型のチャット型AI開発において後れを取っている状況です。このことに対し、専門家は「政府の統制が一因である」と指摘しています。<p><b><a href="https://gigazine.net/news/20230220&#45;china&#45;develop&#45;ai/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 21:00:00 +0900</pubDate>
+      <dc:subject>ソフトウェア,</dc:subject>
+      <dc:date>2023-02-20T21:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>遺伝子を組換えるイギリス初の「遺伝子治療」が赤ちゃんに行われ成功、平均余命5～8年の遺伝子疾患の兆候がなくなり健康に</title>
+      <link>https://gigazine.net/news/20230220-baby-receives-gene-therapy-first-uk/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-baby-receives-gene-therapy-first-uk/</guid>
+      <description><![CDATA[イギリスの国民保健サービス(NHS)が2023年2月15日に、同国で初となる異染性白質ジストロフィー(MLD)の遺伝子治療が生後19カ月の赤ちゃんに行われたと発表しました。細胞を取り出し、欠陥のある遺伝子を組換えてから戻すこの治療は無事に成功し、赤ちゃんは元気に退院したと伝えられています。<p><b><a href="https://gigazine.net/news/20230220&#45;baby&#45;receives&#45;gene&#45;therapy&#45;first&#45;uk/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 20:00:00 +0900</pubDate>
+      <dc:subject>サイエンス,</dc:subject>
+      <dc:date>2023-02-20T20:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>将来の信号機には「4番目の色」が追加されるかもしれない、その理由とは？</title>
+      <link>https://gigazine.net/news/20230220-traffic-light-for-autonomous-cars/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-traffic-light-for-autonomous-cars/</guid>
+      <description><![CDATA[一般的な自動車用信号機には「赤・黄・青(緑)」の3色のライトが存在していますが、ノースカロライナ州立大学の土木・建設・環境工学准教授を務めるAli Hajbabaie氏らの研究チームは、新たに「4番目の色」を信号機に追加することで交通をスムーズにできる可能性があるという研究結果を発表しました。<p><b><a href="https://gigazine.net/news/20230220&#45;traffic&#45;light&#45;for&#45;autonomous&#45;cars/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 19:00:00 +0900</pubDate>
+      <dc:subject>乗り物, サイエンス,</dc:subject>
+      <dc:date>2023-02-20T19:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>2023年2月20日のヘッドラインニュース</title>
+      <link>https://gigazine.net/news/20230220-headline/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-headline/</guid>
+      <description><![CDATA[2023年2月22日(水)から、「ポケットモンスター スカーレット・バイオレット」で新登場したポケモン・ニャオハをメインとしたグッズ「にゃ！にゃにゃ！ ニャオハ！」がポケモンセンターに登場します。<p><b><a href="https://gigazine.net/news/20230220&#45;headline/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 18:19:00 +0900</pubDate>
+      <dc:subject>ヘッドライン,</dc:subject>
+      <dc:date>2023-02-20T18:19:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>Microsoft BingのAIチャットには「ゲームモード」「友だちモード」など隠し機能が搭載されていると判明</title>
+      <link>https://gigazine.net/news/20230220-bing-chats-secret-modes/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-bing-chats-secret-modes/</guid>
+      <description><![CDATA[Microsoftの検索エンジン・Bingに、OpenAIの大規模言語処理モデル「Prometheus」をベースにした「Bing Chat」というAIチャットが2023年2月に組み込まれました。このBing Chatを使うことで、まるで人間と会話するように文章ベースで情報を検索することが可能なのですが、Microsoftがコマンドを入力することで使える「ゲームモード」「友だちモード」などの隠し機能を検討していることが判明しました。<p><b><a href="https://gigazine.net/news/20230220&#45;bing&#45;chats&#45;secret&#45;modes/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 17:00:00 +0900</pubDate>
+      <dc:subject>ソフトウェア, ネットサービス,</dc:subject>
+      <dc:date>2023-02-20T17:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>アメリカ軍が約5300万円のミサイルで撃墜した未確認空中物体がわずか1600円の気象観測用気球だった可能性が報じられる</title>
+      <link>https://gigazine.net/news/20230220-weather-balloon-shot-down/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-weather-balloon-shot-down/</guid>
+      <description><![CDATA[2023年2月4日にアメリカ本土上空に出現した中国の偵察気球をアメリカ軍が撃墜して以降、アメリカ軍は複数の未確認空中物体の撃墜を行なったことを発表しています。撃墜された未確認空中物体の中に、アマチュア無線の愛好家グループが打ち上げた気象観測用気球が含まれていた可能性が指摘されています。<p><b><a href="https://gigazine.net/news/20230220&#45;weather&#45;balloon&#45;shot&#45;down/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 16:00:00 +0900</pubDate>
+      <dc:subject>メモ,</dc:subject>
+      <dc:date>2023-02-20T16:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>「あなたの過去を消去します」デジタルタトゥー削除をうたう企業が行ってきた非倫理的・欺瞞的手法がリークにより明らかに</title>
+      <link>https://gigazine.net/news/20230220-dubious-methods-erase-past-from-internet/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-dubious-methods-erase-past-from-internet/</guid>
+      <description><![CDATA[「あなたの過去を消去します」というキャッチフレーズのもと、インターネット上に残るデジタルタトゥーの削除サービスを提供する企業が「Eliminalia」です。同社による非倫理的あるいは欺瞞的なデジタルタトゥー削除手法の実態を、The GuardianやThe Washington Postが報じています。<p><b><a href="https://gigazine.net/news/20230220&#45;dubious&#45;methods&#45;erase&#45;past&#45;from&#45;internet/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 15:00:00 +0900</pubDate>
+      <dc:subject>メモ,</dc:subject>
+      <dc:date>2023-02-20T15:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>最強の囲碁AIに圧勝する人物が登場、AIの弱点を突いて人類が勝利したと話題に</title>
+      <link>https://gigazine.net/news/20230220-go-human-victory/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-go-human-victory/</guid>
+      <description><![CDATA[人工知能(AI)の進化に伴って、チェスや将棋といった知能ゲームにおいてAIがプロプレイヤーに勝利するケースが増えていましたが、2016年1月にGoogleの「AlphaGo」が囲碁のプロ棋士に勝利したことを皮切りに、2カ月後には世界最強の棋士にも勝利したり、「私ならAlphaGoにも勝てる」と宣言したプロ棋士にも接戦の末勝利したり、2017年には自力で戦術を覚えて強くなれる新バージョンの「AlphaGo Zero」が発表されたりと、囲碁の世界でもAIが圧倒的な勝者として君臨していました。そのような中で、アマチュアの囲碁プレイヤーがコンピュータの直接的なサポート無しで最強レベルの囲碁AIに15戦14勝と大勝し、「AIに対する人類の勝利」と話題になっています。<p><b><a href="https://gigazine.net/news/20230220&#45;go&#45;human&#45;victory/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 14:00:00 +0900</pubDate>
+      <dc:subject>ソフトウェア,</dc:subject>
+      <dc:date>2023-02-20T14:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>【訃報】「銀河鉄道999」「宇宙戦艦ヤマト」などで知られる漫画家・松本零士さん死去</title>
+      <link>https://gigazine.net/news/20230220-leiji-matsumoto-passed-away/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-leiji-matsumoto-passed-away/</guid>
+      <description><![CDATA[「銀河鉄道999」「宇宙戦艦ヤマト」「宇宙海賊キャプテンハーロック」で知られる漫画家の松本零士さんが、2023年2月13日(月)に急性心不全で亡くなっていたことがわかりました。85歳でした。<p><b><a href="https://gigazine.net/news/20230220&#45;leiji&#45;matsumoto&#45;passed&#45;away/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 13:01:00 +0900</pubDate>
+      <dc:subject>動画, マンガ,</dc:subject>
+      <dc:date>2023-02-20T13:01:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>テスラ車が高速道路で消防車に衝突して運転手が死亡する事故が発生</title>
+      <link>https://gigazine.net/news/20230220-tesla-driver-killed-plowing-firetruck/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-tesla-driver-killed-plowing-firetruck/</guid>
+      <description><![CDATA[アメリカ・カリフォルニア州の州間高速道路で、事故対応のために停車中だった消防車にテスラのモデルSが突っ込む事故が発生しました。これによりテスラ車の運転手が死亡し、同乗者も重傷を負ったほか、消防車に乗っていた消防士4人も軽症を負ったとのことです。<p><b><a href="https://gigazine.net/news/20230220&#45;tesla&#45;driver&#45;killed&#45;plowing&#45;firetruck/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 13:00:00 +0900</pubDate>
+      <dc:subject>乗り物,</dc:subject>
+      <dc:date>2023-02-20T13:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>Windows 11のシステム要件を満たしていないPCのデスクトップ上に邪魔な透かしが常に表示されるようになったと報告される</title>
+      <link>https://gigazine.net/news/20230220-windows11-watermark-system-requirements/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-windows11-watermark-system-requirements/</guid>
+      <description><![CDATA[MicrosoftのWindows 11が、更新通知を全画面で表示することなどが報じられています。そんなWindows 11のシステム要件を満たしていないにもかかわらず、更新を行なったPCのデスクトップ上に透かしが表示されていることが報じられています。<p><b><a href="https://gigazine.net/news/20230220&#45;windows11&#45;watermark&#45;system&#45;requirements/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 12:30:00 +0900</pubDate>
+      <dc:subject>ソフトウェア,</dc:subject>
+      <dc:date>2023-02-20T12:30:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>レンジで手軽にプロの味が楽しめるパスタソース「プロ クオリティ パスタソース 濃厚ボロネーゼ／海老の香り濃厚トマトクリーム」試食レビュー</title>
+      <link>https://gigazine.net/news/20230220-housefoods-pasta-sauce-bolognese-tomato-cream/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-housefoods-pasta-sauce-bolognese-tomato-cream/</guid>
+      <description><![CDATA[ハウス食品から、レンジでチンするだけで手軽にプロクオリティのパスタソースが味わえる「プロ クオリティ パスタソース 濃厚ボロネーゼ」と「プロ クオリティ パスタソース 海老の香り濃厚トマトクリーム」が登場しました。便利なレンジ調理でレストラン品質のパスタが味わえるとのことなので、どんな味なのか実際に食べて確かめてみました。<p><b><a href="https://gigazine.net/news/20230220&#45;housefoods&#45;pasta&#45;sauce&#45;bolognese&#45;tomato&#45;cream/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 11:45:00 +0900</pubDate>
+      <dc:subject>試食,</dc:subject>
+      <dc:date>2023-02-20T11:45:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>MicrosoftがBingのAIに口封じ、1回の会話の長さや1日のメッセージ数が制限されていることが判明し悲しむユーザーが続出</title>
+      <link>https://gigazine.net/news/20230220-microsoft-limited-ai-bing-chat/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-microsoft-limited-ai-bing-chat/</guid>
+      <description><![CDATA[ChatGPTの技術が統合されたMicrosoft Bingのチャットボットに、不適切な回答を防ぐための制限が加えられたことが分かりました。この修正により、Bingでは長い会話やBing自身に言及するような質問ができなくなったことが報告されています。<p><b><a href="https://gigazine.net/news/20230220&#45;microsoft&#45;limited&#45;ai&#45;bing&#45;chat/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 11:10:00 +0900</pubDate>
+      <dc:subject>ソフトウェア,</dc:subject>
+      <dc:date>2023-02-20T11:10:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>Appleが「送信者の声でiMessageを読み上げる機能」の特許を出願</title>
+      <link>https://gigazine.net/news/20230220-apple-imessage-to-voice-note/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-apple-imessage-to-voice-note/</guid>
+      <description><![CDATA[Apple関連の特許や商標をチェックするニュースサイト・Patently Appleが、「テキストメッセージング用のパーソナライズされた音声」というAppleからの特許出願がアメリカの特許商標庁のデータベースで公開されたと報じています。出願された機能は、iMessageで受信したメッセージを送信者の声で読み上げさせるものでした。<p><b><a href="https://gigazine.net/news/20230220&#45;apple&#45;imessage&#45;to&#45;voice&#45;note/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 11:00:00 +0900</pubDate>
+      <dc:subject>モバイル, ソフトウェア,</dc:subject>
+      <dc:date>2023-02-20T11:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>携帯ゲーム機「Steam Deck」に「PCからゲームを高速転送する機能」が追加される</title>
+      <link>https://gigazine.net/news/20230220-steam-deck-network-transfer/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-steam-deck-network-transfer/</guid>
+      <description><![CDATA[PCゲームプラットフォーム「Steam」を運営する「Valve」が開発した携帯ゲーム機「Steam Deck」は、小型軽量ながらPCゲームをサクサク遊べる処理性能を備えており、人気を集めています。そんなSteam Deckに「ローカルネットワークを介してPCからゲームを転送し、素早くゲームプレイを開始できる機能」が追加されることが明らかになりました。<p><b><a href="https://gigazine.net/news/20230220&#45;steam&#45;deck&#45;network&#45;transfer/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 10:56:00 +0900</pubDate>
+      <dc:subject>ゲーム,</dc:subject>
+      <dc:date>2023-02-20T10:56:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>Metaが月額1600円でFacebookとInstagramの認証バッジをゲットできる有料サービス「Meta Verified」発表</title>
+      <link>https://gigazine.net/news/20230220-meta-verified-facebook-instagram/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-meta-verified-facebook-instagram/</guid>
+      <description><![CDATA[MetaがFacebookおよびInstagramで認証バッジ(アカウント横に表示される青色チェックマーク)を取得できる「Meta Verified」という有料サービスを、ウェブ版だと月額11.99ドル(約1600円)、モバイル版だと月額14.99ドル(約2000円)で販売すると発表しました。<p><b><a href="https://gigazine.net/news/20230220&#45;meta&#45;verified&#45;facebook&#45;instagram/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 10:36:00 +0900</pubDate>
+      <dc:subject>ネットサービス,</dc:subject>
+      <dc:date>2023-02-20T10:36:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>寝不足必至の戦略ゲーム「Civilization(シヴィライゼーション)」シリーズの新作開発が発表される</title>
+      <link>https://gigazine.net/news/20230220-civilization-development/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-civilization-development/</guid>
+      <description><![CDATA[ターン制ストラテジーゲームの名作「シヴィライゼーション」シリーズの最新作が開発中であることが、パブリッシャーの2K GamesとデベロッパーのFiraxis Gamesから発表されました。記事作成時点での最新ナンバリング作は2016年10月に発売された「シドマイヤーズ シヴィライゼーション VI」で、発売から既に6年以上が経過しています。<p><b><a href="https://gigazine.net/news/20230220&#45;civilization&#45;development/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 10:29:00 +0900</pubDate>
+      <dc:subject>ゲーム,</dc:subject>
+      <dc:date>2023-02-20T10:29:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>超小型食洗機「SOLOTA」は省スペース性能と洗浄性能を両立できているのか徹底検証してみた</title>
+      <link>https://gigazine.net/news/20230220-panasonic-dishwasher-solota-wash/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-panasonic-dishwasher-solota-wash/</guid>
+      <description><![CDATA[パナソニックの超小型食器洗い乾燥機「SOLOTA」は、A4サイズの床面積さえ確保すれば設置可能という省スペース性能の高さが特徴です。そんなSOLOTAの洗浄能力がどれほどのものなのか気になったので、「カレーを食べてから1日放置した皿」「コーヒーを飲んだマグカップ」など汚れの多い食器を洗ってみました。<p><b><a href="https://gigazine.net/news/20230220&#45;panasonic&#45;dishwasher&#45;solota&#45;wash/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 09:00:00 +0900</pubDate>
+      <dc:subject>レビュー, ハードウェア,</dc:subject>
+      <dc:date>2023-02-20T09:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>ChatGPTは高性能な対話ができるのになぜデタラメな回答をすることがあるのか？</title>
+      <link>https://gigazine.net/news/20230220-chatgpt-fake-paper/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230220-chatgpt-fake-paper/</guid>
+      <description><![CDATA[OpenAIの対話型AI「ChatGPT」は、人間からの質問に対して非常に自然に受け答えできるだけではなく、記述試験に合格できたり実際に動作するプログラムを数分で完成させたりと、さまざまな活用が考えられています。一方で、ChatGPTは「それっぽい回答」をしているだけで内容はデタラメのことも多く、ChatGPTを用いて論文を作成することを学術誌Scienceや国際会議のICMLは禁止しています。なぜChatGPTがデタラメな論文を作成するのかという仕組みを、クイーンズランド大学の経済学助教授でチェスのグランドマスターでもあるデビッド・スマードン氏が解説しています。<p><b><a href="https://gigazine.net/news/20230220&#45;chatgpt&#45;fake&#45;paper/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Mon, 20 Feb 2023 08:00:00 +0900</pubDate>
+      <dc:subject>ネットサービス,</dc:subject>
+      <dc:date>2023-02-20T08:00:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>「生存バイアス」を有名にした統計学者のエイブラハム・ウォールドとは何者なのか？</title>
+      <link>https://gigazine.net/news/20230219-abraham-wald/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230219-abraham-wald/</guid>
+      <description><![CDATA[生存バイアスとは、何かしらの選択を行った人や物事のみを基準に判断することで、その選択を行わなかった人の場合を考えないバイアスのことです。この生存バイアスを有名にしたエピソードの1つである「第2次世界大戦中の爆撃機の損傷」を検討した統計学者のエイブラハム・ウォールドについて、数学の歴史に関するエッセイサイト・Privatdozentが解説しています。<p><b><a href="https://gigazine.net/news/20230219&#45;abraham&#45;wald/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Sun, 19 Feb 2023 23:50:00 +0900</pubDate>
+      <dc:subject>メモ, サイエンス,</dc:subject>
+      <dc:date>2023-02-19T23:50:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>アメリカが撃墜した未確認空中物体2つの捜索を終了</title>
+      <link>https://gigazine.net/news/20230219-us-end-search-for-remnants-of-aerial-objects/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230219-us-end-search-for-remnants-of-aerial-objects/</guid>
+      <description><![CDATA[アメリカ北方軍司令部が、2023年2月に撃墜した2つの物体の捜索終了を決定しました。実質的には「捜索打ち切り」で、撃墜した物体に関連する装置は回収・分析されない可能性が高まっています。<p><b><a href="https://gigazine.net/news/20230219&#45;us&#45;end&#45;search&#45;for&#45;remnants&#45;of&#45;aerial&#45;objects/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Sun, 19 Feb 2023 23:25:00 +0900</pubDate>
+      <dc:subject>メモ,</dc:subject>
+      <dc:date>2023-02-19T23:25:00+09:00</dc:date>
+    </item>
+
+    <item>
+      <title>コーヒーにミルクを入れて飲むとポリフェノールの抗炎症作用が2倍になるとの研究結果</title>
+      <link>https://gigazine.net/news/20230219-coffee-milk-inflammation/</link>
+      <guid isPermaLink="true">https://gigazine.net/news/20230219-coffee-milk-inflammation/</guid>
+      <description><![CDATA[コーヒーにはさまざまな飲み方や楽しみ方があり、「いつもブラックで飲んでいる」という人もいれば「ミルクを入れて飲むのが好き」という人もいます。そんなコーヒーに含まれる抗酸化物質のポリフェノールを細胞に投与する実験により、ポリフェノールとタンパク質を組み合わせると抗炎症作用が倍増することが突き止められました。<p><b><a href="https://gigazine.net/news/20230219&#45;coffee&#45;milk&#45;inflammation/">続きを読む...</a></b></p>]]></description>
+      <pubDate>Sun, 19 Feb 2023 20:00:00 +0900</pubDate>
+      <dc:subject>サイエンス, 食,</dc:subject>
+      <dc:date>2023-02-19T20:00:00+09:00</dc:date>
+    </item>
+
+    
+    </channel>
+</rss>
