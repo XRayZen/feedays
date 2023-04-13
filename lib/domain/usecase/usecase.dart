@@ -20,6 +20,7 @@ class Usecase {
   Future<void> Function(WebSite site) onAddSite;
   void Function(int count, int all, String msg) progressCallBack;
   late UserConfig userCfg;
+  late WebFeedData rssFeedData;
   late ConfigUsecase configUsecase;
   late RssUsecase rssUsecase;
   late ApiUsecase apiUsecase;
@@ -36,13 +37,21 @@ class Usecase {
   Future<void> init() async {
     //起動時にデータを読み込む
     await localRepo.init();
-    final data = await localRepo.readConfig();
-    if (data != null) {
-      userCfg = data;
+    final configData = await localRepo.readConfig();
+    if (configData != null) {
+      userCfg = configData;
     } else {
       //データが無かったら起動初回処理
       //ユーザー情報を取得してApiでユーザー登録してデータを用意する
       userCfg = UserConfig.defaultUserConfig();
+    }
+    final rssFeedSites = await localRepo.readFeedData();
+    if (rssFeedSites != null) {
+      rssFeedData = rssFeedSites;
+    } else {
+      //データが無かったら起動初回処理
+      //データを用意する
+      rssFeedData = WebFeedData(folders: []);
     }
     //インスタンス化
     configUsecase = ConfigUsecase(
@@ -64,6 +73,7 @@ class Usecase {
       noticeError: noticeError,
       onAddSite: onAddSite,
       progressCallBack: progressCallBack,
+      rssFeedData: rssFeedData,
       userCfg: userCfg,
     );
   }

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/infra/model/hive_ctrl.dart';
 import 'package:feedays/infra/model/model_user_cfg.dart';
@@ -54,6 +55,7 @@ class LocalRepoImpl extends LocalRepositoryInterface {
   @override
   Future<void> clear() async {
     await Hive.deleteBoxFromDisk('UserCfgBox');
+    await Hive.deleteBoxFromDisk('RssFeedDataBox');
     await Hive.deleteBoxFromDisk('WebImageBox');
   }
 
@@ -87,5 +89,30 @@ class LocalRepoImpl extends LocalRepositoryInterface {
       osVersion: deviceData['OS.Version'].toString(),
       isPhysics: isPhysics,
     );
+  }
+
+  @override
+  Future<WebFeedData?> readFeedData() async {
+    final box = await Hive.openBox<ModelWebFeedData>('RssFeedDataBox');
+    final model = box.get(1);
+    if (model != null) {
+      return model.to();
+    } else {
+      await clear();
+      return null;
+    }
+  }
+
+  @override
+  Future<void> saveFeedData(WebFeedData feeds) async {
+    //Hiveで保存する
+    final box = await Hive.openBox<ModelWebFeedData>('RssFeedDataBox');
+    final model = ModelWebFeedData.from(feeds);
+    if (box.containsKey(1)) {
+      //既にあるのなら削除しておく
+      await box.delete(1);
+    }
+    await box.put(1, model);
+    return box.flush();
   }
 }

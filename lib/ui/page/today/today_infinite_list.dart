@@ -45,8 +45,7 @@ class _TodayInfiniteListState extends ConsumerState<TodayInfiniteList> {
       //取得したページがラストなのかどうか判定する
       if (ref
           .watch(rssUsecaseProvider)
-          .userCfg
-          .rssFeedSites
+          .rssFeedData
           .isLastFeed(site, previouslyFetchedItemsCount)) {
         _pagingController.appendLastPage(datas!);
       } else {

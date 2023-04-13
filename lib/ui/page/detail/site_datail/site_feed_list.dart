@@ -34,8 +34,7 @@ class SiteRssFeedList extends ConsumerWidget {
           //エラーで既存があるのなら表示する
           final res = ref
               .watch(rssUsecaseProvider)
-              .userCfg
-              .rssFeedSites
+              .rssFeedData
               .searchSiteFeedList(site.siteUrl);
           if (res != null) {
             return _buildList(context, res, ref);

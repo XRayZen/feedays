@@ -1,5 +1,6 @@
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/mock/mock_util.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +10,7 @@ class MockLocalRepo extends LocalRepositoryInterface {
   Future<UserConfig> readConfig() async {
     //モックテストパターンとして通常なサイトを登録済みとして返す
     var cfg = UserConfig.defaultUserConfig();
-    cfg.rssFeedSites.add(await genValidSite());
+    // cfg.rssFeedSites.add(await genValidSite());
     return cfg;
   }
 
@@ -46,6 +47,18 @@ class MockLocalRepo extends LocalRepositoryInterface {
   @override
   Future<UserAccessIdentInfo> getDevice() {
     // TODO: implement getDevice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<WebFeedData?> readFeedData() {
+    // TODO: implement readFeedData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveFeedData(WebFeedData feeds) {
+    // TODO: implement saveFeedData
     throw UnimplementedError();
   }
 }

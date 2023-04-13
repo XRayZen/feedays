@@ -95,8 +95,7 @@ class _SiteEditDialogWidgetState extends ConsumerState<SiteEditDialogWidget> {
             //もしサイトが削除されていたらダイアログを閉じる
             if (ref
                     .read(useCaseProvider)
-                    .userCfg
-                    .rssFeedSites
+                    .rssFeedData
                     .anySiteOfURL(widget.site.siteUrl) ==
                 false) {
               // ignore: use_build_context_synchronously

@@ -82,7 +82,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
 
   void deleteCategoryDialog(
     BuildContext context,
-    List<WebSiteFolder> list,
+    List<RssFeedFolder> list,
     int index,
     WidgetRef ref,
   ) {
@@ -135,11 +135,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
               onPressed: () {
                 //フォルダー・カテゴリー名でカテゴリーを追加
                 if (text != '') {
-                  ref
-                      .watch(rssUsecaseProvider)
-                      .userCfg
-                      .rssFeedSites
-                      .addFolder(text);
+                  ref.watch(rssUsecaseProvider).rssFeedData.addFolder(text);
                   //ステートレスだとSetStateが使えないからプロバイダーを使って更新
                   ref.watch(onChangedProvider.notifier).state += 1;
                 }
@@ -153,7 +149,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
     );
   }
 
-  void siteAddOrDelete(List<WebSiteFolder> list, int index, WidgetRef ref) {
+  void siteAddOrDelete(List<RssFeedFolder> list, int index, WidgetRef ref) {
     //タップしたら登録・削除処理
     //フォルダにサイトが無かったら登録してあったら削除する
     //サイト登録処理

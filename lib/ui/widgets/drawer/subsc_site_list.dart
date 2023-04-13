@@ -146,8 +146,9 @@ class _ReorderableTreeListViewState
     int newItemIndex,
     int newListIndex,
   ) {
+    //FIXME:リストの並び替えもRssUseCase経由で行う
     setState(() {
-      ref.watch(rssUsecaseProvider).userCfg.rssFeedSites.onReorderSiteIndex(
+      ref.watch(rssUsecaseProvider).rssFeedData.onReorderSiteIndex(
             oldItemIndex,
             oldListIndex,
             newItemIndex,
@@ -158,15 +159,15 @@ class _ReorderableTreeListViewState
 
   void _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
+      //FIXME:リストの並び替えもRssUseCase経由で行う
       ref
           .watch(rssUsecaseProvider)
-          .userCfg
-          .rssFeedSites
+          .rssFeedData
           .onReorderFolder(oldListIndex, newListIndex);
     });
   }
 
-  List<DragAndDropListExpansion> _buildList(List<WebSiteFolder> nodes) {
+  List<DragAndDropListExpansion> _buildList(List<RssFeedFolder> nodes) {
     final widgets = <DragAndDropListExpansion>[];
 
     for (final node in nodes) {
@@ -220,7 +221,7 @@ class _ReorderableTreeListViewState
     return widgets;
   }
 
-  Future<dynamic> deleteFolderDialog(WebSiteFolder node) {
+  Future<dynamic> deleteFolderDialog(RssFeedFolder node) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
