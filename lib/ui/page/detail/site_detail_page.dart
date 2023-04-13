@@ -168,8 +168,7 @@ class SiteDetailWidget extends ConsumerWidget {
       return Visibility(
         visible: !ref
             .watch(rssUsecaseProvider)
-            .userCfg
-            .rssFeedSites
+            .rssFeedData
             .anySiteOfURL(site.siteUrl),
         child: TextButton(
           onPressed: () async {

@@ -14,7 +14,6 @@ class UserConfig {
   //ユーザーidは初回起動時でサーバーから割り振られるユニークなid
   String userID;
   bool isGuest;
-  RssWebSites rssFeedSites;
   AppConfig appConfig;
   UserAccountType accountType;
   List<String> searchHistory;
@@ -24,7 +23,6 @@ class UserConfig {
     required this.password,
     required this.userID,
     required this.isGuest,
-    required this.rssFeedSites,
     required this.appConfig,
     required this.accountType,
     required this.searchHistory,
@@ -37,7 +35,6 @@ class UserConfig {
       password: '',
       userID: 'userID',
       isGuest: true,
-      rssFeedSites: RssWebSites(folders: []),
       appConfig: AppConfig(
         apiRequestConfig: ApiRequestLimitConfig(
           trendRequestLimit: 10,

@@ -1,6 +1,7 @@
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/search.dart';
+import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/usecase/api_usecase.dart';
 import 'package:feedays/domain/usecase/rss_usecase.dart';
 import 'package:feedays/infra/impl_repo/local_repo_impl.dart';
@@ -33,6 +34,7 @@ void main() {
       noticeError: (message) async {},
       onAddSite: (site) async {},
       progressCallBack: (count, all, msg) async {},
+      rssFeedData: WebFeedData(folders: []),
       userCfg: UserConfig.defaultUserConfig(),
     );
     test(
@@ -48,7 +50,7 @@ void main() {
         await webUse.registerRssSite([res.websites.first]);
         //WebUsecaseのサイトに追加されているか期待する
         expect(
-          webUse.userCfg.rssFeedSites.anySiteOfURL(path),
+          webUse.rssFeedData.anySiteOfURL(path),
           isTrue,
         );
       },

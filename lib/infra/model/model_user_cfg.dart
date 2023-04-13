@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:feedays/infra/model/model_activity.dart';
 import 'package:feedays/infra/model/model_app_cfg.dart';
 import 'package:feedays/infra/model/model_explore.dart';
 import 'package:hive/hive.dart';
@@ -16,23 +13,21 @@ class ModelUserConfig extends HiveObject {
     required this.password,
     required this.userID,
     required this.isGuest,
-    required this.rssFeedSiteFolders,
     required this.config,
     required this.accountType,
     required this.searchHistory,
     required this.categories,
   });
   factory ModelUserConfig.from(UserConfig e) {
-    final obj = List<ModelWebSiteFolder>.empty(growable: true);
-    for (final element in e.rssFeedSites.folders) {
-      obj.add(ModelWebSiteFolder.from(element));
-    }
+    // final obj = List<ModelWebSiteFolder>.empty(growable: true);
+    // for (final element in e.rssFeedSites.folders) {
+    //   obj.add(ModelWebSiteFolder.from(element));
+    // }
     return ModelUserConfig(
       userName: e.userName,
       password: e.password,
       userID: e.userID,
       isGuest: e.isGuest,
-      rssFeedSiteFolders: obj,
       config: ModelAppConfig.from(e.appConfig),
       accountType: convertUserAccountType(e.accountType),
       searchHistory: e.searchHistory,
@@ -45,9 +40,6 @@ class ModelUserConfig extends HiveObject {
       password: password,
       userID: userID,
       isGuest: isGuest,
-      rssFeedSites: RssWebSites(
-        folders: rssFeedSiteFolders.map((e) => e.to()).toList(),
-      ),
       appConfig: config.to(),
       accountType: convertModelUserAccountType(accountType),
       searchHistory: searchHistory,
@@ -61,8 +53,6 @@ class ModelUserConfig extends HiveObject {
   String userID;
   @HiveField(2)
   bool isGuest;
-  @HiveField(3)
-  List<ModelWebSiteFolder> rssFeedSiteFolders;
   @HiveField(4)
   ModelAppConfig config;
   @HiveField(6)
@@ -113,20 +103,41 @@ enum ModelUserAccountType {
   ultimate
 }
 
+@HiveType(typeId: 12)
+class ModelWebFeedData {
+  ModelWebFeedData({
+    required this.folders,
+  });
+
+  factory ModelWebFeedData.from(WebFeedData e) {
+    return ModelWebFeedData(
+      folders: e.folders.map(ModelFeedFolder.from).toList(),
+    );
+  }
+  WebFeedData to() {
+    return WebFeedData(
+      folders: folders.map((e) => e.to()).toList(),
+    );
+  }
+
+  @HiveField(0)
+  List<ModelFeedFolder> folders;
+}
+
 @HiveType(typeId: 1)
-class ModelWebSiteFolder extends HiveObject {
-  ModelWebSiteFolder({
+class ModelFeedFolder extends HiveObject {
+  ModelFeedFolder({
     required this.name,
     required this.children,
   });
-  factory ModelWebSiteFolder.from(WebSiteFolder e) {
-    return ModelWebSiteFolder(
+  factory ModelFeedFolder.from(RssFeedFolder e) {
+    return ModelFeedFolder(
       name: e.name,
       children: e.children.map(ModelWebSite.from).toList(),
     );
   }
-  WebSiteFolder to() {
-    return WebSiteFolder(
+  RssFeedFolder to() {
+    return RssFeedFolder(
       name: name,
       children: children.map((e) => e.to()).toList(),
     );

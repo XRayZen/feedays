@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_positional_boolean_parameters
+
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/entity.dart';
