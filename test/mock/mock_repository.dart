@@ -38,14 +38,11 @@ class MockApiRepository extends BackendApiRepository {
     return fakeSearchResult;
   }
 
-
   @override
   Future<bool> isCompatibleCloudFeed(String url) {
     // TODO: implement isCompatibleCloudFeed
     throw UnimplementedError();
   }
-
-
 
   @override
   Future<List<ExploreCategory>> getExploreCategories(
@@ -53,25 +50,25 @@ class MockApiRepository extends BackendApiRepository {
     // TODO: implement getExploreCategories
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> favoriteArticle(Article article, bool isFavorite) {
     // TODO: implement favoriteArticle
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> favoriteSite(WebSite site, bool isFavorite) {
     // TODO: implement favoriteSite
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> subscribeSite(WebSite site, bool isSubscribe) {
     // TODO: implement subscribeSite
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> syncConfig(UserConfig cfg) {
     // TODO: implement syncConfig
@@ -89,13 +86,14 @@ class MockApiRepository extends BackendApiRepository {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<CodeSyncResponse> codeSync() {
+  Future<CodeSyncResponse> codeSync(
+      String code, UserAccessIdentInfo identInfo) {
     // TODO: implement codeSync
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> reportActivity() {
     // TODO: implement reportActivity

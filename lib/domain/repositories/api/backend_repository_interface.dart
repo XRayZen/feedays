@@ -13,7 +13,7 @@ abstract class BackendApiRepository {
   //設定を同期する
   Future<void> syncConfig(UserConfig cfg);
   //UserConfigと購読していたサイトを同期する
-  Future<CodeSyncResponse> codeSync();
+  Future<CodeSyncResponse> codeSync(String code, UserAccessIdentInfo identInfo);
   //アクテビティを報告する
   Future<void> reportActivity();
   Future<SearchResult> searchWord(ApiSearchRequest request);

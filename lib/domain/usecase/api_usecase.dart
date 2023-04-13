@@ -33,8 +33,9 @@ class ApiUsecase {
     return userCfg.userID;
   }
 
-  void codeSync(String? code) {
+  Future<void> codeSync(String? code)async {
     //Apiにリクエストして設定を受け取り、上書き更新する
+    
   }
 
   //アクテビティを報告する

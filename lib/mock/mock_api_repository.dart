@@ -165,7 +165,7 @@ class MockApiRepository extends BackendApiRepository {
   }
   
   @override
-  Future<CodeSyncResponse> codeSync() {
+  Future<CodeSyncResponse> codeSync(String code, UserAccessIdentInfo identInfo) {
     // TODO: implement codeSync
     throw UnimplementedError();
   }
