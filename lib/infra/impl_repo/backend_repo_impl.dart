@@ -1,5 +1,6 @@
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/api_response.dart';
+import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
@@ -60,8 +61,16 @@ class BackendApiRepoImpl extends BackendApiRepository {
     throw UnimplementedError();
   }
 
+
+
   @override
-  Future<bool> userRegister(UserAccessIdentInfo identInfo) {
+  Future<void> syncConfig(UserConfig cfg) {
+    // TODO: implement syncConfig
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> userRegister(UserConfig cfg, UserAccessIdentInfo identInfo) {
     // TODO: implement userRegister
     throw UnimplementedError();
   }

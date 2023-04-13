@@ -1,6 +1,7 @@
 //mokitoではスタブを形成できないため手動でモッククラスを作る
 
 import 'package:feedays/domain/entities/activity.dart';
+import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
@@ -89,22 +90,14 @@ class MockApiRepository extends BackendApiRepository {
     }
   }
 
-  @override
-  Future<bool> userRegister(UserAccessIdentInfo identInfo) {
-    // TODO: implement userRegister
-    throw UnimplementedError();
-  }
+
 
   @override
   Future<bool> isCompatibleCloudFeed(String url) async {
     return false;
   }
 
-  @override
-  Future<WebSite?> fetchCloudFeed(String url) async {
-    // TODO: implement requestCloudFeed
-    throw UnimplementedError();
-  }
+
 
   @override
   Future<List<ExploreCategory>> getExploreCategories(
@@ -133,5 +126,41 @@ class MockApiRepository extends BackendApiRepository {
             'https://www.pakutaso.com/shared/img/thumb/roujinIMGL8335_TP_V.jpg',
       ),
     ];
+  }
+  
+  @override
+  Future<void> favoriteArticle(Article article, bool isFavorite) {
+    // TODO: implement favoriteArticle
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> favoriteSite(WebSite site, bool isFavorite) {
+    // TODO: implement favoriteSite
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> subscribeSite(WebSite site, bool isSubscribe) {
+    // TODO: implement subscribeSite
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> syncConfig(UserConfig cfg) {
+    // TODO: implement syncConfig
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<FetchCloudFeedResponse> fetchCloudFeed(String url) {
+    // TODO: implement fetchCloudFeed
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> userRegister(UserConfig cfg, UserAccessIdentInfo identInfo) {
+    // TODO: implement userRegister
+    throw UnimplementedError();
   }
 }
