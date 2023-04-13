@@ -11,3 +11,17 @@ class FetchCloudFeedResponse {
   final List<Article> feeds;
   final String error;
 }
+
+//codeSync()のレスポンス
+class CodeSyncResponse {
+  CodeSyncResponse({
+    required this.responseType,
+    required this.userConfig,
+    required this.webSites,
+    required this.error,
+  });
+  final ApiResponseType responseType;
+  final UserConfig userConfig;
+  final List<WebSite> webSites;
+  final String error;
+}

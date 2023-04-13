@@ -38,6 +38,7 @@ class ApiUsecase {
   }
 
   //アクテビティを報告する
+  //PLAN:後回し
   Future<void> reportActivity() async {
     //アクテビティを保存する
   }

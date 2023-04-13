@@ -74,5 +74,17 @@ class BackendApiRepoImpl extends BackendApiRepository {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
+  
+  @override
+  Future<CodeSyncResponse> codeSync() {
+    // TODO: implement codeSync
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> reportActivity() {
+    // TODO: implement reportActivity
+    throw UnimplementedError();
+  }
 
 }

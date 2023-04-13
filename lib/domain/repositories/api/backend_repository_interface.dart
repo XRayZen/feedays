@@ -9,14 +9,18 @@ import 'package:feedays/domain/entities/web_sites.dart';
 
 abstract class BackendApiRepository {
   Future<bool> login();
-  Future<bool> userRegister(UserConfig cfg,UserAccessIdentInfo identInfo);
+  Future<bool> userRegister(UserConfig cfg, UserAccessIdentInfo identInfo);
   //設定を同期する
   Future<void> syncConfig(UserConfig cfg);
-  
+  //UserConfigと購読していたサイトを同期する
+  Future<CodeSyncResponse> codeSync();
+  //アクテビティを報告する
+  Future<void> reportActivity();
+  Future<SearchResult> searchWord(ApiSearchRequest request);
+
   ///クラウドフィードサイトの更新を問い合わせる
   Future<FetchCloudFeedResponse> fetchCloudFeed(String url);
-  
-  Future<SearchResult> searchWord(ApiSearchRequest request);
+
   Future<void> editRecentSearches(String text, {bool isAddOrRemove = true});
   //サイトを購読・購読解除する
   Future<void> subscribeSite(WebSite site, bool isSubscribe);
