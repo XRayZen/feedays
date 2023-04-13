@@ -97,13 +97,51 @@ class ApiUsecase {
         text,
         isAddOrRemove: isAddOrRemove,
       );
-
     } catch (e) {
       //APIに送信するときにエラーが発生した場合
     }
   }
 
-  //
+  //サイトを購読・削除する
+  Future<void> subscribedSite(
+    WebSite site, {
+    bool isAddOrRemove = true,
+  }) async {
+    try {
+      //購読サイトを保存する
+      //Responseを受け取っても対応する必要があるのか
+      await backendApiRepo.subscribeSite(site, isAddOrRemove);
+    } catch (e) {
+      //APIに送信するときにエラーが発生した場合
+    }
+  }
+  // サイトお気に入りを追加・削除する
+  Future<void> favoriteSite(
+    WebSite site, {
+    bool isAddOrRemove = true,
+  }) async {
+    try {
+      //お気に入りサイトを保存する
+      //Responseを受け取っても対応する必要があるのか
+      await backendApiRepo.favoriteSite(site, isAddOrRemove);
+    } catch (e) {
+      //APIに送信するときにエラーが発生した場合
+    }
+  }
+
+  //記事お気に入りを追加・削除する
+  Future<void> favoriteArticle(
+    Article feed, {
+    bool isAddOrRemove = true,
+  }) async {
+    try {
+      //お気に入り記事を保存する
+      //Responseを受け取っても対応する必要があるのか
+      await backendApiRepo.favoriteArticle(feed, isAddOrRemove);
+    } catch (e) {
+      //APIに送信するときにエラーが発生した場合
+    }
+  }
 
   Future<List<ExploreCategory>> getCategories() async {
     //ここもカテゴリーを保存しておらず例外処理も十分にしていない
