@@ -1,31 +1,28 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 //PLAN:flutterのアクティビティのやり方/Best Practiceを調べる
 
-class UserReadActivity {
-  final String userID;
-  final String title;
-  final String link;
-  UserReadActivity({
-    required this.userID,
-    required this.title,
-    required this.link,
-  });
-}
 
-class UserSubscribeActivity {
+//TODO:アクテビティをシンプルに一つに統合する
+class ReadActivity {
   final String userID;
-  final String ip;
   final String title;
   final String link;
-  final String category;
-  final List<String> tags;
-  UserSubscribeActivity({
+  final ActivityType type;
+  final String siteName;
+  final String siteURL;
+  final DateTime accessTime;
+  final UserAccessPlatform accessPlatform;
+  final String accessIP;
+  ReadActivity({
     required this.userID,
-    required this.ip,
     required this.title,
     required this.link,
-    required this.category,
-    required this.tags,
+    required this.type,
+    required this.siteName,
+    required this.siteURL,
+    required this.accessTime,
+    required this.accessPlatform,
+    required this.accessIP,
   });
 }
 
@@ -54,3 +51,10 @@ class UserAccessIdentInfo {
 enum UserAccessPlatform { pc, web, mobile, other }
 
 enum UserPlatformType { android, ios, windows, mac, linux, web, other }
+
+enum ActivityType {
+  read,
+  subscribe,
+  search,
+  other,
+}

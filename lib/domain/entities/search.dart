@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 
@@ -14,6 +15,8 @@ class SearchRequest {
 }
 
 class ApiSearchRequest {
+  // URL or Keyword orSiteName
+  // クライアント側でキーワードにURLが入力された場合は検索タイプをURLにしてURL検索を行う
   final SearchType searchType;
   final String word;
   final String userID;
@@ -33,9 +36,9 @@ class ApiSearchRequest {
 
 enum SearchQueryType { url, word }
 
-enum SearchType { addContent, exploreWeb, powerSearch }
+enum SearchType { url,keyword,siteName }
 
-enum SearchResultType { found, none, error }
+enum SearchResultType { found, none, newSite, error }
 
 class SearchResult {
   final ApiResponseType apiResponse;

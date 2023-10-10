@@ -278,6 +278,7 @@ class Article {
     required this.category,
     required this.lastModified,
     this.isReedLate = false,
+    required this.siteUrl,
   });
   final int index;
   final String title;
@@ -290,6 +291,8 @@ class Article {
 
   ///カテゴリーは取得の際につけられる
   final String category;
+  // サイトURL
+  final String siteUrl;
 }
 
 class RssFeedImage {

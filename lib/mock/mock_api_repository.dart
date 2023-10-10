@@ -12,17 +12,20 @@ import 'package:feedays/mock/mock_util.dart';
 
 class MockApiRepository extends BackendApiRepository {
   // int ff = 0;//これの変数を次第で動作を変える予定
+
   @override
-  Future<void> editRecentSearches(String text, {bool isAddOrRemove = true}) {
+  Future<List<ExploreCategory>> getExploreCategories(
+    UserAccessIdentInfo identInfo,
+  ){
+
+  }
+
+  @override
+  Future<void> modifySearchHistory(String text, {bool isAddOrRemove = true}) {
     // TODO: implement editRecentSearches
     throw UnimplementedError();
   }
 
-  @override
-  Future<bool> login() {
-    // TODO: implement login
-    throw UnimplementedError();
-  }
 
   @override
   Future<SearchResult> searchWord(ApiSearchRequest request) async {
@@ -32,7 +35,7 @@ class MockApiRepository extends BackendApiRepository {
     final list = genExploreList();
     final word = request.word;
     switch (request.searchType) {
-      case SearchType.addContent:
+      case SearchType.url:
         //検索分が空ならnot foundを返す
         if (word == '') {
           return SearchResult(
@@ -55,7 +58,7 @@ class MockApiRepository extends BackendApiRepository {
           articles: [],
         );
         return fakeSearchResult;
-      case SearchType.exploreWeb:
+      case SearchType.keyword:
         //カテゴリを探して返す
         final res = list.where((element) => element.category == word);
         if (res.isNotEmpty) {
@@ -90,14 +93,10 @@ class MockApiRepository extends BackendApiRepository {
     }
   }
 
-
-
   @override
   Future<bool> isCompatibleCloudFeed(String url) async {
     return false;
   }
-
-
 
   @override
   Future<List<ExploreCategory>> getExploreCategories(
@@ -127,27 +126,27 @@ class MockApiRepository extends BackendApiRepository {
       ),
     ];
   }
-  
+
   @override
   Future<void> favoriteArticle(Article article, bool isFavorite) {
     // TODO: implement favoriteArticle
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> favoriteSite(WebSite site, bool isFavorite) {
     // TODO: implement favoriteSite
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> subscribeSite(WebSite site, bool isSubscribe) {
     // TODO: implement subscribeSite
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> syncConfig(UserConfig cfg) {
+  Future<void> updateConfig(UserConfig cfg) {
     // TODO: implement syncConfig
     throw UnimplementedError();
   }
@@ -163,15 +162,16 @@ class MockApiRepository extends BackendApiRepository {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<CodeSyncResponse> codeSync(String code, UserAccessIdentInfo identInfo) {
+  Future<ConfigSyncResponse> codeSync(
+      String code, UserAccessIdentInfo identInfo) {
     // TODO: implement codeSync
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> reportActivity() {
+  Future<void> reportReadActivity() {
     // TODO: implement reportActivity
     throw UnimplementedError();
   }

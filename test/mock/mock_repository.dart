@@ -13,7 +13,7 @@ import 'mock_util.dart';
 class MockApiRepository extends BackendApiRepository {
   int ff = 0; //これの変数を次第で動作を変える予定
   @override
-  Future<void> editRecentSearches(String text, {bool isAddOrRemove = true}) {
+  Future<void> modifySearchHistory(String text, {bool isAddOrRemove = true}) {
     // TODO: implement editRecentSearches
     throw UnimplementedError();
   }
@@ -70,7 +70,7 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<void> syncConfig(UserConfig cfg) {
+  Future<APIResponse> updateConfig(UserConfig cfg) {
     // TODO: implement syncConfig
     throw UnimplementedError();
   }
@@ -88,14 +88,14 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<CodeSyncResponse> codeSync(
+  Future<ConfigSyncResponse> codeSync(
       String code, UserAccessIdentInfo identInfo) {
     // TODO: implement codeSync
     throw UnimplementedError();
   }
 
   @override
-  Future<void> reportActivity() {
+  Future<APIResponse> reportReadActivity() {
     // TODO: implement reportActivity
     throw UnimplementedError();
   }

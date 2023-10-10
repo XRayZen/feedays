@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/ui_config.dart';
-import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:flutter/material.dart';
 
 import './app_config.dart';
@@ -10,19 +8,20 @@ import './app_config.dart';
 ///これはユーザーごとの設定としてサーバーでデータベースに登録され各プラットフォームで同期できる
 class UserConfig {
   String userName;
-  String password;
   //ユーザーidは初回起動時でサーバーから割り振られるユニークなid
-  String userID;
-  bool isGuest;
+  String userUniqueID;
   AppConfig appConfig;
   UserAccountType accountType;
   List<String> searchHistory;
+  // ユーザー設定でカテゴリーを保存する意味はあるのか？
+  // API実装時に改修する
   List<ExploreCategory> categories;
+  // ユーザー設定にサイトの購読情報を入れる
+  // API実装時に改修する
+
   UserConfig({
     required this.userName,
-    required this.password,
-    required this.userID,
-    required this.isGuest,
+    required this.userUniqueID,
     required this.appConfig,
     required this.accountType,
     required this.searchHistory,
@@ -32,14 +31,13 @@ class UserConfig {
   factory UserConfig.defaultUserConfig() {
     return UserConfig(
       userName: 'userName',
-      password: '',
-      userID: 'userID',
-      isGuest: true,
+      userUniqueID: 'userID',
       appConfig: AppConfig(
         apiRequestConfig: ApiRequestLimitConfig(
           trendRequestLimit: 10,
           fetchRssFeedRequestLimit: 10,
-          sendActivityMinute: 10,
+          fetchRssFeedRequestInterval: 10,
+          trendRequestInterval: 10,
         ),
         rssFeedConfig: RssFeedConfig(),
         uiConfig: UiConfig(
@@ -76,5 +74,3 @@ class UserConfig {
 }
 
 enum UserAccountType { guest, free, pro, ultimate }
-
-enum ApiResponseType { refuse, accept }
