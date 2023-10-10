@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_catches_without_on_clauses
 import 'package:feedays/domain/entities/activity.dart';
+import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
@@ -30,14 +31,15 @@ class ApiUsecase {
 
   String getSyncCode() {
     //現時点では同期コードはユーザーIDをそのまま返す
-    return userCfg.userID;
+    return userCfg.userUniqueID;
   }
 
-  void codeSync(String? code) {
+  Future<void> codeSync(String? code) async {
     //Apiにリクエストして設定を受け取り、上書き更新する
   }
 
   //アクテビティを報告する
+  //PLAN:後回し
   Future<void> reportActivity() async {
     //アクテビティを保存する
   }
@@ -48,8 +50,9 @@ class ApiUsecase {
     final result = await backendApiRepo.searchWord(
       ApiSearchRequest(
         searchType: request.searchType,
+        queryType: request.,
         word: request.word,
-        userID: userCfg.userID,
+        userID: userCfg.userUniqueID,
         identInfo: identInfo,
         accountType: userCfg.accountType,
         requestTime: DateTime.now().toUtc(),
@@ -94,7 +97,7 @@ class ApiUsecase {
     try {
       //入力履歴を保存する
       //Responseを受け取っても対応する必要があるのか
-      await backendApiRepo.editRecentSearches(
+      await backendApiRepo.modifySearchHistory(
         text,
         isAddOrRemove: isAddOrRemove,
       );
@@ -116,6 +119,7 @@ class ApiUsecase {
       //APIに送信するときにエラーが発生した場合
     }
   }
+
   // サイトお気に入りを追加・削除する
   Future<void> favoriteSite(
     WebSite site, {
@@ -146,6 +150,7 @@ class ApiUsecase {
 
   Future<List<ExploreCategory>> getCategories() async {
     //ここもカテゴリーを保存しておらず例外処理も十分にしていない
+    //FIXME:カテゴリーを取得する時は最新を反映したいので毎回クラウドから取得する
     if (userCfg.categories.isEmpty) {
       final cate = await backendApiRepo.getExploreCategories(identInfo);
       if (cate.isNotEmpty) {

@@ -1,16 +1,15 @@
 # feedays
+RSSリーダーサービスのモバイルフロントエンドアプリケーションです
+IOS/Androidに対応・実機にて動作確認済み
+# 使用技術
+- 全体のアーキテクチャはClean Architectureを採用
+  - DI・リポジトリパターン・UseCaseパターン・MVVMパターンを含んでいます
+  - DIにより依存性の逆転をしており、これによりアプリのテスト・保守性を高めています
+  - レイヤー間の依存関係は下記のようになっています
+    - Presentation層 -> Domain層 -> Data層
+- 状態管理はRiverPodを採用
+- データ保存はHiveを採用
+  - ローカルに状態を保存しており、ユーザーデータの永続化を実現
+- レスポンシブデザインに対応
+  - モバイル・タブレット端末のみならず、PCにも対応しています
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

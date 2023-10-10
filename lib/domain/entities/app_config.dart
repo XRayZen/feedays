@@ -15,20 +15,22 @@ class AppConfig {
 ///サーバーから送られるリクエスト間隔制限設定<br/>
 ///当然だが制限設定はユーザータイプごとに違う
 class ApiRequestLimitConfig {
-  final int trendRequestLimit;
+  final int fetchRssFeedRequestInterval;
   final int fetchRssFeedRequestLimit;
-  final int sendActivityMinute;
+  final int trendRequestInterval;
+  final int trendRequestLimit;
   ApiRequestLimitConfig({
-    required this.trendRequestLimit,
+    required this.fetchRssFeedRequestInterval,
     required this.fetchRssFeedRequestLimit,
-    required this.sendActivityMinute,
+    required this.trendRequestInterval,
+    required this.trendRequestLimit,
   });
 }
 
 class RssFeedConfig {
   ///最終更新日時からどれくらい経ったら更新するか
-  int limitLastFetchTime;
+  int feedRefreshInterval;
   RssFeedConfig({
-    this.limitLastFetchTime = 60,
+    this.feedRefreshInterval = 60,
   });
 }

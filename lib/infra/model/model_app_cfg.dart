@@ -44,19 +44,22 @@ class ModelApiRequestLimitConfig extends HiveObject {
     required this.trendRequestLimit,
     required this.noneRssFeedRequestLimit,
     required this.sendActivityMinute,
+    required this.searchRequestLimit,
   });
   factory ModelApiRequestLimitConfig.from(ApiRequestLimitConfig cfg) {
     return ModelApiRequestLimitConfig(
       trendRequestLimit: cfg.trendRequestLimit,
       noneRssFeedRequestLimit: cfg.fetchRssFeedRequestLimit,
-      sendActivityMinute: cfg.sendActivityMinute,
+      sendActivityMinute: cfg.refreshTrendRequestLimit,
+      searchRequestLimit: cfg.searchRequestLimit,
     );
   }
   ApiRequestLimitConfig to() {
     return ApiRequestLimitConfig(
       trendRequestLimit: trendRequestLimit,
       fetchRssFeedRequestLimit: noneRssFeedRequestLimit,
-      sendActivityMinute: sendActivityMinute,
+      refreshTrendRequestLimit: sendActivityMinute,
+      searchRequestLimit: searchRequestLimit,
     );
   }
 
@@ -66,6 +69,8 @@ class ModelApiRequestLimitConfig extends HiveObject {
   final int noneRssFeedRequestLimit;
   @HiveField(2)
   final int sendActivityMinute;
+  @HiveField(3)
+  final int searchRequestLimit;
 }
 
 @HiveType(typeId: 8)
@@ -74,12 +79,12 @@ class ModelRssFeedConfig extends HiveObject {
     required this.limitLastFetchTime,
   });
   factory ModelRssFeedConfig.from(RssFeedConfig cfg) {
-    return ModelRssFeedConfig(limitLastFetchTime: cfg.limitLastFetchTime);
+    return ModelRssFeedConfig(limitLastFetchTime: cfg.feedRefreshInterval);
   }
   @HiveField(0)
   int limitLastFetchTime;
   RssFeedConfig to() {
-    return RssFeedConfig(limitLastFetchTime: limitLastFetchTime);
+    return RssFeedConfig(feedRefreshInterval: limitLastFetchTime);
   }
 }
 

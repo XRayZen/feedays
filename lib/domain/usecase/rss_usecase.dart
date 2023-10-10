@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
@@ -12,6 +13,7 @@ import 'package:feedays/util.dart';
 
 typedef ErrorMessageCallback = Future<void> Function(String message);
 
+// 今のところはAPIに依存せずにRSSを取得しているがいずれはAPI経由にしてUI関連のみをここに残す
 class RssUsecase {
   final WebRepositoryInterface webRepo;
   final BackendApiRepository apiRepo;
@@ -55,9 +57,7 @@ class RssUsecase {
     return null;
   }
 
-  ///ワードがURLならRSS登録処理
-  ///それ以外ならクラウドで検索リクエスト
-  ///検索リクエストは無制限
+  ///ワードがURLならURL検索、それ以外ならキーワード検索
   Future<SearchResult> searchWord(
     SearchRequest request,
   ) async {
@@ -66,7 +66,7 @@ class RssUsecase {
         apiResponse: ApiResponseType.refuse,
         responseMessage: '',
         resultType: SearchResultType.error,
-        searchType: SearchType.addContent,
+        searchType: SearchType.keyword,
         websites: [],
         articles: [],
       );
@@ -74,65 +74,10 @@ class RssUsecase {
     userCfg.editRecentSearches(request.word);
     await saveData();
     //ワードがURLかどうか判定する
-    if (parseUrls(request.word) is List<String>) {
-      //URLなら既存のデータベースに存在するか調べて返す
-      if (rssFeedData.anySiteOfURL(request.word)) {
-        final foundSite =
-            rssFeedData.where((site) => site.siteUrl == request.word).first;
-        //もし、RSSがあるのならリプレースせずそのまま返す
-        if (foundSite.feeds.isNotEmpty) {
-          return SearchResult(
-            apiResponse: ApiResponseType.accept,
-            responseMessage: '',
-            resultType: SearchResultType.found,
-            searchType: SearchType.addContent,
-            websites: [foundSite],
-            articles: [],
-          );
-        } else {
-          //無かったらリプレースして置き換える
-          final newSite = await refreshRssFeed(foundSite);
-          return SearchResult(
-            apiResponse: ApiResponseType.accept,
-            responseMessage: '',
-            resultType: SearchResultType.found,
-            searchType: SearchType.addContent,
-            websites: [newSite],
-            articles: [],
-          );
-        }
-      } else {
-        //データに無かったらRSS登録処理
-        try {
-          final newSite = await webRepo.getFeeds(
-            request.word,
-            progressCallBack: progressCallBack,
-          );
-          //リザルトはサイトを返す
-          //登録するかはUIで判断できるようにする
-          return SearchResult(
-            apiResponse: ApiResponseType.accept,
-            responseMessage: '',
-            resultType: SearchResultType.found,
-            searchType: SearchType.addContent,
-            websites: [newSite],
-            articles: [],
-          );
-          // ignore: avoid_catches_without_on_clauses
-        } catch (e) {
-          //非RSSならクラウドフィード対応か問い合わせる
-          //クラウドフィードとはアプリ内からではなくapi経由でフィードを取得する方法
-          //クライアントは許容された範囲内でapiにリクエストしてフィードを取得できる
-          //TODO: implement requestCloudFeed
-          throw UnimplementedError();
-          //非対応ならUIでRefuseを通知する
-        }
-      }
+    if (request.word.contains('http')) {
+      //URLならRSS登録処理
     } else {
-      //クラウドリクエスト中間クラス(APIUseCase)で制限設定を参照しながらリクエスト可否を判定
-      //ApiUsecsse経由でリクエストする
-      //エラー処理はApiUseCaseで行う
-      return apiUsecase.search(request);
+      //それ以外ならキーワード検索
     }
   }
 
@@ -148,7 +93,7 @@ class RssUsecase {
         } else {
           //サイトの現在が更新期限よりも新しかったら更新して返す
           if (element.isRssFeedRefreshTime(
-            userCfg.appConfig.rssFeedConfig.limitLastFetchTime,
+            userCfg.appConfig.rssFeedConfig.feedRefreshInterval,
           )) {
             return refreshRssFeed(element);
           } else {

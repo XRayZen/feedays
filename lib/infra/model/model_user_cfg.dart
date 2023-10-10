@@ -12,7 +12,6 @@ class ModelUserConfig extends HiveObject {
     required this.userName,
     required this.password,
     required this.userID,
-    required this.isGuest,
     required this.config,
     required this.accountType,
     required this.searchHistory,
@@ -25,9 +24,7 @@ class ModelUserConfig extends HiveObject {
     // }
     return ModelUserConfig(
       userName: e.userName,
-      password: e.password,
-      userID: e.userID,
-      isGuest: e.isGuest,
+      userID: e.userUniqueID,
       config: ModelAppConfig.from(e.appConfig),
       accountType: convertUserAccountType(e.accountType),
       searchHistory: e.searchHistory,
@@ -37,9 +34,7 @@ class ModelUserConfig extends HiveObject {
   UserConfig to() {
     return UserConfig(
       userName: userName,
-      password: password,
-      userID: userID,
-      isGuest: isGuest,
+      userUniqueID: userID,
       appConfig: config.to(),
       accountType: convertModelUserAccountType(accountType),
       searchHistory: searchHistory,
@@ -51,8 +46,6 @@ class ModelUserConfig extends HiveObject {
   String userName;
   @HiveField(1)
   String userID;
-  @HiveField(2)
-  bool isGuest;
   @HiveField(4)
   ModelAppConfig config;
   @HiveField(6)

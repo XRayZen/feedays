@@ -8,7 +8,7 @@ import 'package:feedays/domain/repositories/api/backend_repository_interface.dar
 
 class BackendApiRepoImpl extends BackendApiRepository {
   @override
-  Future<void> editRecentSearches(String text, {bool isAddOrRemove = true}) {
+  Future<void> modifySearchHistory(String text, {bool isAddOrRemove = true}) {
     // TODO: implement editRecentSearches
     throw UnimplementedError();
   }
@@ -32,7 +32,8 @@ class BackendApiRepoImpl extends BackendApiRepository {
   }
 
   @override
-  Future<List<ExploreCategory>> getExploreCategories(UserAccessIdentInfo identInfo) {
+  Future<List<ExploreCategory>> getExploreCategories(
+      UserAccessIdentInfo identInfo) {
     // TODO: implement getExploreCategories
     throw UnimplementedError();
   }
@@ -61,18 +62,28 @@ class BackendApiRepoImpl extends BackendApiRepository {
     throw UnimplementedError();
   }
 
-
-
   @override
-  Future<void> syncConfig(UserConfig cfg) {
+  Future<void> updateConfig(UserConfig cfg) {
     // TODO: implement syncConfig
     throw UnimplementedError();
   }
-  
+
   @override
   Future<bool> userRegister(UserConfig cfg, UserAccessIdentInfo identInfo) {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
 
+  @override
+  Future<ConfigSyncResponse> codeSync(
+      String code, UserAccessIdentInfo identInfo) {
+    // TODO: implement codeSync
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> reportReadActivity() {
+    // TODO: implement reportActivity
+    throw UnimplementedError();
+  }
 }
