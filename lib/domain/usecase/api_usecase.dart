@@ -50,7 +50,6 @@ class ApiUsecase {
     final result = await backendApiRepo.searchWord(
       ApiSearchRequest(
         searchType: request.searchType,
-        queryType: request.,
         word: request.word,
         userID: userCfg.userUniqueID,
         identInfo: identInfo,

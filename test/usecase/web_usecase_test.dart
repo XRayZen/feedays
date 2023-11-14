@@ -42,7 +42,7 @@ void main() {
       () async {
         const path = 'http://blog.esuteru.com/';
         final res = await webUse.searchWord(
-          SearchRequest(searchType: SearchType.addContent, word: path),
+          SearchRequest(searchType: SearchType.url, word: path),
         );
         //RssLinkとFeedを取得できているのを期待
         expect(res.websites.first.feeds.length, isNonZero);
@@ -59,7 +59,7 @@ void main() {
     test('Add word', () async {
       const word = 'フェイクニュース';
       final res = await webUse.searchWord(
-        SearchRequest(searchType: SearchType.addContent, word: word),
+        SearchRequest(searchType: SearchType.keyword, word: word),
       );
       //複数のサイトからフィードを取得出来ているのを期待
       //TODO:モックでサイトのフィード10件をむき出して返す
