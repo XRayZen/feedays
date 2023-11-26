@@ -12,8 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class SiteDetailPage extends ConsumerWidget {
-  WebSite? site;
-  SiteDetailPage({
+  final WebSite? site;
+  const SiteDetailPage({
     super.key,
     this.site,
   });
@@ -86,7 +86,7 @@ class SiteDetailWidget extends ConsumerWidget {
 
   ///解像度に応じてレイアウトを変える
   List<Widget> appBarLayout(BuildContext context, WidgetRef ref) {
-    if (ResponsiveWrapper.of(context).isSmallerThan(TABLET)) {
+    if (ResponsiveBreakpoints.of(context).smallerThan(TABLET)) {
       //モバイルの場合
       return [
         switchFavoriteButton(
@@ -190,8 +190,8 @@ class SiteDetailWidget extends ConsumerWidget {
         ),
       );
     }
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         Text('ADDED'),
         Padding(padding: EdgeInsets.all(2)),
         Icon(Icons.check_circle),
@@ -201,8 +201,8 @@ class SiteDetailWidget extends ConsumerWidget {
 }
 
 class SiteBarTitle extends ConsumerWidget {
-  WebSite? site;
-  SiteBarTitle({
+  final WebSite? site;
+  const SiteBarTitle({
     super.key,
     required this.site,
   });
@@ -239,7 +239,11 @@ class SiteBarTitle extends ConsumerWidget {
 }
 
 Widget switchFavoriteButton(
-    WebSite? site, Widget onFavIcon, Widget offFavIcon, WidgetRef ref) {
+  WebSite? site,
+  Widget onFavIcon,
+  Widget offFavIcon,
+  WidgetRef ref,
+) {
   if (site != null) {
     if (ref
         .watch(favSitesProvider)
@@ -260,10 +264,8 @@ Widget switchFavoriteButton(
         tooltip: 'Add Favorite',
         onPressed: () async {
           //お気に入り登録
-          if (site != null) {
-            ref.watch(favSitesProvider).add(site);
-            ref.watch(onChangedProvider.notifier).state += 1;
-          }
+          ref.watch(favSitesProvider).add(site);
+          ref.watch(onChangedProvider.notifier).state += 1;
         },
         icon: offFavIcon,
       );

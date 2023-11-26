@@ -12,8 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class ExploreWeb extends ConsumerStatefulWidget {
-  const ExploreWeb({required this.con, super.key});
-  final TextEditingController con;
+  const ExploreWeb({required this.txtEditingCtrl, super.key});
+  final TextEditingController txtEditingCtrl;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ExploreWebState();
@@ -70,8 +70,7 @@ class _ExploreWebBodyState extends ConsumerState<ExploreWebBody> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(10),
-            image:
-                DecorationImage(image: NetworkImage(item.iconLink)),
+            image: DecorationImage(image: NetworkImage(item.iconLink)),
           ),
           child: ListTile(
             leading: Text(

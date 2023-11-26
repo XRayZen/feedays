@@ -57,7 +57,7 @@ class _SyncDialogWidgetState extends ConsumerState<SyncDialogWidget> {
               ),
               const SizedBox(height: 20),
               ResponsiveRowColumn(
-                layout: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+                layout: ResponsiveBreakpoints.of(context).smallerThan(TABLET)
                     ? ResponsiveRowColumnType.COLUMN
                     : ResponsiveRowColumnType.ROW,
                 rowMainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -148,7 +148,7 @@ class ShowQRCodeWidget extends StatelessWidget {
                         'QR Code',
                         style: TextStyle(fontSize: 40),
                       ),
-                      QrImage(
+                      QrImageView(
                         //背景を白くする
                         backgroundColor: Colors.white,
                         //QRコードのデータはユーザーIDを使用する

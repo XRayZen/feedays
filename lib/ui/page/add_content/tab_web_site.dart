@@ -14,16 +14,16 @@ class TabWebSite extends ConsumerWidget {
     //NOTE:feedlyではWebSitesにのみピンされたテキストフィールドがあるが、
     //細かな再現には時間がかかりすぎるからそこまで求めない
     //NOTE:若干feedlyとUI動作は異なるが速度優先で仕上げる
-    final con = TextEditingController();
+    final txtEditingCTrl = TextEditingController();
     return SingleChildScrollView(
       child: Column(
         key: const Key('WebsitesColumn'),
         children: [
           TextFormField(
             key: const Key('SearchTextFieldTap'),
-            controller: con,
+            controller: txtEditingCTrl,
             onChanged: (value) {
-              con.clear();
+              txtEditingCTrl.clear();
               //feedlyでは遷移ではなくタブバービューを変えている
               ref.watch(barViewTypeProvider.notifier).state =
                   TabBarViewType.searchView;
@@ -50,21 +50,26 @@ class TabWebSite extends ConsumerWidget {
               hintText: 'Type a name, topic, or paste a URL',
             ),
           ),
-          //PLAN:カテゴリごとにおすすめが配置されている
-          const Padding(padding: EdgeInsets.all(8.0)),
+          //PLAN:カテゴリごとにおすすめを配置
+          const Padding(padding: EdgeInsets.all(8)),
           Text(
             'Recommended for you',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          const Padding(padding: EdgeInsets.all(8.0)),
+          const Padding(padding: EdgeInsets.all(8)),
           ResponsiveRowColumn(
-            layout: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+            layout: ResponsiveBreakpoints.of(context).smallerThan(TABLET)
                 ? ResponsiveRowColumnType.COLUMN
                 : ResponsiveRowColumnType.ROW,
             rowMainAxisAlignment: MainAxisAlignment.center,
             children: [
               ResponsiveRowColumnItem(rowFlex: 1, child: Container()),
-              ResponsiveRowColumnItem(rowFlex: 1, child: ExploreWeb(con: con)),
+              ResponsiveRowColumnItem(
+                rowFlex: 1,
+                child: ExploreWeb(
+                  txtEditingCtrl: txtEditingCTrl,
+                ),
+              ),
               ResponsiveRowColumnItem(rowFlex: 1, child: Container()),
             ],
           ),

@@ -59,21 +59,24 @@ class ModelApiRequestLimitConfigAdapter
     };
     return ModelApiRequestLimitConfig(
       trendRequestLimit: fields[0] as int,
-      noneRssFeedRequestLimit: fields[1] as int,
-      sendActivityMinute: fields[2] as int,
+      trendRequestInterval: fields[1] as int,
+      fetchRssFeedRequestInterval: fields[2] as int,
+      fetchRssFeedRequestLimit: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, ModelApiRequestLimitConfig obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.trendRequestLimit)
       ..writeByte(1)
-      ..write(obj.noneRssFeedRequestLimit)
+      ..write(obj.trendRequestInterval)
       ..writeByte(2)
-      ..write(obj.sendActivityMinute);
+      ..write(obj.fetchRssFeedRequestInterval)
+      ..writeByte(3)
+      ..write(obj.fetchRssFeedRequestLimit);
   }
 
   @override

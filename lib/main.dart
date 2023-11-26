@@ -46,7 +46,7 @@ class MyApp extends ConsumerWidget {
         //PLAN:設定で切り替えられるようにする
         visualDensity: VisualDensity.adaptivePlatformDensity,
         //ダークテーマ時のカラーを青色にする
-        colorScheme: ColorScheme.dark(
+        colorScheme: const ColorScheme.dark(
           primary: Colors.amber,
           secondary: Colors.amber,
         ),
@@ -56,28 +56,14 @@ class MyApp extends ConsumerWidget {
       ),
       // ignore: prefer_const_constructors
       home: StartPageView(),
-      builder: (context, child) => ResponsiveWrapper.builder(
-        child,
-        // maxWidth: 1200,
-        minWidth: 480,
-        defaultScale: true,
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        child: child!,
         breakpoints: [
-          const ResponsiveBreakpoint.resize(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-          const ResponsiveBreakpoint.resize(
-            1000, name: DESKTOP, scaleFactor: 1,
-            // 0.90,
-          ),
-          const ResponsiveBreakpoint.autoScale(
-            1200,
-            name: DESKTOP,
-            scaleFactor:
-                // 1,
-                0.70,
-          ),
-          // const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K')
         ],
-        background: Container(color: const Color.fromARGB(255, 0, 0, 0)),
       ),
       initialRoute: '/',
     );

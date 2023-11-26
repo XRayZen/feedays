@@ -5,7 +5,6 @@ import 'package:feedays/ui/ui_util.dart';
 import 'package:feedays/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AppInWebBrowse extends ConsumerStatefulWidget {
@@ -27,6 +26,8 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
   bool _isLoading = false; // ページ読み込み状態
   double _downloadProgress = 0; // ページ読み込みの進捗値
   int _progress = 0;
+  bool isError = false;
+  String errorMessage = '';
   String _url = '';
 
   @override
@@ -34,11 +35,42 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
     super.initState();
     _url = widget.url;
 
-    if (UniversalPlatform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    } else if (UniversalPlatform.isIOS) {
-      WebView.platform = CupertinoWebView();
-    }
+    controller
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..enableZoom(true)
+      ..setBackgroundColor(Colors.transparent)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          // ページへの遷移処理開始時の処理 特定のURLを拒否できる
+          onNavigationRequest: (request) => NavigationDecision.navigate,
+          onProgress: (progress) {
+            setState(() {
+              _downloadProgress = progress / 100;
+              _progress = progress;
+            });
+          },
+          onPageStarted: (url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (url) async {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          onWebResourceError: (error) {
+            setState(() {
+              _isLoading = true;
+              _downloadProgress = 0;
+              _progress = 0;
+              isError = true;
+              errorMessage = error.description;
+            });
+          },
+        ),
+      )
+      ..loadRequest(Uri(path: _url));
   }
 
   @override
@@ -114,35 +146,18 @@ class _AppInWebBrowseState extends ConsumerState<AppInWebBrowse> {
                     )
                   ],
                 )
-              : const SizedBox.shrink(),
+              : isError
+                  ? Text(
+                      'HTTP Request Error: $errorMessage',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: getResponsiveValue(context),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
           Expanded(
-            child: WebView(
-              initialUrl: _url,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: _controller.complete,
-              onProgress: (progress) {
-                setState(() {
-                  _downloadProgress = progress / 100;
-                  _progress = progress;
-                });
-              },
-              // ページへの遷移処理開始時の処理 特定のURLを拒否できる
-              navigationDelegate: (navigation) {
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (url) {
-                setState(() {
-                  _isLoading = true;
-                });
-              },
-              onPageFinished: (url) async {
-                setState(() {
-                  _isLoading = false;
-                });
-              },
-              //IOSのみ対応
-              gestureNavigationEnabled: true,
-              backgroundColor: const Color(0x00000000),
+            child: WebViewWidget(
+              controller: controller,
             ),
           ),
         ],

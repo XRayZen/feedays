@@ -18,9 +18,7 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
     };
     return ModelUserConfig(
       userName: fields[0] as String,
-      password: fields[9] as String,
       userID: fields[1] as String,
-      isGuest: fields[2] as bool,
       config: fields[4] as ModelAppConfig,
       accountType: fields[6] as ModelUserAccountType,
       searchHistory: (fields[7] as List).cast<String>(),
@@ -31,13 +29,11 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
   @override
   void write(BinaryWriter writer, ModelUserConfig obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.userName)
       ..writeByte(1)
       ..write(obj.userID)
-      ..writeByte(2)
-      ..write(obj.isGuest)
       ..writeByte(4)
       ..write(obj.config)
       ..writeByte(6)
@@ -45,9 +41,7 @@ class ModelUserConfigAdapter extends TypeAdapter<ModelUserConfig> {
       ..writeByte(7)
       ..write(obj.searchHistory)
       ..writeByte(8)
-      ..write(obj.categories)
-      ..writeByte(9)
-      ..write(obj.password);
+      ..write(obj.categories);
   }
 
   @override
@@ -230,6 +224,7 @@ class ModelFeedItemAdapter extends TypeAdapter<ModelFeedItem> {
       site: fields[5] as String,
       category: fields[8] as String,
       lastModified: fields[6] as DateTime,
+      siteUrl: fields[9] as String,
       isReedLate: fields[7] as bool,
     );
   }
@@ -237,7 +232,7 @@ class ModelFeedItemAdapter extends TypeAdapter<ModelFeedItem> {
   @override
   void write(BinaryWriter writer, ModelFeedItem obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.index)
       ..writeByte(1)
@@ -255,7 +250,9 @@ class ModelFeedItemAdapter extends TypeAdapter<ModelFeedItem> {
       ..writeByte(7)
       ..write(obj.isReedLate)
       ..writeByte(8)
-      ..write(obj.category);
+      ..write(obj.category)
+      ..writeByte(9)
+      ..write(obj.siteUrl);
   }
 
   @override

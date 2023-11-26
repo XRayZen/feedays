@@ -21,7 +21,7 @@ TextStyle genResponsiveTextStyle(
     context,
     // ignore: prefer_int_literals
     defaultValue: 25.0,
-    valueWhen: [
+    conditionalValues: [
       //MOBILE より小さい場合はフォントサイズがvalue  になる
       Condition.smallerThan(name: MOBILE, value: mobileValue),
       // TABLET より大きい場合はフォントサイズが value になる
@@ -45,7 +45,7 @@ double getResponsiveValue(
   final res = ResponsiveValue(
     context,
     defaultValue: defaultValue,
-    valueWhen: [
+    conditionalValues: [
       //MOBILE より小さい場合はフォントサイズがvalue  になる
       Condition.smallerThan(name: MOBILE, value: mobileValue),
       //TABLET より大きい場合はフォントサイズが value になる
@@ -99,16 +99,16 @@ Brightness getBrightness(UiConfig uiConfig) {
     case AppThemeMode.dark:
       return Brightness.dark;
     case AppThemeMode.system:
-      return WidgetsBinding.instance.window.platformBrightness;
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness;
   }
 }
 
 ///今の解像度からモバイルかタブレットかPCかを判定する関数
 ///関数名をよりわかりやすくしたい
 DeviceType howDeviceType(BuildContext context) {
-  if (ResponsiveWrapper.of(context).isSmallerThan(MOBILE)) {
+  if (ResponsiveBreakpoints.of(context).smallerThan(MOBILE)) {
     return DeviceType.mobile;
-  } else if (ResponsiveWrapper.of(context).isSmallerThan(TABLET)) {
+  } else if (ResponsiveBreakpoints.of(context).smallerThan(TABLET)) {
     return DeviceType.tablet;
   } else {
     return DeviceType.pc;
@@ -116,15 +116,15 @@ DeviceType howDeviceType(BuildContext context) {
 }
 
 bool isMobile(BuildContext context) {
-  return ResponsiveWrapper.of(context).isSmallerThan(MOBILE);
+  return ResponsiveBreakpoints.of(context).smallerThan(MOBILE);
 }
 
 bool isTablet(BuildContext context) {
-  return ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+  return ResponsiveBreakpoints.of(context).smallerThan(TABLET);
 }
 
 bool isDesktop(BuildContext context) {
-  return ResponsiveWrapper.of(context).isSmallerThan(DESKTOP);
+  return ResponsiveBreakpoints.of(context).smallerThan(DESKTOP);
 }
 
 UserPlatformType detectPlatformType() {
@@ -196,8 +196,8 @@ Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
 }
 
 Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
-  final sysName = data.systemName ?? 'IOS';
-  final sysVersion = data.systemVersion ?? 'Unknown';
+  final sysName = data.systemName;
+  final sysVersion = data.systemVersion;
   return <String, dynamic>{
     'OS.Version': '$sysName: $sysVersion',
     'brand': 'Apple',
