@@ -13,7 +13,7 @@ void main({bool isProviderOverRide = true}) async {
       ProviderScope(
         overrides: [
           //但し、この方法だとスタブを臨機応変に変えることは出来ない
-          backendApiRepoProvider.overrideWithValue(MockApiRepository())
+          backendApiRepoProvider.overrideWithValue(MockApiRepository()),
         ],
         // ignore: prefer_const_constructors
         child: MyApp(),
@@ -62,7 +62,7 @@ class MyApp extends ConsumerWidget {
           const Breakpoint(start: 0, end: 450, name: MOBILE),
           const Breakpoint(start: 451, end: 800, name: TABLET),
           const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K')
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
         ],
       ),
       initialRoute: '/',
