@@ -25,16 +25,16 @@ class _ResultSliverState extends ConsumerState<SearchResultList> {
   Widget item(SearchResult res, int index) {
     //試しに切り替える
     switch (res.searchType) {
-      case SearchType.addContent:
+      case SearchType.siteName:
         return SiteListItem(
           site: res.websites[index],
         );
-      case SearchType.powerSearch:
+      case SearchType.keyword:
         return RssFeedItemUI(
           index: index,
           articles: res.articles,
         );
-      case SearchType.exploreWeb:
+      case SearchType.url:
         return SiteListItem(
           site: res.websites[index],
         );

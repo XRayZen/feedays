@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:feedays/domain/entities/app_config.dart';
 import 'package:feedays/domain/entities/ui_config.dart';
 import 'package:feedays/ui/provider/config_provider.dart';
@@ -48,7 +47,7 @@ void showSelectFontSizeDialog(
     onSelect: (picker, index, selected) {
       fontSize = selected[index].toDouble();
     },
-    onConfirm: (Picker picker, List value) {
+    onConfirm: (Picker picker, List<int> value) {
       if (confirmCallBack != null) {
         confirmCallBack(fontSize.toInt() + 1);
       }

@@ -11,7 +11,7 @@ void main() {
     final cfg = UserConfig.defaultUserConfig();
     final res = await repo.searchWord(
       ApiSearchRequest(
-        searchType: SearchType.addContent,
+        searchType: SearchType.keyword,
         userID: '',
         requestTime: DateTime.now().toUtc(),
         word: 'News',

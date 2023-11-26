@@ -5,11 +5,8 @@ import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/usecase/api_usecase.dart';
 import 'package:feedays/domain/usecase/rss_usecase.dart';
 import 'package:feedays/infra/impl_repo/backend_repo_impl.dart';
-import 'package:feedays/infra/impl_repo/local_repo_impl.dart';
 import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:feedays/mock/mock_local_repo.dart';
-import 'package:feedays/mock/mock_util.dart';
-import 'package:feedays/util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -21,10 +18,10 @@ void main() {
     const answerSiteName = 'Pioncoo';
     final rssUse = RssUsecase(
       webRepo: WebRepoImpl(),
-      apiRepo: BackendApiRepoImpl(),
+      apiRepo: ImplBackendApiRepo(),
       localRepo: MockLocalRepo(),
       apiUsecase: ApiUsecase(
-        backendApiRepo: BackendApiRepoImpl(),
+        backendApiRepo: ImplBackendApiRepo(),
         noticeError: (message) async {},
         userCfg: UserConfig.defaultUserConfig(),
         identInfo: UserAccessIdentInfo(
@@ -45,7 +42,7 @@ void main() {
     );
     final result = await rssUse.searchWord(
       SearchRequest(
-        searchType: SearchType.addContent,
+        searchType: SearchType.url,
         word: url,
       ),
     );

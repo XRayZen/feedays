@@ -2,25 +2,25 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:feedays/domain/entities/web_sites.dart';
-import 'package:webfeed/webfeed.dart';
+import 'package:webfeed_revised/webfeed_revised.dart';
 
-FeedObject? feedDataToRssObj(Uint8List data, String url) {
+FeedObject? feedDataToRssObj(Uint8List data, String rssUrl, String siteUrl) {
   try {
     final rss = RssFeed.parse(utf8.decode(data.buffer.asUint8List()));
     if (rss.items != null) {
-      return convertRssToFeedObj(rss, url);
+      return convertRssToFeedObj(rss, rssUrl, siteUrl);
     }
     // ignore: avoid_catching_errors, avoid_catches_without_on_clauses
   } catch (_) {
     final atom = AtomFeed.parse(utf8.decode(data.buffer.asUint8List()));
     if (atom.items != null) {
-      return convertAtomToFeedObj(atom, url);
+      return convertAtomToFeedObj(atom, rssUrl, siteUrl);
     }
   }
   return null;
 }
 
-List<Article> rssFeedConvert(RssFeed rssFeed) {
+List<Article> rssFeedConvert(RssFeed rssFeed, String siteUrl) {
   final items = List<Article>.empty(growable: true);
   if (rssFeed.items != null && rssFeed.items!.isNotEmpty) {
     var index = 0;
@@ -39,6 +39,7 @@ List<Article> rssFeedConvert(RssFeed rssFeed) {
         category: rssFeed.dc?.subject ?? '',
         lastModified:
             item.pubDate ?? item.dc?.date ?? DateTime.utc(2000, 1, 1, 1, 1),
+        siteUrl: siteUrl,
       );
       //記事の日時をローカルに書き換える
       feedItem.lastModified = feedItem.lastModified.toLocal();
@@ -49,7 +50,10 @@ List<Article> rssFeedConvert(RssFeed rssFeed) {
   return items;
 }
 
-List<Article> atomFeedConvert(AtomFeed atomFeed) {
+List<Article> atomFeedConvert(
+  AtomFeed atomFeed,
+  String siteUrl,
+) {
   final items = List<Article>.empty(growable: true);
   if (atomFeed.items != null && atomFeed.items!.isNotEmpty) {
     var index = 0;
@@ -93,6 +97,7 @@ List<Article> atomFeedConvert(AtomFeed atomFeed) {
         site: atomFeed.title ?? '',
         category: cate,
         lastModified: item.updated ?? DateTime.utc(2000, 1, 1, 1, 1),
+        siteUrl: siteUrl,
       );
       //記事の日時をローカルに書き換える
       feedItem.lastModified = feedItem.lastModified.toLocal();
@@ -103,24 +108,32 @@ List<Article> atomFeedConvert(AtomFeed atomFeed) {
   return items;
 }
 
-FeedObject convertRssToFeedObj(RssFeed rssFeed, String feedUrl) {
+FeedObject convertRssToFeedObj(
+  RssFeed rssFeed,
+  String rssUrl,
+  String siteUrl,
+) {
   return FeedObject(
-    items: rssFeedConvert(rssFeed),
+    items: rssFeedConvert(rssFeed, siteUrl),
     title: rssFeed.title ?? '',
-    siteLink: rssFeed.link ?? '',
-    feedLink: feedUrl,
+    siteLink: siteUrl,
+    feedLink: rssUrl,
     description: rssFeed.description ?? '',
     category: rssFeed.dc?.subject ?? '',
     iconLink: rssFeed.image?.url,
   );
 }
 
-FeedObject convertAtomToFeedObj(AtomFeed atomFeed, String url) {
+FeedObject convertAtomToFeedObj(
+  AtomFeed atomFeed,
+  String rssUrl,
+  String siteUrl,
+) {
   return FeedObject(
-    items: atomFeedConvert(atomFeed),
+    items: atomFeedConvert(atomFeed, siteUrl),
     title: atomFeed.title ?? '',
-    siteLink: url,
-    feedLink: url,
+    siteLink: siteUrl,
+    feedLink: rssUrl,
     description: atomFeed.subtitle ?? '',
     category: '',
     iconLink: atomFeed.icon ?? atomFeed.logo,

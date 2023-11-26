@@ -4,7 +4,7 @@
 
 import 'package:feedays/ui/page/search/custom_text_field.dart';
 import 'package:feedays/ui/page/search/result_view.dart';
-import 'package:feedays/ui/page/search/search_auto_comp.dart';
+import 'package:feedays/ui/page/search/search_auto_complete.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';

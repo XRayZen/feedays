@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,11 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScanView extends ConsumerStatefulWidget {
-  void Function(String? code) code;
   QRScanView({
     super.key,
     required this.code,
   });
+  void Function(String? code) code;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _QRScanViewState();
@@ -75,7 +75,7 @@ class _QRScanViewState extends ConsumerState<QRScanView> {
 
   Widget _buildQrView(BuildContext context) {
     // この例では、デバイスの幅や高さを確認し、それに応じてscanAreaとオーバーレイを変更します。
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+    final scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
@@ -85,11 +85,11 @@ class _QRScanViewState extends ConsumerState<QRScanView> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
+        borderRadius: 10,
+        borderLength: 30,
+        borderWidth: 10,
+        cutOutSize: scanArea,
+      ),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }

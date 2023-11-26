@@ -42,35 +42,35 @@ class ModelAppConfig extends HiveObject {
 class ModelApiRequestLimitConfig extends HiveObject {
   ModelApiRequestLimitConfig({
     required this.trendRequestLimit,
-    required this.noneRssFeedRequestLimit,
-    required this.sendActivityMinute,
-    required this.searchRequestLimit,
+    required this.trendRequestInterval,
+    required this.fetchRssFeedRequestInterval,
+    required this.fetchRssFeedRequestLimit,
   });
   factory ModelApiRequestLimitConfig.from(ApiRequestLimitConfig cfg) {
     return ModelApiRequestLimitConfig(
       trendRequestLimit: cfg.trendRequestLimit,
-      noneRssFeedRequestLimit: cfg.fetchRssFeedRequestLimit,
-      sendActivityMinute: cfg.refreshTrendRequestLimit,
-      searchRequestLimit: cfg.searchRequestLimit,
+      trendRequestInterval: cfg.trendRequestInterval,
+      fetchRssFeedRequestInterval: cfg.fetchRssFeedRequestInterval,
+      fetchRssFeedRequestLimit: cfg.fetchRssFeedRequestLimit,
     );
   }
   ApiRequestLimitConfig to() {
     return ApiRequestLimitConfig(
       trendRequestLimit: trendRequestLimit,
-      fetchRssFeedRequestLimit: noneRssFeedRequestLimit,
-      refreshTrendRequestLimit: sendActivityMinute,
-      searchRequestLimit: searchRequestLimit,
+      trendRequestInterval: trendRequestInterval,
+      fetchRssFeedRequestInterval: fetchRssFeedRequestInterval,
+      fetchRssFeedRequestLimit: fetchRssFeedRequestLimit,
     );
   }
 
   @HiveField(0)
   final int trendRequestLimit;
   @HiveField(1)
-  final int noneRssFeedRequestLimit;
+  final int trendRequestInterval;
   @HiveField(2)
-  final int sendActivityMinute;
+  final int fetchRssFeedRequestInterval;
   @HiveField(3)
-  final int searchRequestLimit;
+  final int fetchRssFeedRequestLimit;
 }
 
 @HiveType(typeId: 8)

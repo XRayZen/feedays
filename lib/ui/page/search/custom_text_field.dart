@@ -45,7 +45,7 @@ class CustomTextField extends ConsumerWidget {
             editingController.text = value;
             if (value.isNotEmpty) {
               onSearch(
-                SearchRequest(searchType: SearchType.addContent, word: value),
+                SearchRequest(searchType: SearchType.keyword, word: value),
                 ref,
               );
             }

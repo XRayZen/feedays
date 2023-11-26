@@ -31,7 +31,7 @@ class _DrawerMenuState extends ConsumerState<AppDrawerMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final _add = ref.watch(onChangedProvider);
+    final add = ref.watch(onChangedProvider);
     final opacity =
         ref.watch(useCaseProvider).userCfg.appConfig.uiConfig.drawerMenuOpacity;
     return Drawer(

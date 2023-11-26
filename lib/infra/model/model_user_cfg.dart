@@ -10,7 +10,6 @@ part 'model_user_cfg.g.dart';
 class ModelUserConfig extends HiveObject {
   ModelUserConfig({
     required this.userName,
-    required this.password,
     required this.userID,
     required this.config,
     required this.accountType,
@@ -18,10 +17,6 @@ class ModelUserConfig extends HiveObject {
     required this.categories,
   });
   factory ModelUserConfig.from(UserConfig e) {
-    // final obj = List<ModelWebSiteFolder>.empty(growable: true);
-    // for (final element in e.rssFeedSites.folders) {
-    //   obj.add(ModelWebSiteFolder.from(element));
-    // }
     return ModelUserConfig(
       userName: e.userName,
       userID: e.userUniqueID,
@@ -54,8 +49,6 @@ class ModelUserConfig extends HiveObject {
   List<String> searchHistory;
   @HiveField(8)
   List<ModelExploreCategory> categories;
-  @HiveField(9)
-  String password;
 }
 
 ModelUserAccountType convertUserAccountType(UserAccountType ty) {
@@ -248,6 +241,7 @@ class ModelFeedItem extends HiveObject {
     required this.site,
     required this.category,
     required this.lastModified,
+    required this.siteUrl,
     this.isReedLate = false,
   });
   factory ModelFeedItem.from(Article e) {
@@ -261,6 +255,7 @@ class ModelFeedItem extends HiveObject {
       lastModified: e.lastModified,
       isReedLate: e.isReedLate,
       site: e.site,
+      siteUrl: e.siteUrl,
     );
   }
   Article to() {
@@ -274,6 +269,7 @@ class ModelFeedItem extends HiveObject {
       site: site,
       lastModified: lastModified,
       isReedLate: isReedLate,
+      siteUrl: siteUrl,
     );
   }
 
@@ -295,6 +291,8 @@ class ModelFeedItem extends HiveObject {
   bool isReedLate;
   @HiveField(8)
   final String category;
+  @HiveField(9)
+  final String siteUrl;
 }
 
 @HiveType(typeId: 4)

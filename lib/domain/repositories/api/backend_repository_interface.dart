@@ -29,11 +29,13 @@ abstract class BackendApiRepository {
     UserConfig cfg,
     UserAccessIdentInfo identInfo,
   );
+
   //閲覧などのアクテビティを報告する
   Future<APIResponse> reportReadActivity(
     ReadActivity activity,
     UserAccessIdentInfo identInfo,
   );
+
   //設定を同期する UI設定を変更したらクラウドに送信してクラウドの設定を上書きする
   Future<APIResponse> updateConfig(
     UserConfig cfg,

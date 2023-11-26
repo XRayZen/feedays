@@ -18,7 +18,8 @@ List<Article> genFakeRssFeeds(int num) {
         ),
         site: 'fakeSite:{$i}',
         category: 'MockedCategory',
-        lastModified: DateTime.now(),
+        lastModified: DateTime.now(), 
+        siteUrl: 'https://wired.jp',
       ),
     );
   }

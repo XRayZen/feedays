@@ -1,29 +1,17 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/entity.dart';
-import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/repositories/api/backend_repository_interface.dart';
 import 'package:feedays/domain/repositories/local/local_repository_interface.dart';
 import 'package:feedays/domain/repositories/web/web_repository_interface.dart';
 import 'package:feedays/domain/usecase/api_usecase.dart';
-import 'package:feedays/util.dart';
 
 typedef ErrorMessageCallback = Future<void> Function(String message);
 
 // 今のところはAPIに依存せずにRSSを取得しているがいずれはAPI経由にしてUI関連のみをここに残す
 class RssUsecase {
-  final WebRepositoryInterface webRepo;
-  final BackendApiRepository apiRepo;
-  final LocalRepositoryInterface localRepo;
-  final ApiUsecase apiUsecase;
-  Future<void> Function(String message) noticeError;
-  Future<void> Function(WebSite site) onAddSite;
-  void Function(int count, int all, String msg) progressCallBack;
-  WebFeedData rssFeedData;
-  final UserConfig userCfg;
   RssUsecase({
     required this.webRepo,
     required this.apiRepo,
@@ -35,6 +23,15 @@ class RssUsecase {
     required this.rssFeedData,
     required this.userCfg,
   });
+  final WebRepositoryInterface webRepo;
+  final BackendApiRepository apiRepo;
+  final LocalRepositoryInterface localRepo;
+  final ApiUsecase apiUsecase;
+  Future<void> Function(String message) noticeError;
+  Future<void> Function(WebSite site) onAddSite;
+  void Function(int count, int all, String msg) progressCallBack;
+  WebFeedData rssFeedData;
+  final UserConfig userCfg;
 
   Future<List<Article>?> fetchFeedDetail(
     WebSite site,
@@ -76,8 +73,20 @@ class RssUsecase {
     //ワードがURLかどうか判定する
     if (request.word.contains('http')) {
       //URLならRSS登録処理
+      return apiUsecase.search(
+        SearchRequest(
+          searchType: SearchType.url,
+          word: request.word,
+        ),
+      );
     } else {
       //それ以外ならキーワード検索
+      return apiUsecase.search(
+        SearchRequest(
+          searchType: SearchType.keyword,
+          word: request.word,
+        ),
+      );
     }
   }
 

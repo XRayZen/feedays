@@ -10,7 +10,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ogp_data_extract/ogp_data_extract.dart';
-import 'package:webfeed/webfeed.dart';
+import 'package:webfeed_revised/webfeed_revised.dart';
 
 class WebRepoImpl extends WebRepositoryInterface {
   @override

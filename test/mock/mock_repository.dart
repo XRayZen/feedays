@@ -2,6 +2,7 @@
 
 import 'package:feedays/domain/entities/activity.dart';
 import 'package:feedays/domain/entities/api_response.dart';
+import 'package:feedays/domain/entities/app_config.dart';
 import 'package:feedays/domain/entities/entity.dart';
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
@@ -12,15 +13,12 @@ import 'mock_util.dart';
 
 class MockApiRepository extends BackendApiRepository {
   int ff = 0; //これの変数を次第で動作を変える予定
-  @override
-  Future<void> modifySearchHistory(String text, {bool isAddOrRemove = true}) {
-    // TODO: implement editRecentSearches
-    throw UnimplementedError();
-  }
 
   @override
-  Future<bool> login() {
-    // TODO: implement login
+  Future<List<String>> modifySearchHistory(
+    String text, {
+    bool isAddOrRemove = true,
+  }) {
     throw UnimplementedError();
   }
 
@@ -39,38 +37,34 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<bool> isCompatibleCloudFeed(String url) {
-    // TODO: implement isCompatibleCloudFeed
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<ExploreCategory>> getExploreCategories(
-      UserAccessIdentInfo identInfo) {
+    UserAccessIdentInfo identInfo,
+  ) {
     // TODO: implement getExploreCategories
     throw UnimplementedError();
   }
 
   @override
-  Future<void> favoriteArticle(Article article, bool isFavorite) {
+  Future<APIResponse> favoriteArticle(
+    String userID,
+    Article article,
+    bool isFavorite,
+  ) {
     // TODO: implement favoriteArticle
     throw UnimplementedError();
   }
 
   @override
-  Future<void> favoriteSite(WebSite site, bool isFavorite) {
-    // TODO: implement favoriteSite
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> subscribeSite(WebSite site, bool isSubscribe) {
+  Future<APIResponse> subscribeSite(WebSite site, bool isSubscribe) {
     // TODO: implement subscribeSite
     throw UnimplementedError();
   }
 
   @override
-  Future<APIResponse> updateConfig(UserConfig cfg) {
+  Future<APIResponse> updateConfig(
+    UserConfig cfg,
+    UserAccessIdentInfo identInfo,
+  ) {
     // TODO: implement syncConfig
     throw UnimplementedError();
   }
@@ -82,21 +76,60 @@ class MockApiRepository extends BackendApiRepository {
   }
 
   @override
-  Future<bool> userRegister(UserConfig cfg, UserAccessIdentInfo identInfo) {
+  Future<APIResponse> userRegister(
+    UserConfig cfg,
+    UserAccessIdentInfo identInfo,
+  ) {
     // TODO: implement userRegister
     throw UnimplementedError();
   }
 
   @override
-  Future<ConfigSyncResponse> codeSync(
-      String code, UserAccessIdentInfo identInfo) {
-    // TODO: implement codeSync
+  Future<ApiRequestLimitConfig> getApiRequestLimit(
+    String userID,
+    UserAccessIdentInfo identInfo,
+  ) {
+    // TODO: implement getApiRequestLimit
     throw UnimplementedError();
   }
 
   @override
-  Future<APIResponse> reportReadActivity() {
-    // TODO: implement reportActivity
+  Future<String> getNewUserID(UserAccessIdentInfo identInfo) {
+    // TODO: implement getNewUserID
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<RankingResponse> getRanking(
+    String userID,
+    UserAccessIdentInfo identInfo,
+  ) {
+    // TODO: implement getRanking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserConfig> syncConfig(String userID, UserAccessIdentInfo identInfo) {
+    // TODO: implement syncConfig
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<APIResponse> favoriteSite(
+    String userID,
+    WebSite site,
+    bool isFavorite,
+  ) {
+    // TODO: implement favoriteSite
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<APIResponse> reportReadActivity(
+    ReadActivity activity,
+    UserAccessIdentInfo identInfo,
+  ) {
+    // TODO: implement reportReadActivity
     throw UnimplementedError();
   }
 }

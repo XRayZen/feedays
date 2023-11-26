@@ -127,7 +127,11 @@ class ApiUsecase {
     try {
       //お気に入りサイトを保存する
       //Responseを受け取っても対応する必要があるのか
-      await backendApiRepo.favoriteSite(site, isAddOrRemove);
+      await backendApiRepo.favoriteSite(
+        userCfg.userUniqueID,
+        site,
+        isAddOrRemove,
+      );
     } catch (e) {
       //APIに送信するときにエラーが発生した場合
     }
@@ -141,7 +145,11 @@ class ApiUsecase {
     try {
       //お気に入り記事を保存する
       //Responseを受け取っても対応する必要があるのか
-      await backendApiRepo.favoriteArticle(feed, isAddOrRemove);
+      await backendApiRepo.favoriteArticle(
+        userCfg.userUniqueID,
+        feed,
+        isAddOrRemove,
+      );
     } catch (e) {
       //APIに送信するときにエラーが発生した場合
     }

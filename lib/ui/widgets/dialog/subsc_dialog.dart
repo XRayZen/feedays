@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, inference_failure_on_function_invocation
+
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/ui/provider/business_provider.dart';
 import 'package:feedays/ui/provider/rss_provider.dart';
@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SubscriptionSiteDialog extends ConsumerWidget {
-  final WebSite site;
   const SubscriptionSiteDialog({
     super.key,
     required this.site,
   });
+  final WebSite site;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //https://zenn.dev/t_fukuyama/articles/5ee3f60311271b
@@ -86,7 +86,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
     int index,
     WidgetRef ref,
   ) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) {
         final deleteName = list[index].name;
@@ -100,7 +100,10 @@ class SubscriptionSiteDialog extends ConsumerWidget {
                     .watch(rssUsecaseProvider)
                     .removeSiteFolder(deleteName);
                 ref.watch(onChangedProvider.notifier).state += 1;
-                Navigator.pop(context, true);
+                if (context.mounted){
+                  // ダイアログを閉じる
+                  Navigator.pop(context, true);
+                }
               },
               child: const Text('OK'),
             ),
@@ -119,7 +122,7 @@ class SubscriptionSiteDialog extends ConsumerWidget {
   void inputCategoryNameDialog(BuildContext context, WidgetRef ref) {
     //さらに入力を促すダイアログを表示してカテゴリー名を入れてフォルダに追加する
     var text = '';
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -188,27 +191,28 @@ class SubscriptionSiteDialog extends ConsumerWidget {
 }
 
 class AddedSite extends ConsumerWidget {
-  final int folderIndex;
-  final WebSite site;
   const AddedSite({
     super.key,
     required this.folderIndex,
     required this.site,
   });
+  final int folderIndex;
+  final WebSite site;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final list = ref.watch(readRssFolderProvider);
     //更新するために監視
+    // ignore: unused_local_variable
     final count = ref.watch(onChangedProvider);
     return Visibility(
       visible: anySiteOfRssFolders(list[folderIndex].name, site.siteUrl, ref),
       //ダイアログにはサイズ指定が必要
-      child: SizedBox(
+      child: const SizedBox(
         height: 50,
         width: 90,
         child: Row(
-          children: const [
+          children: [
             Text(
               'ADDED',
               style: TextStyle(
@@ -230,7 +234,7 @@ Future<void> showSubscriptionDialog(
   WebSite site,
   WidgetRef ref,
 ) async {
-  await showDialog(
+  await showDialog<void>(
     context: context,
     builder: (context) {
       return AlertDialog(

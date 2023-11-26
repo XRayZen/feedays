@@ -1,4 +1,4 @@
-import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,7 +14,7 @@ class SearchResultNotifier extends StateNotifier<SearchResult> {
             apiResponse: ApiResponseType.refuse,
             responseMessage: 'Default',
             resultType: SearchResultType.none,
-            searchType: SearchType.addContent,
+            searchType: SearchType.keyword,
             websites: [],
             articles: [],
           ),
@@ -29,7 +29,7 @@ class SearchResultNotifier extends StateNotifier<SearchResult> {
       apiResponse: ApiResponseType.refuse,
       responseMessage: 'Default',
       resultType: SearchResultType.none,
-      searchType: SearchType.addContent,
+      searchType: SearchType.keyword,
       websites: [],
       articles: [],
     );

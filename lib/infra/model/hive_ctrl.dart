@@ -34,5 +34,4 @@ void registerAdapter() {
   Hive.registerAdapter(ModelAppThemeModeAdapter());
   //model_activity
   Hive.registerAdapter(ModelUserReadActivityAdapter());
-  Hive.registerAdapter(ModelUserSubscribeActivityAdapter());
 }

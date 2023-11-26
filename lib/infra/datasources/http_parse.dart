@@ -6,7 +6,7 @@ import 'package:feedays/infra/datasources/rss_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:webfeed/domain/rss_feed.dart';
+import 'package:webfeed_revised/webfeed_revised.dart';
 
 // https://zenn.dev/tris/articles/9705b93a02425f
 
@@ -154,7 +154,7 @@ Future<WebSite> parseRssToWebSiteMeta(
     iconLink: meta.iconLink,
     category: meta.category,
     tags: feed.itunes?.keywords ?? [],
-    feeds: rssFeedConvert(feed),
+    feeds: rssFeedConvert(feed, url),
     description: feed.description ?? '',
     lastModified: meta.lastModified,
   );
@@ -183,46 +183,47 @@ Future<List<Article>> parseImageLink(
 ///有効なRSSFeedを返す
 Future<FeedObject?> getRssFeed(
   WebRepositoryInterface webRepo,
-  String url,
+  String siteUrl,
 ) async {
-  if (await webRepo.anyPath(url)) {
+  if (await webRepo.anyPath(siteUrl)) {
     try {
-      final data = await webRepo.fetchHttpByte(url);
-      final rss = feedDataToRssObj(data, url);
+      final data = await webRepo.fetchHttpByte(siteUrl);
+      final rss = feedDataToRssObj(data, siteUrl, siteUrl);
       if (rss != null && rss.items.isNotEmpty) {
         return rss;
       }
-    } catch (_) {
+    } on Exception catch (err) {
       //RSSではないのならRSS抽出処理を継続する
+      debugPrint('Not RSS Feed: $err');
     }
   }
   //サイトHTMLからRSSLinkを抽出する
   //もしUTF8変換エラーならRawにして先にRSSFeedを取得してサイトメタを構成する
   var data = '';
   try {
-    data = await webRepo.fetchHttpString(url, isUtf8: true);
+    data = await webRepo.fetchHttpString(siteUrl, isUtf8: true);
   } on Exception catch (_) {
     //4Gamerなどの一部２バイト文字サイトはutf8変換出来ないからRSSからMetaを生成するしかない
     //flutterのhttp系パッケージは２バイト文字サイトにはほとんど使い物にならないゴミとなる
-    data = await webRepo.fetchHttpString(url);
-    final docBaseSiteMeta = parseDocumentToWebSite(url, parse(data));
+    data = await webRepo.fetchHttpString(siteUrl);
+    final docBaseSiteMeta = parseDocumentToWebSite(siteUrl, parse(data));
     final rssUrl = extractRSSLinkFromWebsite(
       docBaseSiteMeta.siteName,
       parse(data),
       RSSorAtom.rss,
     );
     //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
-    if (await webRepo.anyPath(url + rssUrl)) {
-      final rssData = await webRepo.fetchHttpByte(url + rssUrl);
-      return feedDataToRssObj(rssData, url + rssUrl);
+    if (await webRepo.anyPath(siteUrl + rssUrl)) {
+      final rssData = await webRepo.fetchHttpByte(siteUrl + rssUrl);
+      return feedDataToRssObj(rssData, rssUrl, siteUrl);
     }
     //FullPathの場合
     else if (await webRepo.anyPath(rssUrl)) {
       final rssData = await webRepo.fetchHttpByte(rssUrl);
-      return feedDataToRssObj(rssData, rssUrl);
+      return feedDataToRssObj(rssData, rssUrl, siteUrl);
     }
   }
-  final docBaseSiteMeta = parseDocumentToWebSite(url, parse(data));
+  final docBaseSiteMeta = parseDocumentToWebSite(siteUrl, parse(data));
   var rssUrl = '';
   try {
     rssUrl = extractRSSLinkFromWebsite(
@@ -239,11 +240,11 @@ Future<FeedObject?> getRssFeed(
   }
   //中にはhrefに中途半端なURLを渡すのもいる "/feed.xml
   if (!rssUrl.contains('://')) {
-    final rssData = await webRepo.fetchHttpByte(url + rssUrl);
-    return feedDataToRssObj(rssData, rssUrl);
+    final rssData = await webRepo.fetchHttpByte(siteUrl + rssUrl);
+    return feedDataToRssObj(rssData, rssUrl, siteUrl);
   }
   final rssData = await webRepo.fetchHttpByte(rssUrl);
-  return feedDataToRssObj(rssData, rssUrl);
+  return feedDataToRssObj(rssData, rssUrl, siteUrl);
 }
 
 Future<WebSite> fetchRss(

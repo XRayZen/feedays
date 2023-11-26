@@ -1,13 +1,13 @@
 // ignore_for_file:  use_decorated_box
 import 'package:feedays/ui/provider/business_provider.dart';
-import 'package:feedays/ui/widgets/QRScanView.dart';
+import 'package:feedays/ui/widgets/qr_scan_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 void showSyncDialog(BuildContext context) {
-  showDialog(
+  showDialog<void>(
     context: context,
     builder: (context) {
       return Dialog(
@@ -78,7 +78,7 @@ class _SyncDialogWidgetState extends ConsumerState<SyncDialogWidget> {
                             const Text('Scan the QR code on the other device'),
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            MaterialPageRoute<void>(
                               builder: (context) => QRScanView(
                                 code: (code) {
                                   ref
@@ -137,7 +137,7 @@ class ShowQRCodeWidget extends StatelessWidget {
         ),
         onTap: () {
           //QRコードを表示する
-          showDialog(
+          showDialog<void>(
             context: context,
             builder: (context) {
               return Dialog(
@@ -154,7 +154,6 @@ class ShowQRCodeWidget extends StatelessWidget {
                         //QRコードのデータはユーザーIDを使用する
                         data:
                             ref.watch(useCaseProvider).apiUsecase.getSyncCode(),
-                        version: QrVersions.auto,
                         size: 200,
                       ),
                     ],

@@ -5,7 +5,7 @@ import 'package:feedays/infra/impl_repo/web_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
-import 'package:webfeed/domain/rss_feed.dart';
+import 'package:webfeed_revised/webfeed_revised.dart';
 
 void main() {
   test(

@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, use_decorated_box
 import 'package:feedays/domain/entities/explore_web.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/ui/page/search/custom_text_field.dart';
@@ -43,11 +42,11 @@ class _ExploreWebState extends ConsumerState<ExploreWeb> {
 }
 
 class ExploreWebBody extends ConsumerStatefulWidget {
-  final List<ExploreCategory> exploreList;
   const ExploreWebBody({
     super.key,
     required this.exploreList,
   });
+  final List<ExploreCategory> exploreList;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ExploreWebBodyState();
@@ -67,12 +66,12 @@ class _ExploreWebBodyState extends ConsumerState<ExploreWebBody> {
       ),
       itemBuilder: (context, index) {
         final item = widget.exploreList[index];
-        return Container(
+        return DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(10),
             image:
-                DecorationImage(image: NetworkImage(item.iconLink, scale: 1)),
+                DecorationImage(image: NetworkImage(item.iconLink)),
           ),
           child: ListTile(
             leading: Text(
@@ -94,7 +93,7 @@ class _ExploreWebBodyState extends ConsumerState<ExploreWebBody> {
                     '#${item.name}';
                 onSearch(
                   SearchRequest(
-                    searchType: SearchType.exploreWeb,
+                    searchType: SearchType.keyword,
                     word: '#${item.name}',
                   ),
                   ref,

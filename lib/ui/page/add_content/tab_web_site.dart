@@ -1,7 +1,7 @@
 import 'package:feedays/ui/page/search_view_page.dart';
 import 'package:feedays/ui/provider/state_notifier.dart';
 import 'package:feedays/ui/provider/state_provider.dart';
-import 'package:feedays/ui/widgets/exploreWeb.dart';
+import 'package:feedays/ui/widgets/explore_web.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';

@@ -1,4 +1,4 @@
-import 'package:feedays/domain/entities/entity.dart';
+import 'package:feedays/domain/entities/api_response.dart';
 import 'package:feedays/domain/entities/search.dart';
 import 'package:feedays/domain/entities/web_sites.dart';
 import 'package:feedays/domain/usecase/rss_usecase.dart';
@@ -22,8 +22,7 @@ final readWebSiteProvider =
 
 void onSearch(SearchRequest request, WidgetRef ref) {
   //空の文字は検索しない
-  if (request.word.isEmpty) {
-  }
+  if (request.word.isEmpty) {}
   ref.watch(searchProvider(request));
 }
 

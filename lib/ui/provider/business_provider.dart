@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final backendApiRepoProvider = Provider<BackendApiRepository>((ref) {
   //テスト時はモックに上書きする
-  return BackendApiRepoImpl();
+  return ImplBackendApiRepo();
 });
 
 final webRepoProvider = Provider<WebRepositoryInterface>((ref) {

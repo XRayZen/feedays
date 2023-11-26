@@ -27,12 +27,12 @@ class _SearchAutoCompState extends ConsumerState<SearchAutoComp> {
         ref.watch(onTextFieldTapProvider.notifier).state = false;
         if (txt == '') {
           onSearch(
-            SearchRequest(searchType: SearchType.addContent, word: txt),
+            SearchRequest(searchType: SearchType.keyword, word: txt),
             ref,
           );
         } else {
           onSearch(
-            SearchRequest(searchType: SearchType.addContent, word: selectItem),
+            SearchRequest(searchType: SearchType.keyword, word: selectItem),
             ref,
           );
         }
